@@ -1,0 +1,81 @@
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart
+00:00 +0: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: exact cycle strings and unknown forward compatibility
+00:00 +1: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: missing config refuses startup
+00:00 +2: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: missing config refuses startup
+00:00 +3: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: missing config refuses startup
+00:00 +4: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: missing config refuses startup
+00:00 +5: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: missing config refuses startup
+00:00 +6: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: third persona is empty and inaccessible is indistinguishable
+00:00 +7: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: native flavour must match config
+00:00 +8: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: unknown role
+00:00 +9: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: unknown role
+00:00 +10: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 10 without floating point
+00:00 +11: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 10 without floating point
+00:00 +12: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: paid cycle
+00:00 +13: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 15050 without floating point
+00:00 +14: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: unknown cycle
+00:00 +15: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 150000 without floating point
+00:00 +16: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: unknown contribution
+00:00 +17: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 100000000 without floating point
+00:00 +18: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: member no contribution
+00:00 +19: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: member no contribution
+00:00 +20: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: formats 0 without floating point
+00:00 +21: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: member pending
+00:00 +22: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 150
+00:00 +23: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 150
+00:00 +24: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 150
+00:00 +25: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 150
+00:00 +26: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: treasurer existing contribution
+00:00 +27: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 150,50
+00:00 +28: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: chairperson no contribution
+00:00 +29: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses R150
+00:00 +30: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: action rule: chairperson existing contribution
+00:00 +31: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses R 1 500
+00:00 +32: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: all inactive combinations suppress actions
+00:00 +33: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 1 500,50
+00:00 +34: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: treasurer cannot confirm when no paid contribution exists
+00:00 +35: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses 1 500,50
+00:00 +36: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: treasurer can confirm another member without an own contribution
+00:00 +37: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: parses R 1 500
+00:00 +38: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: view conversion has loading, empty, data and failure
+00:00 +39: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: view conversion has loading, empty, data and failure
+00:00 +40: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: view conversion has loading, empty, data and failure
+00:00 +41: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "1,500.50" with a reason
+00:00 +42: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "150,505" with a reason
+00:00 +43: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "150." with a reason
+00:00 +44: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "" with a reason
+00:00 +45: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "abc" with a reason
+00:00 +46: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "15 00" with a reason
+00:00 +47: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/foundation_test.dart: rejects "-1" with a reason
+00:00 +48: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: view conversion retains manual refresh data but hides a new persona
+00:01 +49: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home loading
+00:01 +49: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: two IDs remain separate; two listeners share one fetch
+Disposed stokvel id=2
+Disposed stokvel id=1
+00:01 +50: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home loading
+00:01 +50: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: detail is disposed only after its final listener closes
+Disposed stokvel id=1
+Disposed stokvel id=1
+00:01 +51: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home loading
+00:01 +52: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home empty explains next step
+00:01 +53: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home data uses server amounts and per-stokvel roles
+00:02 +54: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home failure retries the overridden repository
+00:02 +55: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: pull to refresh retains old Home cards
+00:02 +56: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail loading
+Disposed stokvel id=1
+00:02 +57: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail empty is not found for inaccessible and nonexistent IDs
+Disposed stokvel id=1
+Disposed stokvel id=999
+00:02 +58: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail data shows treasurer actions in that membership
+Disposed stokvel id=1
+00:02 +59: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: treasurer detail hides confirmation when nobody has a paid row
+Disposed stokvel id=1
+00:03 +60: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail member has no treasurer actions
+Disposed stokvel id=2
+00:03 +61: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail failure retry works
+Disposed stokvel id=1
+Disposed stokvel id=1
+00:03 +62: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: switch to slow B shows B loading and no A contributions for a frame
+Disposed stokvel id=1
+Disposed stokvel id=2
+00:03 +63: All tests passed!

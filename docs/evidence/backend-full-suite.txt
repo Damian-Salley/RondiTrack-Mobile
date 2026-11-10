@@ -1,0 +1,8 @@
+Command: dotnet test RondiTrack.Tests/RondiTrack.Tests.csproj --no-restore --logger console;verbosity=normal -- xUnit.MaxParallelThreads=1 xUnit.ParallelizeTestCollections=false
+No test filter was used. All test collections ran sequentially.
+
+
+Test Run Successful.
+Total tests: 108
+     Passed: 108
+ Total time: 7,4518 Minutes

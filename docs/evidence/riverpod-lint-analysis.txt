@@ -1,0 +1,5 @@
+Analyzing RondiTrack-Mobile...
+
+   info - lib\features\session\presentation\session_provider.dart:8:3 - Notifiers should not have public properties/getters. Instead, all their public API should be exposed through the `state` property. - avoid_public_notifier_properties
+
+1 issue found.

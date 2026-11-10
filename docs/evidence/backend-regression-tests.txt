@@ -1,0 +1,7 @@
+  RondiTrack.Infrastructure -> C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack\RondiTrack.Infrastructure\bin\Debug\net10.0\RondiTrack.Infrastructure.dll
+  RondiTrack -> C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack\bin\Debug\net10.0\RondiTrack.dll
+  RondiTrack.Tests -> C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack\RondiTrack.Tests\bin\Debug\net10.0\RondiTrack.Tests.dll
+Test run for C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack\RondiTrack.Tests\bin\Debug\net10.0\RondiTrack.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    10, Skipped:     0, Total:    10, Duration: 2 m 4 s - RondiTrack.Tests.dll (net10.0)

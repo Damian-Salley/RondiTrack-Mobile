@@ -1,0 +1,22 @@
+name: Mobile checks
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: subosito/flutter-action@v2.19.0
+        with:
+          flutter-version: '3.47.7'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: dart run build_runner build
+      - name: Check committed generated files
+        run: git diff --exit-code
+      - run: dart analyze --fatal-infos
+      - run: flutter test

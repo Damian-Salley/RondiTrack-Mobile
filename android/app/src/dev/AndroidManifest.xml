@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Allow the development app to connect to the local backend. -->
+    <application
+        android:networkSecurityConfig="@xml/network_security_config" />
+
+</manifest>

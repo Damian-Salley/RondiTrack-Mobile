@@ -1,0 +1,4 @@
+Mismatched config build exit: 1
+Missing config build exit: 1
+Use --dart-define-from-file=config/prod.json with --flavor prod
+Use --dart-define-from-file=config/dev.json with --flavor dev
