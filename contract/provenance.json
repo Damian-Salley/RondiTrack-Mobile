@@ -1,0 +1,13 @@
+{
+    "apiRepository": "https://github.com/Damian-Salley/RondiTrack",
+    "baseCommit": "7c2651bc7689206c90a9d89c12ad871254c947d4",
+    "backendCommit": "1e23b75266a0e56f1e3658c84fc54fb8af29c9fd",
+    "backendPullRequest": "https://github.com/Damian-Salley/RondiTrack/pull/6",
+    "sourceState": "Backend changes committed and pushed; pull request CI checks passed.",
+    "openApiSha256": "457757B3ADDF679C7261B26DFF61EE7F2AEED46F2F83411237FFDB47399C54CD",
+    "trackedBackendPatchSha256": "E04CD141C01ED57FD125CA6611AE50EE6BD454513E9D093984917B2F9F0B5F03",
+    "backendTestSha256": "CD3C19AD4EBF3BED6E890B58069A482C38B23BC2A4B4CB28BFDE9A51C60A723A",
+    "exportedBy": "Assignment101Tests.OpenApi_ExportsCurrentCentsAndDetailContract",
+    "verificationDate": "2026-11-10",
+    "backendMoneyTestSha256": "8EDC393F4AE2427F1BEAA89251C8D31065BAB3FEC20B8AB81BECD3FAB55956C6"
+}

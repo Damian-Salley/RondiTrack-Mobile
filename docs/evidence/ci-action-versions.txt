@@ -1,0 +1,3 @@
+actions/checkout v4.2.2: published 2024-10-23T14:46:00Z
+subosito/flutter-action v2.19.0: published 2025-03-24T20:59:47Z
+Verified using GitHub release metadata on 2026-11-10. Fixed release tags are used in ci.yml.

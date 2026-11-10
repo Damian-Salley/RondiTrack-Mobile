@@ -1,0 +1,8 @@
+Running Gradle task 'assembleDevDebug'...                         201,7s
+v Built build\app\outputs\flutter-apk\app-dev-debug.apk
+Running Gradle task 'assembleStagingDebug'...                      53,4s
+v Built build\app\outputs\flutter-apk\app-staging-debug.apk
+Running Gradle task 'assembleProdDebug'...                        154,0s
+v Built build\app\outputs\flutter-apk\app-prod-debug.apk
+Running Gradle task 'assembleDevDebug'...                          24,8s
+v Built build\app\outputs\flutter-apk\app-dev-debug.apk

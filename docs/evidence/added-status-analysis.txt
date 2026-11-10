@@ -1,0 +1,6 @@
+Analyzing RondiTrack-Mobile...
+
+  error - lib\features\stokvels\domain\actions.dart:23:6 - The type '(StokvelRole, CycleStatus, ContributionStatus?)' isn't exhaustively matched by the switch cases since it doesn't match the pattern '(StokvelRole.member, CycleStatus.paused, _)'. Try adding a wildcard pattern or cases that match '(StokvelRole.member, CycleStatus.paused, _)'. - non_exhaustive_switch_expression
+  error - lib\features\stokvels\domain\status.dart:15:23 - The type 'CycleStatus' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'CycleStatus.paused'. Try adding a wildcard pattern or cases that match 'CycleStatus.paused'. - non_exhaustive_switch_expression
+
+2 issues found.
