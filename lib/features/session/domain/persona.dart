@@ -6,4 +6,10 @@ enum Persona {
 
   new(this.label);
   final String label;
+
+  String get email => switch (this) {
+    demo => 'assignment71-demo@ronditrack.example',
+    contributor => 'assignment71-contributor@ronditrack.example',
+    newcomer => 'assignment101-new@ronditrack.example',
+  };
 }

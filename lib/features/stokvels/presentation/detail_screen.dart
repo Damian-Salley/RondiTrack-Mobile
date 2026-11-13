@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ronditrack_mobile/app/app_theme.dart';
+import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/state_message.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
@@ -10,23 +12,17 @@ import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_provider.dart';
 
 /// Displays the details of a selected stokvel.
-class DetailScreen extends ConsumerStatefulWidget {
-  const new({required this.stokvelId, super.key});
+class DetailScreen extends ConsumerWidget {
+  const new({required this.stokvelId, this.cycleId, super.key});
 
   final int stokvelId;
+  final String? cycleId;
 
   @override
-  ConsumerState<DetailScreen> createState() => _DetailScreenState();
-}
-
-class _DetailScreenState extends ConsumerState<DetailScreen> {
-  late int _selectedId = widget.stokvelId;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Watch the selected stokvel without storing its details locally.
     final state = toViewState(
-      ref.watch(detailProvider(_selectedId)),
+      ref.watch(detailProvider(stokvelId)),
       isEmpty: (detail) => detail == null,
     );
 
@@ -38,18 +34,21 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: choices.containsKey(_selectedId)
+        toolbarHeight: 64 * MediaQuery.textScalerOf(context).scale(1),
+        title: choices.containsKey(stokvelId)
             ? DropdownButton<int>(
                 key: const Key('stokvel-picker'),
-                value: _selectedId,
+                value: stokvelId,
                 isExpanded: true,
+                itemHeight: null,
+                style: Theme.of(context).textTheme.titleMedium,
                 items: [
                   for (final MapEntry(key: id, value: entry) in choices.entries)
                     DropdownMenuItem(value: id, child: Text(entry.stokvelName)),
                 ],
                 // Switch to another stokvel when selected.
                 onChanged: (id) {
-                  if (id != null) setState(() => _selectedId = id);
+                  if (id != null) StokvelRoute(id: '$id').go(context);
                 },
               )
             : const Text('Stokvel'),
@@ -60,12 +59,19 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
         Loading() => const Center(
           child: CircularProgressIndicator(semanticsLabel: 'Loading stokvel'),
         ),
-        Empty() => const StateMessage(message: 'Stokvel not found.'),
+        Empty() => StateMessage(
+          message: cycleId == null ? 'Stokvel not found.' : 'Cycle not found.',
+        ),
         Failure(:final message) => StateMessage(
           message: message,
-          retry: () => ref.invalidate(detailProvider(_selectedId)),
+          retry: () => ref.invalidate(detailProvider(stokvelId)),
         ),
-        Data(:final value) => _DetailBody(detail: value!),
+        Data(:final value) =>
+          cycleId != null &&
+                  (cycleId != '${value!.currentCycle?.id}' ||
+                      value.currentCycle?.stokvelId != stokvelId)
+              ? const StateMessage(message: 'Cycle not found.')
+              : _DetailBody(detail: value!, isCycle: cycleId != null),
       },
     );
   }
@@ -73,9 +79,10 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
 
 /// Displays the stokvel's cycle, contributions, and available actions.
 class _DetailBody extends StatelessWidget {
-  const new({required this.detail});
+  const new({required this.detail, required this.isCycle});
 
   final StokvelDetail detail;
+  final bool isCycle;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +108,7 @@ class _DetailBody extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
+        if (isCycle) const Text('Cycle details'),
         Text(
           detail.stokvel.name,
           style: Theme.of(context).textTheme.headlineSmall,
@@ -114,7 +122,22 @@ class _DetailBody extends StatelessWidget {
         if (cycle == null)
           const Text('No current cycle.')
         else ...[
-          Text('Cycle ${cycle.number}: ${cycle.status.label}'),
+          if (!isCycle)
+            TextButton(
+              onPressed: () => CycleRoute(
+                id: '${detail.stokvel.id}',
+                cycleId: '${cycle.id}',
+              ).go(context),
+              child: const Text('Open cycle'),
+            ),
+          Text(
+            'Cycle ${cycle.number}: ${cycle.status.label}',
+            style: TextStyle(
+              color: Theme.of(context)
+                  .extension<StatusColors>()
+                  ?.cycles[cycle.status],
+            ),
+          ),
           Text('Due (UTC): ${cycle.dueDateUtc.toIso8601String()}'),
           Text('Target: ${formatCents(cycle.targetAmount)}'),
           Text('Required: ${formatCents(cycle.requiredContribution)}'),
@@ -130,8 +153,21 @@ class _DetailBody extends StatelessWidget {
             key: ValueKey('${detail.stokvel.id}-${contribution.userId}'),
             contentPadding: EdgeInsets.zero,
             title: Text(contribution.memberName),
-            subtitle: Text(contribution.status.label),
-            trailing: Text(formatCents(contribution.amount)),
+            // Keep amount under the name so large text has room to wrap.
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  contribution.status.label,
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .extension<StatusColors>()
+                        ?.contributions[contribution.status],
+                  ),
+                ),
+                Text(formatCents(contribution.amount)),
+              ],
+            ),
           ),
 
         const SizedBox(height: 20),

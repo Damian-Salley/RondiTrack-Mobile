@@ -36,12 +36,17 @@ android {
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
+            manifestPlaceholders["deepLinkScheme"] = "ronditrack-dev"
         }
         create("staging") {
             dimension = "environment"
             applicationIdSuffix = ".staging"
+            manifestPlaceholders["deepLinkScheme"] = "ronditrack-staging"
         }
-        create("prod") { dimension = "environment" }
+        create("prod") {
+            dimension = "environment"
+            manifestPlaceholders["deepLinkScheme"] = "ronditrack"
+        }
     }
 
     // Reject a config for a different native flavour before packaging an APK.
