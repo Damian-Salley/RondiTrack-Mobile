@@ -1,0 +1,18 @@
+ronditrack-dev://app/stokvels/1 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.dev/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack-dev://app/stokvels/1/cycles/101 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.dev/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack-dev://app/join/family -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.dev/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack-staging://app/stokvels/1 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.staging/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack-staging://app/stokvels/1/cycles/101 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.staging/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack-staging://app/join/family -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.staging/za.co.damiansalley.ronditrack_mobile.MainActivity
+ronditrack://app/stokvels/1 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile/.MainActivity
+ronditrack://app/stokvels/1/cycles/101 -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile/.MainActivity
+ronditrack://app/join/family -> priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile/.MainActivity
