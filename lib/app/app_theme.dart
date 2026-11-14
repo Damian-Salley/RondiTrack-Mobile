@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ronditrack_mobile/features/payouts/domain/payout.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 
 const rondiSeed = Color(0xFF186B52);
@@ -15,6 +16,20 @@ class StatusColors extends ThemeExtension<StatusColors> {
   final Map<ContributionStatus, Color> contributions;
   final Map<CycleStatus, Color> cycles;
   final Color arrears;
+
+  /// Reuse measured pairs whose meanings match paid, next, waiting and unknown.
+  Color payout(PayoutStatus status) {
+    if (status == PayoutStatus.paid) {
+      return contributions[ContributionStatus.paid]!;
+    }
+    if (status == PayoutStatus.next) {
+      return contributions[ContributionStatus.confirmed]!;
+    }
+    if (status == PayoutStatus.waiting) {
+      return contributions[ContributionStatus.pending]!;
+    }
+    return contributions[ContributionStatus.unknown]!;
+  }
 
   static const light = StatusColors(
     contributions: {

@@ -918,3 +918,16 @@ The baseline API only had POST payout processing, so the read endpoint is a
 required backend fix. No schema migration, package, or new payout business rule
 is needed. Backend tests cover access, order, next, paid amount/date and empty.
 The owner will publish/link separate backend and mobile PRs after local review.
+
+### Payout status tokens
+
+All pairs reuse measured contribution tokens in `StatusColors.payout`, on the
+same theme surface. `test/payout_theme_test.dart` measures every status in both
+modes; words accompany colours.
+
+| Token / reused meaning | Light FG / BG | Ratio | Dark FG / BG | Ratio |
+|---|---|---:|---|---:|
+| payout.paid / contribution.paid | #174EA6 / #F5FBF6 | 7.48 | #A8C7FA / #0F1512 | 10.75 |
+| payout.next / contribution.confirmed (positive emphasis) | #14633E / #F5FBF6 | 6.94 | #8FD9AD / #0F1512 | 11.17 |
+| payout.waiting / contribution.pending | #6B4800 / #F5FBF6 | 7.84 | #FFD180 / #0F1512 | 12.92 |
+| payout.unknown / contribution.unknown | #43525F / #F5FBF6 | 7.67 | #CBD5E1 / #0F1512 | 12.45 |
