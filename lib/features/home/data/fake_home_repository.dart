@@ -39,7 +39,7 @@ class FakeHomeRepository implements HomeRepository {
       // Both existing personas are ordinary members of this stokvel.
       const HomeEntry(
         membership: Membership(stokvelId: 2, role: .member),
-        stokvelName: 'Family Savings',
+        stokvelName: 'Mabena Family',
         paidThisCycle: Cents(0),
         stillOwes: Cents(10000),
         arrears: Cents(0),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/auth_redirect.dart';
 import 'package:ronditrack_mobile/core/breakpoints.dart';
 import 'package:ronditrack_mobile/features/activity/activity_screen.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
 import 'package:ronditrack_mobile/features/payouts/presentation/payout_screen.dart';
+import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/session/presentation/profile_screen.dart';
 import 'package:ronditrack_mobile/features/session/presentation/sign_in_screen.dart';
@@ -196,7 +198,7 @@ class _StokvelPage extends StatelessWidget {
   );
 }
 
-class _AppShell extends StatelessWidget {
+class _AppShell extends ConsumerWidget {
   const new({required this.shell});
   final StatefulNavigationShell shell;
   static const List<(IconData, String)> _tabs = [
@@ -207,29 +209,56 @@ class _AppShell extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final wide = MediaQuery.sizeOf(context).width >= mediumWidth;
     return Scaffold(
       body: SafeArea(
-        child: Row(
+        child: Column(
           children: [
-            // Keep the branch shell in the same slot across window changes.
-            if (wide)
-              NavigationRail(
-                selectedIndex: shell.currentIndex,
-                onDestinationSelected: shell.goBranch,
-                labelType: NavigationRailLabelType.all,
-                destinations: [
-                  for (final (icon, label) in _tabs)
-                    NavigationRailDestination(
-                      icon: Icon(icon),
-                      label: Text(label),
+            // Construct no switcher at all outside dev. There is no dev route.
+            if (ref.watch(appConfigProvider).flavor == 'dev')
+              Align(
+                alignment: Alignment.centerLeft,
+                child: PopupMenuButton<Persona>(
+                  key: const Key('persona-switcher'),
+                  tooltip: 'Switch dev persona',
+                  onSelected: (persona) =>
+                      ref.read(authProvider.notifier).signIn(persona.email),
+                  itemBuilder: (_) => [
+                    for (final persona in Persona.values)
+                      PopupMenuItem(value: persona, child: Text(persona.label)),
+                  ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                      'Dev persona: ${ref.watch(authProvider)?.label}',
                     ),
+                  ),
+                ),
+              ),
+            Expanded(
+              child: Row(
+                children: [
+                  // Keep the shell in the same slot across window changes.
+                  if (wide)
+                    NavigationRail(
+                      selectedIndex: shell.currentIndex,
+                      onDestinationSelected: shell.goBranch,
+                      labelType: NavigationRailLabelType.all,
+                      destinations: [
+                        for (final (icon, label) in _tabs)
+                          NavigationRailDestination(
+                            icon: Icon(icon),
+                            label: Text(label),
+                          ),
+                      ],
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  Expanded(child: shell),
                 ],
-              )
-            else
-              const SizedBox.shrink(),
-            Expanded(child: shell),
+              ),
+            ),
           ],
         ),
       ),

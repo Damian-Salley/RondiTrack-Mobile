@@ -28,14 +28,14 @@ class FakePayoutRepository implements PayoutRepository {
     return const [
       PayoutEntry(
         userId: 1,
-        memberName: 'Demo Member',
+        memberName: 'Lerato',
         position: 1,
         amount: Cents(50000),
         status: .next,
       ),
       PayoutEntry(
         userId: 2,
-        memberName: 'Sample Contributor',
+        memberName: 'Sipho',
         position: 2,
         amount: Cents(50000),
         status: .waiting,

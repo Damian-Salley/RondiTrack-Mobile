@@ -10,12 +10,18 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Check that the required API configuration and app flavour are valid.
-  AppConfig.validate(
+  final config = AppConfig.validate(
     flavor: const String.fromEnvironment('FLAVOR'),
     apiBaseUrl: const String.fromEnvironment('API_BASE_URL'),
     nativeFlavor: appFlavor,
   );
 
   // Start the application with Riverpod state management enabled.
-  runApp(const ProviderScope(retry: appRetry, child: RondiTrackApp()));
+  runApp(
+    ProviderScope(
+      retry: appRetry,
+      overrides: [appConfigProvider.overrideWithValue(config)],
+      child: const RondiTrackApp(),
+    ),
+  );
 }

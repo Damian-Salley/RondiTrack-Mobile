@@ -5,6 +5,7 @@ import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/state_message.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
+import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_notifier.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/actions.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
@@ -27,7 +28,8 @@ class DetailScreen extends ConsumerWidget {
     );
 
     // Get the stokvels available to the current persona.
-    final entries = ref.watch(homeProvider).value ?? [];
+    final home = ref.watch(homeProvider);
+    final entries = home.isReloading ? <HomeEntry>[] : home.value ?? [];
     final choices = {
       for (final item in entries) item.membership.stokvelId: item,
     };

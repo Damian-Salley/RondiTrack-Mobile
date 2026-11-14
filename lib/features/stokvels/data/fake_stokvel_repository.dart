@@ -30,7 +30,7 @@ class FakeStokvelRepository implements StokvelRepository {
     return StokvelDetail(
       stokvel: Stokvel(
         id: stokvelId,
-        name: community ? 'Community Savings' : 'Family Savings',
+        name: community ? 'Community Savings' : 'Mabena Family',
         contributionAmount: Cents(community ? 25000 : 10000),
         memberCount: 2,
       ),
@@ -57,7 +57,7 @@ class FakeStokvelRepository implements StokvelRepository {
           userId: 1,
           stokvelId: stokvelId,
           cycleId: cycleId,
-          memberName: 'Demo Member',
+          memberName: 'Lerato',
           amount: Cents(community ? 25000 : 10000),
           status: community ? .paid : .pending,
           paidAtUtc: community ? DateTime.utc(2026, 10, 31, 22, 30) : null,
@@ -67,7 +67,7 @@ class FakeStokvelRepository implements StokvelRepository {
             userId: 2,
             stokvelId: stokvelId,
             cycleId: cycleId,
-            memberName: 'Sample Contributor',
+            memberName: 'Sipho',
             amount: const Cents(10),
             status: .confirmed,
             paidAtUtc: DateTime.utc(2026, 11),

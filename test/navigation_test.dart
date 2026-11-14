@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/app/auth_redirect.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
@@ -86,7 +87,7 @@ void main() {
     ),
   ]) {
     testWidgets('$persona at $address returns $message', (tester) async {
-      final container = ProviderContainer();
+      final container = ProviderContainer(retry: appRetry);
       addTearDown(container.dispose);
       container.read(authProvider.notifier).signIn(persona.email);
       container.read(routerProvider).go(address);
@@ -107,7 +108,7 @@ void main() {
   testWidgets(
     'same persona has treasurer actions only in its treasurer stokvel',
     (tester) async {
-      final container = ProviderContainer();
+      final container = ProviderContainer(retry: appRetry);
       addTearDown(container.dispose);
       container.read(authProvider.notifier).signIn(Persona.demo.email);
       final router = container.read(routerProvider)
@@ -134,7 +135,7 @@ void main() {
   testWidgets(
     'signed-out invite survives email sign-in and sign-out clears back',
     (tester) async {
-      final container = ProviderContainer();
+      final container = ProviderContainer(retry: appRetry);
       addTearDown(container.dispose);
       final router = container.read(routerProvider)
         ..go(const JoinRoute(code: 'family').location);
@@ -165,7 +166,7 @@ void main() {
   testWidgets('cycle branch keeps its stack and scroll across tabs', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(retry: appRetry);
     addTearDown(container.dispose);
     container.read(authProvider.notifier).signIn(Persona.demo.email);
     final router = container.read(routerProvider)

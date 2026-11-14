@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/features/activity/activity_screen.dart';
 import 'package:ronditrack_mobile/features/home/data/fake_home_repository.dart';
 import 'package:ronditrack_mobile/features/home/home_providers.dart';
@@ -30,7 +31,7 @@ void main() {
     var fail = true;
     await tester.pumpWidget(
       ProviderScope(
-        retry: (_, _) => null,
+        retry: appRetry,
         overrides: [
           activityProvider.overrideWith((ref) async {
             if (fail) throw StateError('offline');
