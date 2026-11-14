@@ -3,28 +3,13 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/app/provider_retry.dart';
-import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
 import 'package:ronditrack_mobile/features/payouts/domain/payout.dart';
 import 'package:ronditrack_mobile/features/payouts/domain/payout_repository.dart';
 import 'package:ronditrack_mobile/features/payouts/payout_providers.dart';
 import 'package:ronditrack_mobile/features/payouts/presentation/payout_provider.dart';
 
-class TestPayoutRepository implements PayoutRepository {
-  new(this.load);
-  final Future<List<PayoutEntry>> Function(PayoutCycle) load;
-
-  @override
-  Future<List<PayoutEntry>> fetchOrder(PayoutCycle cycle) => load(cycle);
-}
-
-const testPayout = PayoutEntry(
-  userId: 2,
-  memberName: 'Server first',
-  position: 9,
-  amount: Cents(12345),
-  status: .next,
-);
+import 'support/repositories.dart';
 
 void main() {
   test('provider: empty is Empty, not Data; loading maps once', () async {

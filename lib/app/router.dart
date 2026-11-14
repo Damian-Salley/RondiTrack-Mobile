@@ -5,6 +5,7 @@ import 'package:ronditrack_mobile/app/auth_redirect.dart';
 import 'package:ronditrack_mobile/core/breakpoints.dart';
 import 'package:ronditrack_mobile/features/activity/activity_screen.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
+import 'package:ronditrack_mobile/features/payouts/presentation/payout_screen.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/session/presentation/profile_screen.dart';
 import 'package:ronditrack_mobile/features/session/presentation/sign_in_screen.dart';
@@ -152,8 +153,12 @@ class PayoutsRoute extends GoRouteData with $PayoutsRoute {
   final String cycleId;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const Scaffold(body: Center(child: Text('Rotation and payouts')));
+  Widget build(BuildContext context, GoRouterState state) => PayoutScreen(
+    cycle: (
+      stokvelId: int.tryParse(id) ?? -1,
+      cycleId: int.tryParse(cycleId) ?? -1,
+    ),
+  );
 }
 
 class ActivityRoute extends GoRouteData with $ActivityRoute {

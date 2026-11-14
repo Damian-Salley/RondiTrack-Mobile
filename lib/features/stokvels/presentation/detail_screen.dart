@@ -141,6 +141,13 @@ class _DetailBody extends StatelessWidget {
           Text('Due (UTC): ${cycle.dueDateUtc.toIso8601String()}'),
           Text('Target: ${formatCents(cycle.targetAmount)}'),
           Text('Required: ${formatCents(cycle.requiredContribution)}'),
+          TextButton(
+            onPressed: () => PayoutsRoute(
+              id: '${detail.stokvel.id}',
+              cycleId: '${cycle.id}',
+            ).go(context),
+            child: const Text('View rotation and payouts'),
+          ),
         ],
 
         const SizedBox(height: 20),
