@@ -18,18 +18,12 @@ class StatusColors extends ThemeExtension<StatusColors> {
   final Color arrears;
 
   /// Reuse measured pairs whose meanings match paid, next, waiting and unknown.
-  Color payout(PayoutStatus status) {
-    if (status == PayoutStatus.paid) {
-      return contributions[ContributionStatus.paid]!;
-    }
-    if (status == PayoutStatus.next) {
-      return contributions[ContributionStatus.confirmed]!;
-    }
-    if (status == PayoutStatus.waiting) {
-      return contributions[ContributionStatus.pending]!;
-    }
-    return contributions[ContributionStatus.unknown]!;
-  }
+  Color payout(PayoutStatus status) => switch (status) {
+    .paid => contributions[ContributionStatus.paid]!,
+    .next => contributions[ContributionStatus.confirmed]!,
+    .waiting => contributions[ContributionStatus.pending]!,
+    .unknown => contributions[ContributionStatus.unknown]!,
+  };
 
   static const light = StatusColors(
     contributions: {
