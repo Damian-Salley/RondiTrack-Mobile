@@ -21,7 +21,7 @@ class PayoutScreen extends ConsumerWidget {
     final state = ref.watch(payoutViewProvider(cycle));
     final detail = ref.watch(detailProvider(cycle.stokvelId));
     // AsyncValue can retain the previous persona during reload. Never use it.
-    final current = detail.isReloading ? null : detail.value;
+    final current = detail.isLoading || detail.hasError ? null : detail.value;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64 * MediaQuery.textScalerOf(context).scale(1),

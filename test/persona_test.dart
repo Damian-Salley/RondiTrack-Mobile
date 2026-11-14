@@ -262,4 +262,38 @@ void main() {
       );
     },
   );
+
+  testWidgets('twist: failed new membership cannot retain old actions', (
+    tester,
+  ) async {
+    final container = ProviderContainer(
+      retry: appRetry,
+      overrides: [
+        stokvelRepositoryProvider.overrideWith((ref) {
+          final persona = ref.watch(sessionProvider);
+          return TestStokvelRepository(
+            (id) => persona == Persona.demo
+                ? const FakeStokvelRepository(
+                    Persona.demo,
+                    delay: Duration.zero,
+                  ).fetchDetail(id)
+                : Future<StokvelDetail?>.error(StateError('offline')),
+          );
+        }),
+      ],
+    );
+    addTearDown(container.dispose);
+    container.read(authProvider.notifier).signIn(Persona.demo.email);
+    container
+        .read(routerProvider)
+        .go(const PayoutsRoute(id: '1', cycleId: '101').location);
+    await pumpApp(tester, container);
+    await tester.pumpAndSettle();
+    expect(find.text('Record payout'), findsOneWidget);
+    container.read(authProvider.notifier).signIn(Persona.contributor.email);
+    await tester.pumpAndSettle();
+    expect(find.text('1. Lerato'), findsOneWidget);
+    expect(find.text('Record payout'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 }

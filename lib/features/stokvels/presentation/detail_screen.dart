@@ -29,7 +29,9 @@ class DetailScreen extends ConsumerWidget {
 
     // Get the stokvels available to the current persona.
     final home = ref.watch(homeProvider);
-    final entries = home.isReloading ? <HomeEntry>[] : home.value ?? [];
+    final entries = home.isReloading || home.hasError
+        ? <HomeEntry>[]
+        : home.value ?? [];
     final choices = {
       for (final item in entries) item.membership.stokvelId: item,
     };
