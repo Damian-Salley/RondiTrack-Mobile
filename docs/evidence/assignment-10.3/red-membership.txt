@@ -1,0 +1,62 @@
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_fake_test.dart
+00:00 +0: fake: Persona.demo membership and exact seeded order
+00:00 +1: fake: Persona.demo cannot address missing or mismatched cycles
+00:00 +1 -1: fake: Persona.demo cannot address missing or mismatched cycles [E]
+  Expected: throws <Instance of 'PayoutNotFound'>
+    Actual: <Instance of 'Future<List<PayoutEntry>>'>
+     Which: emitted [
+                      _PayoutEntry:PayoutEntry(userId: 1, memberName: Lerato, position: 1, amount: 50000, status: PayoutStatus.next, paidAtUtc: null),
+                      _PayoutEntry:PayoutEntry(userId: 2, memberName: Sipho, position: 2, amount: 50000, status: PayoutStatus.waiting, paidAtUtc: null)
+                    ]
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\payout_fake_test.dart 40:17                   main.<fn>
+
+00:00 +1 -1: fake: Persona.contributor membership and exact seeded order
+00:00 +2 -1: fake: Persona.contributor cannot address missing or mismatched cycles
+00:00 +2 -2: fake: Persona.contributor cannot address missing or mismatched cycles [E]
+  Expected: throws <Instance of 'PayoutNotFound'>
+    Actual: <Instance of 'Future<List<PayoutEntry>>'>
+     Which: emitted [
+                      _PayoutEntry:PayoutEntry(userId: 1, memberName: Lerato, position: 1, amount: 50000, status: PayoutStatus.next, paidAtUtc: null),
+                      _PayoutEntry:PayoutEntry(userId: 2, memberName: Sipho, position: 2, amount: 50000, status: PayoutStatus.waiting, paidAtUtc: null)
+                    ]
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\payout_fake_test.dart 40:17                   main.<fn>
+
+00:00 +2 -2: fake: Persona.newcomer membership and exact seeded order
+00:00 +2 -3: fake: Persona.newcomer membership and exact seeded order [E]
+  Expected: throws <Instance of 'PayoutNotFound'>
+    Actual: <Instance of 'Future<List<PayoutEntry>>'>
+     Which: emitted [
+                      _PayoutEntry:PayoutEntry(userId: 1, memberName: Lerato, position: 1, amount: 50000, status: PayoutStatus.next, paidAtUtc: null),
+                      _PayoutEntry:PayoutEntry(userId: 2, memberName: Sipho, position: 2, amount: 50000, status: PayoutStatus.waiting, paidAtUtc: null)
+                    ]
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\payout_fake_test.dart 13:15                   main.<fn>
+
+00:00 +2 -3: fake: Persona.newcomer cannot address missing or mismatched cycles
+00:00 +2 -4: fake: Persona.newcomer cannot address missing or mismatched cycles [E]
+  Expected: throws <Instance of 'PayoutNotFound'>
+    Actual: <Instance of 'Future<List<PayoutEntry>>'>
+     Which: emitted [
+                      _PayoutEntry:PayoutEntry(userId: 1, memberName: Lerato, position: 1, amount: 50000, status: PayoutStatus.next, paidAtUtc: null),
+                      _PayoutEntry:PayoutEntry(userId: 2, memberName: Sipho, position: 2, amount: 50000, status: PayoutStatus.waiting, paidAtUtc: null)
+                    ]
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\payout_fake_test.dart 40:17                   main.<fn>
+
+00:00 +2 -4: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_fake_test.dart: fake: Persona.contributor cannot address missing or mismatched cycles
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_fake_test.dart: fake: Persona.demo cannot address missing or mismatched cycles
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_fake_test.dart: fake: Persona.newcomer cannot address missing or mismatched cycles
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_fake_test.dart: fake: Persona.newcomer membership and exact seeded order

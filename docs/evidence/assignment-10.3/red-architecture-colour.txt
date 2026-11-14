@@ -1,0 +1,18 @@
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/architecture_test.dart
+00:00 +0: architecture: feature colours and screen data boundaries
+00:00 +0 -1: architecture: feature colours and screen data boundaries [E]
+  Expected: empty
+    Actual: [
+              'lib/features/home/presentation/home_screen.dart: use app theme tokens instead of typing a colour'
+            ]
+  lib/features/home/presentation/home_screen.dart: use app theme tokens instead of typing a colour
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\architecture_test.dart 46:5                    main.<fn>
+
+00:00 +0 -1: architecture: guard detects each prohibited dependency and colour form
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/architecture_test.dart: architecture: feature colours and screen data boundaries

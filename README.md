@@ -900,8 +900,8 @@ No merge into `main` is claimed.
 ## Assignment 10.3 contract notes (read before adding payout types)
 
 API baseline: `9958be9` (merged Assignment 10.1 backend); the necessary local
-fix is on `feature/assignment-10.3-backend`. Its final commit and real exported
-OpenAPI hash are recorded in `contract/provenance.json` after verification.
+fix is on `feature/assignment-10.3-backend`. Its verified commit (`729079e`) and exported
+OpenAPI hash are recorded in `contract/provenance.json`.
 Sources: backend README, `Services/RondiTrackService.cs`,
 `Controllers/StokvelsController.cs`, and the application's `/openapi/v1.json`.
 The checked-in backend `openapi.json` is an older snapshot; the mobile contract
@@ -982,3 +982,19 @@ exception expiry dates. Any future exception must state its reason and ending
 week in the test, with an expiry assertion. The existing CI `flutter test` step
 runs these checks alongside every other test. Guard fixtures prove the detector
 recognises each prohibited dependency and permits theme-token use.
+
+
+## Assignment 10.3 verification and review
+
+The compulsory requirements, local commit sequence, actual results and owner
+submission steps are in [the completion report](docs/assignment-10.3-completion.md).
+Use [the prepared PR description](docs/assignment-10.3-pr-description.md) and
+[real device/test evidence](docs/evidence/assignment-10.3/README.md) after review.
+All 134 mobile tests and 109 backend tests passed. Formatting, strict analysis,
+locked resolution, two stable generation runs, dev/staging/prod debug APKs and
+a prod release APK passed. Hosted CI/PR links await the owner's publication;
+no push, merge or PR was made during this task.
+
+Family's empty order is a deliberate empty-response fixture for the required
+empty screen, not a claim that the backend's currently seeded Family rotation
+is empty. Both fakes use the API response shape, and mobile computes no order.

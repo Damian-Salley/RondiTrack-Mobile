@@ -1,0 +1,10 @@
+  0s riverpod_generator on 57 inputs; lib/app/app_config.dart
+  0s riverpod_generator on 57 inputs: 1 skipped; lib/app/app_theme.dart
+  0s riverpod_generator on 57 inputs: 57 skipped
+  0s go_router_builder on 57 inputs; lib/app/app_config.dart
+  0s go_router_builder on 57 inputs: 57 skipped
+  0s source_gen:combining_builder on 57 inputs; lib/app/app_config.dart
+  0s source_gen:combining_builder on 57 inputs: 57 skipped
+  0s freezed on 114 inputs; lib/app/app_config.dart
+  0s freezed on 114 inputs: 114 skipped
+  Built with build_runner/aot in 2s; wrote 0 outputs.
