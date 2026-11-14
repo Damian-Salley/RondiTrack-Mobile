@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ronditrack_mobile/app/app_theme.dart';
+import 'package:ronditrack_mobile/app/router.dart';
 
 // Defines the main application and its appearance.
-class RondiTrackApp extends StatelessWidget {
+class RondiTrackApp extends ConsumerWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     title: 'RondiTrack',
 
-    // Apply a consistent green theme throughout the application.
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF186B52)),
-      useMaterial3: true,
-    ),
+    // Follow the phone's light/dark setting using the same RondiTrack seed.
+    theme: rondiTheme(Brightness.light),
+    darkTheme: rondiTheme(Brightness.dark),
 
-    // Display the Home screen when the application starts.
-    home: const HomeScreen(),
+    routerConfig: ref.watch(routerProvider),
   );
 }

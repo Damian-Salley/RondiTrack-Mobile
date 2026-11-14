@@ -1,10 +1,168 @@
-# RondiTrack Mobile — Assignment 10.1
+# RondiTrack Mobile — Assignment 10.2
+
+## Routes
+
+Each address uses a generated typed route. All signed-in people share the same four tabs.
+
+| Address | Screen and tab | Signed out | Not a member | Android back, including cold links |
+|---|---|---|---|---|
+| `/sign-in` | Fake email sign-in, outside tabs | Stay here | Not applicable | Exit |
+| `/home` | Home summary, Home | Sign in, then Home | Empty Home | Exit |
+| `/stokvels` | Membership list, Stokvels | Sign in, then list | Empty list | Exit |
+| `/stokvels/:id` | Stokvel detail, Stokvels | Sign in, then requested detail | Stokvel not found | Stokvel list |
+| `/stokvels/:id/cycles/:cycleId` | Cycle detail, Stokvels | Sign in, then requested cycle | Cycle not found, also for mismatched IDs | Parent stokvel, then list |
+| `/activity` | Fake cross-stokvel feed, Activity | Sign in, then Activity | Empty feed | Exit |
+| `/profile` | Current persona and sign-out, Profile | Sign in, then Profile | Not applicable | Exit |
+| `/join/:code` | Invite preview, outside tabs | Sign in, then same preview | Preview; fake join does not change memberships | Home |
+
+
+## Authentication gate
+
+The app starts signed out. Enter a seed email on Sign in, or tap a persona to fill
+it. `authProvider` holds a persona or null and updates the existing 10.1 session
+provider. The old Home persona picker has moved to sign-in; Profile shows the
+current persona and signs out. Authentication stays in memory, so a cold start
+requires sign-in again.
+
+`authRedirect` is one pure, unit-tested gate. Protected addresses go to sign-in
+with an encoded `from`; signing in restores that address. `safeDestination`
+accepts only known internal routes without schemes, authorities, queries,
+fragments or backslashes. Everything else falls back to Home. Our Android custom
+scheme links are reduced to their internal path before remembering them.
+Riverpod auth changes notify `GoRouter.refreshListenable`, so the gate runs even
+without navigation. Sign-out removes the shell and its stacks and invalidates
+the session's repositories.
+
+Invites display the original code after sign-in. Join demonstrates the fake flow,
+returns Home and shows confirmation; it does not modify seed memberships or call
+an API. Payment and treasurer buttons retain their 10.1 Week 11 placeholders.
+
+## Navigation and Android back
+
+Each typed stateful-shell branch keeps its page and scroll. Tapping the active
+tab also preserves its position. Back pops the current branch: cycle → stokvel →
+list. At a branch root, back exits; it does not replay tab selections. Cold cycle
+links build both parents underneath. Invite back goes Home. After sign-out, back
+cannot reopen protected screens.
+
+The picker changes the address. Widgets use generated typed routes, with no
+string paths or `Navigator.push`. Missing and inaccessible resources give the
+same response: `Stokvel not found.` or `Cycle not found.`. Cycles must belong to
+their addressed stokvel. The unchanged domain action rules use each stokvel's
+membership, never a global persona role.
+
+## Deep links
+
+Custom schemes with host `app` keep installed flavours separate: `ronditrack-dev`,
+`ronditrack-staging`, and `ronditrack`. Flutter's native handler forwards cold and
+running-app links to the router. Build/install the matching flavour first.
+These commands omit a package to test Android's scheme resolution:
+
+```bash
+# Dev
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1/cycles/101"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/join/family"
+# Staging
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1/cycles/101"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/join/family"
+# Prod
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1/cycles/101"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/join/family"
+```
+
+For a **cold** test, force-stop the matching package immediately before each link:
+
+```bash
+adb shell am force-stop za.co.damiansalley.ronditrack_mobile.dev
+adb shell am force-stop za.co.damiansalley.ronditrack_mobile.staging
+adb shell am force-stop za.co.damiansalley.ronditrack_mobile
+```
+
+Sign in and check the requested screen and back chain. For a warm test, leave the
+app signed in and issue the link again. Family uses stokvel `2` and cycle `201`;
+cycle `201` under stokvel `1` must show not found. New Member must get the same
+not-found response as stokvel `999`.
+
+adb checks intent resolution and navigation, not domain ownership or verified
+web-link handling. With an owned HTTPS domain, add an `android:autoVerify` intent
+filter and host `/.well-known/assetlinks.json` with each flavour's application ID
+and signing-certificate SHA-256 fingerprints. Then verify real taps from a browser
+or messaging app. Custom schemes do not provide that verification.
+
+## Theme tokens and measured contrast
+
+Material 3 uses seed `#186B52`, with separate light/dark schemes following the
+system. `StatusColors` extends the theme for every contribution/cycle status,
+including unknown values, and arrears. Status words remain visible without colour.
+Presentation widgets contain no literal colours.
+
+The checker is `test/layout_theme_test.dart`: Flutter `Color.computeLuminance()`
+and WCAG's `(lighter + 0.05) / (darker + 0.05)` formula. It asserts every pair
+below. Text exceeds 4.5:1; outlines exceed 3:1. Status text uses surface backgrounds.
+
+| Token | Light FG / BG | Ratio | Dark FG / BG | Ratio |
+|---|---|---:|---|---:|
+| onSurface | #171D1A / #F5FBF6 | 16.31 | #DEE4DF / #0F1512 | 14.32 |
+| onSurfaceVariant | #404944 / #F5FBF6 | 8.88 | #BFC9C2 / #0F1512 | 10.87 |
+| primary | #196B52 / #F5FBF6 | 6.13 | #8AD6B7 / #0F1512 | 10.90 |
+| onPrimary | #FFFFFF / #196B52 | 6.43 | #003828 / #8AD6B7 | 7.76 |
+| outline (control) | #707974 / #F5FBF6 | 4.28 | #89938D / #0F1512 | 5.83 |
+| arrears | #9B2424 / #F5FBF6 | 7.49 | #FFB4AB / #0F1512 | 10.88 |
+| contribution.pending | #6B4800 / #F5FBF6 | 7.84 | #FFD180 / #0F1512 | 12.92 |
+| contribution.paid | #174EA6 / #F5FBF6 | 7.48 | #A8C7FA / #0F1512 | 10.75 |
+| contribution.confirmed | #14633E / #F5FBF6 | 6.94 | #8FD9AD / #0F1512 | 11.17 |
+| contribution.unknown | #43525F / #F5FBF6 | 7.67 | #CBD5E1 / #0F1512 | 12.45 |
+| cycle.active | #14633E / #F5FBF6 | 6.94 | #8FD9AD / #0F1512 | 11.17 |
+| cycle.closed | #6B4800 / #F5FBF6 | 7.84 | #FFD180 / #0F1512 | 12.92 |
+| cycle.paid | #174EA6 / #F5FBF6 | 7.48 | #A8C7FA / #0F1512 | 10.75 |
+| cycle.unknown | #43525F / #F5FBF6 | 7.67 | #CBD5E1 / #0F1512 | 12.45 |
+
+## Responsive layouts
+
+Window breakpoints live once in `lib/core/breakpoints.dart`:
+
+| Width (dp) | Navigation | Stokvels |
+|---|---|---|
+| Below 600 | Bottom NavigationBar | List or detail |
+| 600–839 | Labelled NavigationRail | List or detail |
+| 840 and wider | Labelled NavigationRail | List beside addressed detail |
+
+Resizing changes panes without navigating. Pages scroll, text wraps, actions
+wrap, amounts sit below member names, and the detail toolbar grows with text.
+Layout tests cover 360×640 at 200% text and tablet rotation/back navigation.
+
+## Assignment 10.2 verification and submission
+
+```bash
+flutter pub get --enforce-lockfile
+dart run build_runner build
+dart format --output=none --set-exit-if-changed .
+dart analyze --fatal-infos
+flutter test
+```
+
+Regenerate twice and compare generated-file hashes to verify reproducibility.
+The existing PR workflow also checks regeneration against committed sources.
+Router versions are pinned as required: `go_router 18.1.1` and
+`go_router_builder 4.5.2`. No hosted CI result is claimed before the owner submits.
+
+See [current check results](docs/completion-report.md) and
+[evidence/capture instructions](docs/evidence/assignment-10.2/README.md).
+Required PR evidence: Home and stokvel screenshots in light and dark; 360 dp at
+200% text; tablet list/detail; cold cycle link recording including back; signed-out
+invite through sign-in recording; non-member not-found screenshot.
+
+## Assignment 10.1 foundation (historical)
 
 Flutter foundations and Riverpod state management using fake repositories.
 
 The mobile application does not call the API yet. API integration is planned for Week 11.
 
-On the Home screen, choose Demo Member, Sample Contributor, or New Member. Open a stokvel card to view its details, or use the detail screen's picker to switch stokvels.
+Choose a persona on Sign in. Open a Home card or Stokvel list entry, or use the
+detail picker to switch stokvels.
 
 ## Backend contract
 

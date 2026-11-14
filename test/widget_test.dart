@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ronditrack_mobile/app/ronditrack_app.dart';
+import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/features/home/data/fake_home_repository.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
 import 'package:ronditrack_mobile/features/home/home_providers.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
+import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/fake_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_screen.dart';
@@ -358,16 +361,25 @@ void main() {
         (id) => id == 2 ? pending.future : fake.fetchDetail(id),
       );
 
+      // Exercise the same one-frame assertion through address-based navigation.
+      final container = ProviderContainer(
+        retry: (retryCount, error) => null,
+        overrides: [
+          homeRepositoryProvider.overrideWithValue(
+            const FakeHomeRepository(Persona.demo, delay: Duration.zero),
+          ),
+          stokvelRepositoryProvider.overrideWithValue(repo),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.read(authProvider.notifier).signIn(Persona.demo.email);
+      final router = container.read(routerProvider)
+        ..go(const StokvelRoute(id: '1').location);
+
       await tester.pumpWidget(
-        ProviderScope(
-          retry: (retryCount, error) => null,
-          overrides: [
-            homeRepositoryProvider.overrideWithValue(
-              const FakeHomeRepository(Persona.demo, delay: Duration.zero),
-            ),
-            stokvelRepositoryProvider.overrideWithValue(repo),
-          ],
-          child: const MaterialApp(home: DetailScreen(stokvelId: 1)),
+        UncontrolledProviderScope(
+          container: container,
+          child: const RondiTrackApp(),
         ),
       );
 
@@ -397,6 +409,7 @@ void main() {
       expect(find.text('Your role: Treasurer'), findsNothing);
       expect(find.byKey(const ValueKey('1-1')), findsNothing);
       expect(find.byKey(const ValueKey('1-2')), findsNothing);
+      expect(router.routeInformationProvider.value.uri.path, '/stokvels/2');
 
       pending.complete(
         await tester.runAsync<StokvelDetail?>(() => fake.fetchDetail(2)),
