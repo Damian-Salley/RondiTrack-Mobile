@@ -895,3 +895,26 @@ The completion report records requirement coverage, testing evidence, and remain
 The mobile pull request and its CI results must be verified before claiming the complete mobile submission is finished.
 
 No merge into `main` is claimed.
+
+## Assignment 10.3 contract notes (read before adding payout types)
+
+API baseline: `9958be9` (merged Assignment 10.1 backend); the necessary local
+fix is on `feature/assignment-10.3-backend`. Its final commit and real exported
+OpenAPI hash are recorded in `contract/provenance.json` after verification.
+Sources: backend README, `Services/RondiTrackService.cs`,
+`Controllers/StokvelsController.cs`, and the application's `/openapi/v1.json`.
+The checked-in backend `openapi.json` is an older snapshot; the mobile contract
+copy is exported by an integration test from the actual application.
+
+| Question | Contract answer |
+|---|---|
+| Payout order endpoint and shape | GET `/api/v1/stokvels/{stokvelId}/cycles/{cycleId}/payouts`: array of `userId`, `memberName`, one-based `position`, `amountCents` (Int64 whole cents), nullable `paidAtUtc` (UTC instant), `status`. No scheduled date is promised. |
+| Exact status spellings | `Paid`, `Next`, `Waiting`; future values map to `unknown`. |
+| Who is next? | The API marks `Next` using the same recipient helper as payout processing. The app never sorts, sums, counts paid members or chooses a recipient. Closed/paid cycles have no next recipient. |
+| Non-member response | 404, also for missing/mismatched cycles; fake throws the same not-found outcome. Anonymous API callers receive 401. |
+| Who records? | Existing POST `.../payout`: Treasurer or Chairperson from this stokvel's membership; Member receives 403, non-member 404. The existing exhaustive `allowedActions` rule remains authoritative for UI actions. |
+
+The baseline API only had POST payout processing, so the read endpoint is a
+required backend fix. No schema migration, package, or new payout business rule
+is needed. Backend tests cover access, order, next, paid amount/date and empty.
+The owner will publish/link separate backend and mobile PRs after local review.
