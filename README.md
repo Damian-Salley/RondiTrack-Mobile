@@ -969,3 +969,16 @@ address. Existing navigation, access, activity and large-text tests still run.
 Payout records/actions remain fake/read-only Week 10 demonstrations; the record
 button retains the existing Week 11 placeholder, with no financial write.
 No optional stretch challenges or packages were added.
+
+## Architecture rules
+
+`test/architecture_test.dart` scans every Dart file under `lib/features`,
+including generated files. It rejects literal colours and colour constructors
+or palettes (`Color`, `Colors`, Material/Cupertino palettes, HSL/HSV, hex values).
+Screens (by filename or Screen class) cannot import/export a `data/` folder,
+Dio or Drift. Composition roots may import data; screens consume their domain
+interfaces through providers. There are **no exceptions**, so there are no
+exception expiry dates. Any future exception must state its reason and ending
+week in the test, with an expiry assertion. The existing CI `flutter test` step
+runs these checks alongside every other test. Guard fixtures prove the detector
+recognises each prohibited dependency and permits theme-token use.
