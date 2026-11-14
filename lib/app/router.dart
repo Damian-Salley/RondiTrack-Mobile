@@ -70,7 +70,12 @@ class JoinRoute extends GoRouteData with $JoinRoute {
           routes: [
             TypedGoRoute<StokvelRoute>(
               path: ':id',
-              routes: [TypedGoRoute<CycleRoute>(path: 'cycles/:cycleId')],
+              routes: [
+                TypedGoRoute<CycleRoute>(
+                  path: 'cycles/:cycleId',
+                  routes: [TypedGoRoute<PayoutsRoute>(path: 'payouts')],
+                ),
+              ],
             ),
           ],
         ),
@@ -139,6 +144,16 @@ class CycleRoute extends GoRouteData with $CycleRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       _StokvelPage(id: id, cycleId: cycleId);
+}
+
+class PayoutsRoute extends GoRouteData with $PayoutsRoute {
+  const new({required this.id, required this.cycleId});
+  final String id;
+  final String cycleId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const Scaffold(body: Center(child: Text('Rotation and payouts')));
 }
 
 class ActivityRoute extends GoRouteData with $ActivityRoute {

@@ -14,7 +14,8 @@ String safeDestination(String? destination) {
   }
   final path = uri.path;
   if (const {'/home', '/stokvels', '/activity', '/profile'}.contains(path) ||
-      RegExp(r'^/stokvels/[^/%]+(?:/cycles/[^/%]+)?$').hasMatch(path) ||
+      RegExp(r'^/stokvels/[^/%]+(?:/cycles/[^/%]+(?:/payouts)?)?$')
+          .hasMatch(path) ||
       RegExp(r'^/join/[A-Za-z0-9_-]+$').hasMatch(path)) {
     return path;
   }

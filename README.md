@@ -11,6 +11,7 @@ Each address uses a generated typed route. All signed-in people share the same f
 | `/stokvels` | Membership list, Stokvels | Sign in, then list | Empty list | Exit |
 | `/stokvels/:id` | Stokvel detail, Stokvels | Sign in, then requested detail | Stokvel not found | Stokvel list |
 | `/stokvels/:id/cycles/:cycleId` | Cycle detail, Stokvels | Sign in, then requested cycle | Cycle not found, also for mismatched IDs | Parent stokvel, then list |
+| `/stokvels/:id/cycles/:cycleId/payouts` | Rotation and payouts, Stokvels | Sign in, then requested payouts | Cycle not found | Parent cycle, then stokvel and list |
 | `/activity` | Fake cross-stokvel feed, Activity | Sign in, then Activity | Empty feed | Exit |
 | `/profile` | Current persona and sign-out, Profile | Sign in, then Profile | Not applicable | Exit |
 | `/join/:code` | Invite preview, outside tabs | Sign in, then same preview | Preview; fake join does not change memberships | Home |
@@ -931,3 +932,4 @@ modes; words accompany colours.
 | payout.next / contribution.confirmed (positive emphasis) | #14633E / #F5FBF6 | 6.94 | #8FD9AD / #0F1512 | 11.17 |
 | payout.waiting / contribution.pending | #6B4800 / #F5FBF6 | 7.84 | #FFD180 / #0F1512 | 12.92 |
 | payout.unknown / contribution.unknown | #43525F / #F5FBF6 | 7.67 | #CBD5E1 / #0F1512 | 12.45 |
+
