@@ -1,0 +1,22 @@
+Starting: Intent { act=android.intent.action.VIEW dat=ronditrack-dev://app/... }
+Status: ok
+LaunchState: COLD
+Activity: za.co.damiansalley.ronditrack_mobile.dev/za.co.damiansalley.ronditrack_mobile.MainActivity
+TotalTime: 5512
+WaitTime: 5538
+Complete
+Observed cold sign-in restoring payouts with Treasurer action.
+Android back reached Cycle details.
+Next back reached Community Savings stokvel detail.
+Performing Streamed Install
+Success
+Resolve ronditrack-dev payout link:
+priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.dev/za.co.damiansalley.ronditrack_mobile.MainActivity
+Resolve ronditrack-staging payout link:
+priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile.staging/za.co.damiansalley.ronditrack_mobile.MainActivity
+Resolve ronditrack payout link:
+priority=0 preferredOrder=0 match=0x308000 specificIndex=-1 isDefault=true
+za.co.damiansalley.ronditrack_mobile/.MainActivity
+Restored font scale 1.0, size/density defaults and night auto.

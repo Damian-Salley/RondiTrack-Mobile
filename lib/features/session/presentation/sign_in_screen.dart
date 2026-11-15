@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
@@ -26,7 +27,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     body: ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text('Fake sign-in: enter a seed email or choose one below.'),
+        const Text('Fake sign-in: enter a seed email.'),
         TextField(
           controller: _email,
           keyboardType: TextInputType.emailAddress,
@@ -36,17 +37,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           onPressed: () {
             // The auth listener re-runs the gate and restores the destination.
             if (!ref.read(authProvider.notifier).signIn(_email.text)) {
-              setState(() => _error = 'Choose one of the seed emails below.');
+              setState(() => _error = 'Enter a valid seed email.');
             }
           },
           child: const Text('Sign in'),
         ),
-        for (final persona in Persona.values)
-          ListTile(
-            title: Text(persona.label),
-            subtitle: Text(persona.email),
-            onTap: () => _email.text = persona.email,
-          ),
+        if (ref.watch(appConfigProvider).flavor == 'dev')
+          for (final persona in Persona.values)
+            ListTile(
+              title: Text(persona.label),
+              subtitle: Text(persona.email),
+              onTap: () => _email.text = persona.email,
+            ),
       ],
     ),
   );

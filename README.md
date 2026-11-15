@@ -1,4 +1,4 @@
-# RondiTrack Mobile — Assignment 10.2
+# RondiTrack Mobile — Assignment 10.3
 
 ## Routes
 
@@ -11,6 +11,7 @@ Each address uses a generated typed route. All signed-in people share the same f
 | `/stokvels` | Membership list, Stokvels | Sign in, then list | Empty list | Exit |
 | `/stokvels/:id` | Stokvel detail, Stokvels | Sign in, then requested detail | Stokvel not found | Stokvel list |
 | `/stokvels/:id/cycles/:cycleId` | Cycle detail, Stokvels | Sign in, then requested cycle | Cycle not found, also for mismatched IDs | Parent stokvel, then list |
+| `/stokvels/:id/cycles/:cycleId/payouts` | Rotation and payouts, Stokvels | Sign in, then requested payouts | Cycle not found | Parent cycle, then stokvel and list |
 | `/activity` | Fake cross-stokvel feed, Activity | Sign in, then Activity | Empty feed | Exit |
 | `/profile` | Current persona and sign-out, Profile | Sign in, then Profile | Not applicable | Exit |
 | `/join/:code` | Invite preview, outside tabs | Sign in, then same preview | Preview; fake join does not change memberships | Home |
@@ -20,7 +21,7 @@ Each address uses a generated typed route. All signed-in people share the same f
 
 The app starts signed out. Enter a seed email on Sign in, or tap a persona to fill
 it. `authProvider` holds a persona or null and updates the existing 10.1 session
-provider. The old Home persona picker has moved to sign-in; Profile shows the
+provider. Dev sign-in has seed shortcuts; the dev shell also switches personas. Profile shows the
 current persona and signs out. Authentication stays in memory, so a cold start
 requires sign-in again.
 
@@ -291,31 +292,31 @@ Three personas are available for demonstrating different application states.
 
 | Persona | Backend seed email | Demonstration data |
 |---|---|---|
-| Demo Member | assignment71-demo@ronditrack.example | Treasurer of Community Savings and Member of Family Savings |
-| Sample Contributor | assignment71-contributor@ronditrack.example | Member of both stokvels, with contribution and arrears examples |
+| Lerato | assignment71-demo@ronditrack.example | Treasurer of Community Savings and Member of Mabena Family |
+| Sipho | assignment71-contributor@ronditrack.example | Member of both stokvels, with contribution and arrears examples |
 | New Member | assignment101-new@ronditrack.example | No memberships; Home displays its empty state |
 
-### Demo Member
+### Lerato
 
 Community Savings:
 - Paid R250.
 - No arrears.
 - Treasurer permissions.
 
-Family Savings:
+Mabena Family:
 - Pending R100 contribution.
 - Paid zero.
 - Owes R100.
 - Member permissions.
 
-### Sample Contributor
+### Sipho
 
 Community Savings:
 - Confirmed R0.10 contribution.
 - Owes R249.90.
 - R250 arrears from a closed cycle.
 
-Family Savings:
+Mabena Family:
 - No contribution.
 - Owes R100.
 
@@ -325,7 +326,7 @@ Community Savings:
 - Required contribution: R250 per member.
 - Target: R500.
 
-Family Savings:
+Mabena Family:
 - Required contribution: R100 per member.
 - Target: R200.
 
@@ -895,3 +896,105 @@ The completion report records requirement coverage, testing evidence, and remain
 The mobile pull request and its CI results must be verified before claiming the complete mobile submission is finished.
 
 No merge into `main` is claimed.
+
+## Assignment 10.3 contract notes (read before adding payout types)
+
+API baseline: `9958be9` (merged Assignment 10.1 backend); the necessary local
+fix is on `feature/assignment-10.3-backend`. Its verified commit (`729079e`) and exported
+OpenAPI hash are recorded in `contract/provenance.json`.
+Sources: backend README, `Services/RondiTrackService.cs`,
+`Controllers/StokvelsController.cs`, and the application's `/openapi/v1.json`.
+The checked-in backend `openapi.json` is an older snapshot; the mobile contract
+copy is exported by an integration test from the actual application.
+
+| Question | Contract answer |
+|---|---|
+| Payout order endpoint and shape | GET `/api/v1/stokvels/{stokvelId}/cycles/{cycleId}/payouts`: array of `userId`, `memberName`, one-based `position`, `amountCents` (Int64 whole cents), nullable `paidAtUtc` (UTC instant), `status`. No scheduled date is promised. |
+| Exact status spellings | `Paid`, `Next`, `Waiting`; future values map to `unknown`. |
+| Who is next? | The API marks `Next` using the same recipient helper as payout processing. The app never sorts, sums, counts paid members or chooses a recipient. Closed/paid cycles have no next recipient. |
+| Non-member response | 404, also for missing/mismatched cycles; fake throws the same not-found outcome. Anonymous API callers receive 401. |
+| Who records? | Existing POST `.../payout`: Treasurer or Chairperson from this stokvel's membership; Member receives 403, non-member 404. The existing exhaustive `allowedActions` rule remains authoritative for UI actions. |
+
+The baseline API only had POST payout processing, so the read endpoint is a
+required backend fix. No schema migration, package, or new payout business rule
+is needed. Backend tests cover access, order, next, paid amount/date and empty.
+The owner will publish/link separate backend and mobile PRs after local review.
+
+### Payout status tokens
+
+All pairs reuse measured contribution tokens in `StatusColors.payout`, on the
+same theme surface. `test/payout_theme_test.dart` measures every status in both
+modes; words accompany colours.
+
+| Token / reused meaning | Light FG / BG | Ratio | Dark FG / BG | Ratio |
+|---|---|---:|---|---:|
+| payout.paid / contribution.paid | #174EA6 / #F5FBF6 | 7.48 | #A8C7FA / #0F1512 | 10.75 |
+| payout.next / contribution.confirmed (positive emphasis) | #14633E / #F5FBF6 | 6.94 | #8FD9AD / #0F1512 | 11.17 |
+| payout.waiting / contribution.pending | #6B4800 / #F5FBF6 | 7.84 | #FFD180 / #0F1512 | 12.92 |
+| payout.unknown / contribution.unknown | #43525F / #F5FBF6 | 7.67 | #CBD5E1 / #0F1512 | 12.45 |
+
+
+
+## Assignment 10.3 personas
+
+These are display aliases for the existing 10.1 seeds, with stable IDs and emails:
+Lerato = Demo Member (`assignment71-demo@ronditrack.example`), Sipho = Sample
+Contributor (`assignment71-contributor@ronditrack.example`), New Member =
+`assignment101-new@ronditrack.example`. Mabena Family is the mobile display name
+for the backend's Family Savings fixture. These aliases change no API roles.
+
+| Persona | Home | Community Savings (1 / cycle 101) | Mabena Family (2 / cycle 201) | Payouts |
+|---|---|---|---|---|
+| Lerato | Two stokvels; Paid R250 / Owed R0 in Community, Paid R0 / Owed R100 in Family | Treasurer: confirm paid contributions, close, record payout; own upload proof | Member: own upload proof; no management actions | Community: server order Lerato Next, Sipho Waiting, R500 each, Record payout; Family: no payout order yet |
+| Sipho | Two stokvels; Paid R0.10 / Owed R249.90 in Community, Paid R0 / Owed R100 in Family | Member: own upload proof; no management actions | Member: Pay; no management actions | Same Community order without Record payout; Family: no payout order yet |
+| New Member | No stokvels; ask an organiser for an invite | Stokvel not found | Stokvel not found | Cycle not found for either cycle; no retry spinner |
+
+In dev only, tap **Dev persona: ...** above any shell screen and select a person.
+This invokes the same fake `authProvider.signIn` as email sign-in and keeps the
+current address. The menu has no address of its own. Staging and prod construct
+neither the menu nor sign-in seed shortcuts; `/dev/personas` is not found.
+`main` supplies the validated native `AppConfig` to the same provider read by
+these construction checks. Tests explicitly build both non-dev configs.
+
+Every persona-dependent repository watches `sessionProvider`. Reloads discard
+the previous person's visible data, including the stokvel picker and payouts.
+The first-frame tests in `test/persona_test.dart` exercise the real menu with
+Community and Mabena Family open, then sign out and sign in as New Member.
+Another first-frame test covers payouts. The same `appRetry` function is used in
+main and whole-app tests: requests do not automatically retry; recoverable
+failures expose a Retry button, while not-found exposes only its message.
+
+`test/routes_table_test.dart` parses the Routes table and opens every listed
+address. Existing navigation, access, activity and large-text tests still run.
+Payout records/actions remain fake/read-only Week 10 demonstrations; the record
+button retains the existing Week 11 placeholder, with no financial write.
+No optional stretch challenges or packages were added.
+
+## Architecture rules
+
+`test/architecture_test.dart` scans every Dart file under `lib/features`,
+including generated files. It rejects literal colours and colour constructors
+or palettes (`Color`, `Colors`, Material/Cupertino palettes, HSL/HSV, hex values).
+Screens (by filename or Screen class) cannot import/export a `data/` folder,
+Dio or Drift. Composition roots may import data; screens consume their domain
+interfaces through providers. There are **no exceptions**, so there are no
+exception expiry dates. Any future exception must state its reason and ending
+week in the test, with an expiry assertion. The existing CI `flutter test` step
+runs these checks alongside every other test. Guard fixtures prove the detector
+recognises each prohibited dependency and permits theme-token use.
+
+
+## Assignment 10.3 verification and review
+
+The compulsory requirements, local commit sequence, actual results and owner
+submission steps are in [the completion report](docs/assignment-10.3-completion.md).
+Use [the prepared PR description](docs/assignment-10.3-pr-description.md) and
+[real device/test evidence](docs/evidence/assignment-10.3/README.md) after review.
+All 134 mobile tests and 109 backend tests passed. Formatting, strict analysis,
+locked resolution, two stable generation runs, dev/staging/prod debug APKs and
+a prod release APK passed. Hosted CI/PR links await the owner's publication;
+no push, merge or PR was made during this task.
+
+Family's empty order is a deliberate empty-response fixture for the required
+empty screen, not a claim that the backend's currently seeded Family rotation
+is empty. Both fakes use the API response shape, and mobile computes no order.

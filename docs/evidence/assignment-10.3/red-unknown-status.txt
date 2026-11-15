@@ -1,0 +1,15 @@
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_domain_test.dart
+00:00 +0: domain: every API payout status maps, future strings are unknown
+00:00 +0 -1: domain: every API payout status maps, future strings are unknown [E]
+  Expected: PayoutStatus:<PayoutStatus.unknown>
+    Actual: PayoutStatus:<PayoutStatus.paid>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\payout_domain_test.dart 10:5                   main.<fn>
+
+00:00 +0 -1: domain: immutable row preserves server position, cents and date
+00:00 +1 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_domain_test.dart: domain: every API payout status maps, future strings are unknown

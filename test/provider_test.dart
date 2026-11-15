@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
 import 'package:ronditrack_mobile/features/home/data/fake_home_repository.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
@@ -34,7 +35,7 @@ void main() {
       );
 
       final container = ProviderContainer(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [homeRepositoryProvider.overrideWithValue(repo)],
       );
 
@@ -58,7 +59,7 @@ void main() {
       await container.read(homeProvider.future);
 
       // Use the real provider dependencies to test persona switching.
-      final sessions = ProviderContainer(retry: (retryCount, error) => null);
+      final sessions = ProviderContainer(retry: appRetry);
 
       addTearDown(sessions.dispose);
 
@@ -92,7 +93,7 @@ void main() {
     );
 
     final container = ProviderContainer(
-      retry: (retryCount, error) => null,
+      retry: appRetry,
       overrides: [stokvelRepositoryProvider.overrideWithValue(repo)],
     );
 
@@ -126,7 +127,7 @@ void main() {
     );
 
     final container = ProviderContainer(
-      retry: (retryCount, error) => null,
+      retry: appRetry,
       overrides: [stokvelRepositoryProvider.overrideWithValue(repo)],
     );
 

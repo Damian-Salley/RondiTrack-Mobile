@@ -1,7 +1,7 @@
 /// These are the backend's development seed people, not authentication roles.
 enum Persona {
-  demo('Demo Member'),
-  contributor('Sample Contributor'),
+  demo('Lerato'),
+  contributor('Sipho'),
   newcomer('New Member');
 
   new(this.label);

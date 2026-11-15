@@ -1,0 +1,47 @@
+Running Gradle task 'assembleProdRelease'...
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "Windows_NT" == "Windows_NT" setlocal
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set DEFAULT_JVM_OPTS=
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set DIRNAME=C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android\
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android\" == "" set DIRNAME=.
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set APP_BASE_NAME=gradlew
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set APP_HOME=C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android\
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if defined JAVA_HOME goto findJavaFromJavaHome
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set JAVA_HOME=C:\Program Files\Android\Android Studio\jbr
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set JAVA_EXE=C:\Program Files\Android\Android Studio\jbr/bin/java.exe
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if exist "C:\Program Files\Android\Android Studio\jbr/bin/java.exe" goto init
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if not "Windows_NT" == "Windows_NT" goto win9xME_args
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "@eval[2+2]" == "4" goto 4NT_args
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set CMD_LINE_ARGS=
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set _SKIP=2
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "x-q" == "x" goto execute
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set CMD_LINE_ARGS=-q -Ptarget-platform=android-arm,android-arm64,android-x64 -Ptarget=lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxBVk9SPXByb2Q=,QVBJX0JBU0VfVVJMPWh0dHBzOi8vcm9uZGl0cmFjay5leGFtcGxlL2FwaS92MQ==,RkxVVFRFUl9BUFBfRkxBVk9SPXByb2Q=,RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuNw==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049YWJhZjljNTIzNw==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049ZGViMjg3NDgxZQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy41 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=true -Pflutter.androidSdkRoot=C:\Users\Damian\AppData\Local\Android\sdk -Pflutter.installedNdkVersions=27.0.12077973,28.2.13676358 -Pflutter.sdkManagerPath=C:\Users\Damian\AppData\Local\Android\sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleProdRelease
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>goto execute
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>set CLASSPATH=C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android\\gradle\wrapper\gradle-wrapper.jar
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>"C:\Program Files\Android\Android Studio\jbr/bin/java.exe"    "-Dorg.gradle.appname=gradlew" -classpath "C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android\\gradle\wrapper\gradle-wrapper.jar" org.gradle.wrapper.GradleWrapperMain -q -Ptarget-platform=android-arm,android-arm64,android-x64 -Ptarget=lib\main.dart -Pbase-application-name=android.app.Application -Pdart-defines=RkxBVk9SPXByb2Q=,QVBJX0JBU0VfVVJMPWh0dHBzOi8vcm9uZGl0cmFjay5leGFtcGxlL2FwaS92MQ==,RkxVVFRFUl9BUFBfRkxBVk9SPXByb2Q=,RkxVVFRFUl9CVUlMRF9OQU1FPTEuMC4w,RkxVVFRFUl9CVUlMRF9OVU1CRVI9MQ==,RkxVVFRFUl9WRVJTSU9OPTMuNDcuNw==,RkxVVFRFUl9DSEFOTkVMPVt1c2VyLWJyYW5jaF0=,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049YWJhZjljNTIzNw==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049ZGViMjg3NDgxZQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMy41 -Pdart-obfuscation=false -Ptrack-widget-creation=true -Ptree-shake-icons=true -Pflutter.androidSdkRoot=C:\Users\Damian\AppData\Local\Android\sdk -Pflutter.installedNdkVersions=27.0.12077973,28.2.13676358 -Pflutter.sdkManagerPath=C:\Users\Damian\AppData\Local\Android\sdk\cmdline-tools\latest\bin\sdkmanager.bat assembleProdRelease
+Expected to find fonts for (packages/cupertino_icons/CupertinoIcons, MaterialIcons), but found (MaterialIcons). This usually means you are referring to font families in an IconData class but not including them in the assets section of your pubspec.yaml, are missing the package that would include them, or are missing "uses-material-design: true".
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 2016 bytes (99.9% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "0" == "0" goto mainEnd
+
+C:\Users\Damian\Desktop\RondiTrackApp\RondiTrack-Mobile\android>if "Windows_NT" == "Windows_NT" endlocal
+Running Gradle task 'assembleProdRelease'...                      165,1s
+√ Built build\app\outputs\flutter-apk\app-prod-release.apk (48.7MB)

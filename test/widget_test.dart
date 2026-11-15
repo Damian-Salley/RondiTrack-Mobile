@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/features/home/data/fake_home_repository.dart';
@@ -25,7 +26,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             TestHomeRepository(() => pending.future),
@@ -41,7 +42,7 @@ void main() {
   testWidgets('Home empty explains next step', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             const FakeHomeRepository(Persona.newcomer, delay: Duration.zero),
@@ -64,7 +65,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             const FakeHomeRepository(Persona.demo, delay: Duration.zero),
@@ -77,7 +78,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Community Savings'), findsOneWidget);
-    expect(find.text('Family Savings'), findsOneWidget);
+    expect(find.text('Mabena Family'), findsOneWidget);
     expect(find.text('Your role: Treasurer'), findsOneWidget);
     expect(find.text('Your role: Member'), findsOneWidget);
     expect(find.text('Paid: R\u00A0250,00'), findsOneWidget);
@@ -98,7 +99,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [homeRepositoryProvider.overrideWithValue(repo)],
         child: const MaterialApp(home: HomeScreen()),
       ),
@@ -137,7 +138,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [homeRepositoryProvider.overrideWithValue(repo)],
         child: const MaterialApp(home: HomeScreen()),
       ),
@@ -151,7 +152,7 @@ void main() {
 
     expect(calls, 2);
     expect(find.text('Community Savings'), findsOneWidget);
-    expect(find.text('Family Savings'), findsOneWidget);
+    expect(find.text('Mabena Family'), findsOneWidget);
 
     pending.complete(entries);
 
@@ -164,7 +165,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             TestHomeRepository(() async => []),
@@ -187,7 +188,7 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             key: ValueKey(id),
-            retry: (retryCount, error) => null,
+            retry: appRetry,
             overrides: [
               homeRepositoryProvider.overrideWithValue(
                 TestHomeRepository(() async => []),
@@ -216,7 +217,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             TestHomeRepository(() async => []),
@@ -264,7 +265,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          retry: (retryCount, error) => null,
+          retry: appRetry,
           overrides: [
             homeRepositoryProvider.overrideWithValue(
               TestHomeRepository(() async => []),
@@ -287,7 +288,7 @@ void main() {
   testWidgets('detail member has no treasurer actions', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             TestHomeRepository(() async => []),
@@ -323,7 +324,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             TestHomeRepository(() async => []),
@@ -363,7 +364,7 @@ void main() {
 
       // Exercise the same one-frame assertion through address-based navigation.
       final container = ProviderContainer(
-        retry: (retryCount, error) => null,
+        retry: appRetry,
         overrides: [
           homeRepositoryProvider.overrideWithValue(
             const FakeHomeRepository(Persona.demo, delay: Duration.zero),
@@ -385,7 +386,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Sample Contributor'), findsOneWidget);
+      expect(find.text('Sipho'), findsOneWidget);
 
       // Invoke the actual picker's callback, then render exactly one frame.
       tester
@@ -404,8 +405,8 @@ void main() {
       );
 
       expect(find.bySemanticsLabel('Loading stokvel'), findsOneWidget);
-      expect(find.text('Sample Contributor'), findsNothing);
-      expect(find.text('Demo Member'), findsNothing);
+      expect(find.text('Sipho'), findsNothing);
+      expect(find.text('Lerato'), findsNothing);
       expect(find.text('Your role: Treasurer'), findsNothing);
       expect(find.byKey(const ValueKey('1-1')), findsNothing);
       expect(find.byKey(const ValueKey('1-2')), findsNothing);

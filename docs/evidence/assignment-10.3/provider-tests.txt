@@ -1,0 +1,150 @@
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart
+00:00 +0: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/domain_test.dart: exact cycle strings and unknown forward compatibility
+00:00 +1: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +2: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +3: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +4: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +5: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +6: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +7: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +8: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +9: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +10: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +11: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +12: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +13: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +14: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +15: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +16: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +17: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +18: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +19: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +20: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +21: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +22: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +23: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +24: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +25: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +26: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +27: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +28: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +29: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +30: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +31: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +32: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +33: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +34: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +35: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +36: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +37: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +38: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +39: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +40: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +41: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +42: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +43: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +44: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +45: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +46: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +47: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:00 +48: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders loading and empty
+00:01 +49: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity renders failure and retries
+00:01 +50: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/activity_test.dart: activity combines the signed-in personas stokvels
+00:03 +51: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/layout_theme_test.dart: /home at 360x640 and 200 percent has no overflow
+00:04 +52: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/layout_theme_test.dart: /stokvels at 360x640 and 200 percent has no overflow
+00:04 +53: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
+Disposed stokvel id=1
+00:05 +54: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/layout_theme_test.dart: tablet panes share an address and survive rotation and back
+Disposed stokvel id=2
+00:05 +55: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/layout_theme_test.dart: theme tokens meet measured WCAG contrast in both themes
+dark|onSurface|ffdee4df|ff0f1512|14.32
+dark|onSurfaceVariant|ffbfc9c2|ff0f1512|10.87
+dark|primary|ff8ad6b7|ff0f1512|10.90
+dark|onPrimary|ff003828|ff8ad6b7|7.76
+dark|outline|ff89938d|ff0f1512|5.83
+dark|arrears|ffffb4ab|ff0f1512|10.88
+dark|contribution.pending|ffffd180|ff0f1512|12.92
+dark|contribution.paid|ffa8c7fa|ff0f1512|10.75
+dark|contribution.confirmed|ff8fd9ad|ff0f1512|11.17
+dark|contribution.unknown|ffcbd5e1|ff0f1512|12.45
+dark|cycle.active|ff8fd9ad|ff0f1512|11.17
+dark|cycle.closed|ffffd180|ff0f1512|12.92
+dark|cycle.paid|ffa8c7fa|ff0f1512|10.75
+dark|cycle.unknown|ffcbd5e1|ff0f1512|12.45
+light|onSurface|ff171d1a|fff5fbf6|16.31
+light|onSurfaceVariant|ff404944|fff5fbf6|8.88
+light|primary|ff196b52|fff5fbf6|6.13
+light|onPrimary|ffffffff|ff196b52|6.43
+light|outline|ff707974|fff5fbf6|4.28
+light|arrears|ff9b2424|fff5fbf6|7.49
+light|contribution.pending|ff6b4800|fff5fbf6|7.84
+light|contribution.paid|ff174ea6|fff5fbf6|7.48
+light|contribution.confirmed|ff14633e|fff5fbf6|6.94
+light|contribution.unknown|ff43525f|fff5fbf6|7.67
+light|cycle.active|ff14633e|fff5fbf6|6.94
+light|cycle.closed|ff6b4800|fff5fbf6|7.84
+light|cycle.paid|ff174ea6|fff5fbf6|7.48
+light|cycle.unknown|ff43525f|fff5fbf6|7.67
+00:05 +56: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: gate covers signed out, signed in, invite and sign-in
+00:05 +57: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: only safe internal destinations survive the gate
+00:05 +58: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.newcomer at /stokvels/1 returns Stokvel not found.
+Disposed stokvel id=1
+00:06 +59: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/999 returns Stokvel not found.
+Disposed stokvel id=999
+00:06 +60: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/payout_domain_test.dart: domain: every API payout status maps, future strings are unknown
+00:06 +61: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/bad returns Stokvel not found.
+00:06 +62: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/bad returns Stokvel not found.
+Disposed stokvel id=-1
+00:07 +63: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.newcomer at /stokvels/1/cycles/101 returns Cycle not found.
+Disposed stokvel id=1
+00:07 +64: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/201 returns Cycle not found.
+Disposed stokvel id=1
+00:07 +65: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/999 returns Cycle not found.
+Disposed stokvel id=1
+00:07 +66: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/bad returns Cycle not found.
+Disposed stokvel id=1
+00:07 +67: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +68: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +69: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +70: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +71: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +72: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+00:07 +73: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+Disposed stokvel id=1
+Disposed stokvel id=2
+00:07 +74: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+00:08 +75: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+00:08 +76: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+00:08 +77: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+00:08 +78: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/navigation_test.dart: cycle branch keeps its stack and scroll across tabs
+Disposed stokvel id=1
+00:09 +79: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: view conversion retains manual refresh data but hides a new persona
+00:10 +80: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: two IDs remain separate; two listeners share one fetch
+Disposed stokvel id=2
+Disposed stokvel id=1
+00:10 +81: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/provider_test.dart: detail is disposed only after its final listener closes
+Disposed stokvel id=1
+Disposed stokvel id=1
+00:12 +82: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home loading
+00:13 +83: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home empty explains next step
+00:13 +84: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home data uses server amounts and per-stokvel roles
+00:13 +85: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: Home failure retries the overridden repository
+00:13 +86: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: pull to refresh retains old Home cards
+00:13 +87: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail loading
+Disposed stokvel id=1
+00:13 +88: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail empty is not found for inaccessible and nonexistent IDs
+Disposed stokvel id=1
+Disposed stokvel id=999
+00:13 +89: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail data shows treasurer actions in that membership
+Disposed stokvel id=1
+00:13 +90: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: treasurer detail hides confirmation when nobody has a paid row
+Disposed stokvel id=1
+00:13 +91: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail member has no treasurer actions
+Disposed stokvel id=2
+00:13 +92: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: detail failure retry works
+Disposed stokvel id=1
+Disposed stokvel id=1
+00:13 +93: C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/widget_test.dart: switch to slow B shows B loading and no A contributions for a frame
+Disposed stokvel id=1
+Disposed stokvel id=2
+00:14 +94: All tests passed!

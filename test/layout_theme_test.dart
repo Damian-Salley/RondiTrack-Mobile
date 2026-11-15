@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/app/app_theme.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
@@ -22,7 +23,7 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
-      final container = ProviderContainer();
+      final container = ProviderContainer(retry: appRetry);
       addTearDown(container.dispose);
       container.read(authProvider.notifier).signIn(Persona.demo.email);
       container.read(routerProvider).go(route);
@@ -71,7 +72,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    final container = ProviderContainer();
+    final container = ProviderContainer(retry: appRetry);
     addTearDown(container.dispose);
     container.read(authProvider.notifier).signIn(Persona.demo.email);
     final router = container.read(routerProvider)

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
+import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 
 void main() {
@@ -9,12 +10,18 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Check that the required API configuration and app flavour are valid.
-  AppConfig.validate(
+  final config = AppConfig.validate(
     flavor: const String.fromEnvironment('FLAVOR'),
     apiBaseUrl: const String.fromEnvironment('API_BASE_URL'),
     nativeFlavor: appFlavor,
   );
 
   // Start the application with Riverpod state management enabled.
-  runApp(const ProviderScope(child: RondiTrackApp()));
+  runApp(
+    ProviderScope(
+      retry: appRetry,
+      overrides: [appConfigProvider.overrideWithValue(config)],
+      child: const RondiTrackApp(),
+    ),
+  );
 }

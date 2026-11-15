@@ -1,5 +1,8 @@
+import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_repository.dart';
+import 'package:ronditrack_mobile/features/payouts/domain/payout.dart';
+import 'package:ronditrack_mobile/features/payouts/domain/payout_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/stokvel_repository.dart';
 
@@ -30,3 +33,19 @@ class TestStokvelRepository implements StokvelRepository {
     return load(stokvelId);
   }
 }
+
+class TestPayoutRepository implements PayoutRepository {
+  new(this.load);
+  final Future<List<PayoutEntry>> Function(PayoutCycle) load;
+
+  @override
+  Future<List<PayoutEntry>> fetchOrder(PayoutCycle cycle) => load(cycle);
+}
+
+const testPayout = PayoutEntry(
+  userId: 2,
+  memberName: 'Server first',
+  position: 9,
+  amount: Cents(12345),
+  status: .next,
+);

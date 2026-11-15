@@ -1,0 +1,2 @@
+Formatted test\architecture_test.dart
+Formatted 66 files (1 changed) in 0.18 seconds.
