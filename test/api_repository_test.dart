@@ -5,6 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/features/home/data/api_home_repository.dart';
+import 'package:ronditrack_mobile/features/stokvels/data/api_stokvel_repository.dart';
+import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 
 class _FakeAdapter implements HttpClientAdapter {
@@ -32,6 +34,79 @@ ResponseBody _json(String value, int status) => ResponseBody.fromString(
 );
 
 void main() {
+  test(
+    'detail follows the page token and keeps SA date and close version',
+    () async {
+      final dio = Dio();
+      addTearDown(dio.close);
+      const token = 'opaque+/=';
+      final tokens = <Object?>[];
+      dio.httpClientAdapter = _FakeAdapter((request) {
+        switch (request.path) {
+          case '/api/v1/stokvels/1':
+            return _json('''
+            {"id":1,"name":"Community Savings","contributionAmount":250,
+            "contributionAmountCents":25000,"memberCount":2}
+            ''', 200);
+          case '/api/v1/me':
+            return _json('''
+            {"id":2,"firstName":"Demo","lastName":"Member",
+            "email":"assignment71-demo@ronditrack.example"}
+            ''', 200);
+          case '/api/v1/me/home':
+            return _json('''
+            [{"stokvelId":1,"stokvelName":"Community Savings","role":"Treasurer",
+            "currentCycle":1,"cycleStatus":"Active","paidThisCycle":25000,
+            "totalCollectedCents":"25010","stillOwes":0,"arrearsCents":0}]
+            ''', 200);
+          case '/api/v1/contributioncycles':
+            return _json('''
+            [{"id":8,"stokvelId":1,"number":1,"status":"Active",
+            "dueDateUtc":"2026-11-30T22:00:00Z","targetAmountCents":50000,
+            "requiredContributionCents":25000}]
+            ''', 200);
+          case '/api/v1/stokvels/1/cycles/8/contributions':
+            final next = request.queryParameters['PageToken'];
+            tokens.add(next);
+            if (next == null) {
+              return _json('''
+              {"items":[{"userId":2,"stokvelId":1,"cycle":8,"amountCents":25000,
+              "status":"Paid","memberName":"Demo Member"}],"nextPageToken":"$token"}
+              ''', 200);
+            }
+            return _json('''
+            {"items":[{"userId":3,"stokvelId":1,"cycle":8,"amountCents":10,
+            "status":"Confirmed","memberName":"Sample Contributor"}],
+            "nextPageToken":null}
+            ''', 200);
+          case '/api/v1/contributioncycles/8/close-preview':
+            return _json('''
+            {"cycleId":8,"cycleName":"Cycle 1","asOfDate":"2026-12-01",
+            "version":"Opaque-Version","members":[],"totalCents":25010}
+            ''', 200);
+          default:
+            throw StateError('Unexpected request route');
+        }
+      });
+      final client = RondiTrackClient(dio);
+      final repository = ApiStokvelRepository(
+        client,
+        ApiHomeRepository(client),
+      );
+      final detail = (await repository.fetchDetail(1))!;
+      expect(tokens, [null, token]);
+      expect(detail.currentCycle!.southAfricanDueDate, '2026-12-01');
+      expect(detail.currentCycle!.dueDateUtc.isUtc, isTrue);
+      expect(detail.contributions.map((item) => item.amount.value), [
+        25000,
+        10,
+      ]);
+      final preview = await repository.previewClose(1, 8);
+      expect(preview.version, 'Opaque-Version');
+      expect(preview.total.value, 25010);
+    },
+  );
+
   test(
     'generated Home response preserves role, cents and unknown statuses',
     () async {

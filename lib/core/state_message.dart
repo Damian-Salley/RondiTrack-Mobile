@@ -21,11 +21,7 @@ class StateMessage extends StatelessWidget {
           Text(message, textAlign: TextAlign.center),
 
           if (apiFailure case ServerFailure(correlationId: final reference?))
-            TextButton(
-              onPressed: () =>
-                  Clipboard.setData(ClipboardData(text: reference)),
-              child: Text('Copy reference: $reference'),
-            ),
+            _FailureReference(key: ValueKey(reference), reference: reference),
 
           // Only show the retry button when a retry action is provided.
           if (retry != null &&
@@ -38,4 +34,37 @@ class StateMessage extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// Retain the displayed reference until the person dismisses it.
+class _FailureReference extends StatefulWidget {
+  const new({required this.reference, super.key});
+
+  final String reference;
+
+  @override
+  State<_FailureReference> createState() => _FailureReferenceState();
+}
+
+class _FailureReferenceState extends State<_FailureReference> {
+  bool _dismissed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_dismissed) return const SizedBox.shrink();
+    return Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        TextButton(
+          onPressed: () =>
+              Clipboard.setData(ClipboardData(text: widget.reference)),
+          child: Text('Copy reference: ${widget.reference}'),
+        ),
+        TextButton(
+          onPressed: () => setState(() => _dismissed = true),
+          child: const Text('Dismiss'),
+        ),
+      ],
+    );
+  }
 }

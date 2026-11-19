@@ -13,14 +13,6 @@ import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_provider.dart';
 
-// South Africa stays two hours ahead of UTC throughout the year.
-String _southAfricanDate(DateTime instant) => instant
-    .toUtc()
-    .add(const Duration(hours: 2))
-    .toIso8601String()
-    .split('T')
-    .first;
-
 /// Displays the details of a selected stokvel.
 class DetailScreen extends ConsumerWidget {
   const new({required this.stokvelId, this.cycleId, super.key});
@@ -161,7 +153,7 @@ class _DetailBody extends StatelessWidget {
                   ?.cycles[cycle.status],
             ),
           ),
-          Text('Due: ${_southAfricanDate(cycle.dueDateUtc)}'),
+          Text('Due: ${cycle.southAfricanDueDate}'),
           Text('Target: ${formatCents(cycle.targetAmount)}'),
           Text('Required: ${formatCents(cycle.requiredContribution)}'),
           TextButton(
