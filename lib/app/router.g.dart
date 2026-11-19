@@ -104,6 +104,11 @@ RouteBase get $appShellRoute => StatefulShellRouteData.$route(
                       hasOverriddenOnExit: false,
                       factory: $PayoutsRoute._fromState,
                     ),
+                    GoRouteData.$route(
+                      path: 'close-preview',
+                      hasOverriddenOnExit: false,
+                      factory: $ClosePreviewRoute._fromState,
+                    ),
                   ],
                 ),
               ],
@@ -239,6 +244,33 @@ mixin $PayoutsRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/stokvels/${Uri.encodeComponent(_self.id)}/cycles/${Uri.encodeComponent(_self.cycleId)}/payouts',
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $ClosePreviewRoute on GoRouteData {
+  static ClosePreviewRoute _fromState(GoRouterState state) => ClosePreviewRoute(
+    id: state.pathParameters['id']!,
+    cycleId: state.pathParameters['cycleId']!,
+  );
+
+  ClosePreviewRoute get _self => this as ClosePreviewRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/stokvels/${Uri.encodeComponent(_self.id)}/cycles/${Uri.encodeComponent(_self.cycleId)}/close-preview',
   );
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_theme.dart';
+import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/app/router.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/state_message.dart';
@@ -11,6 +12,14 @@ import 'package:ronditrack_mobile/features/stokvels/domain/actions.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_provider.dart';
+
+// South Africa stays two hours ahead of UTC throughout the year.
+String _southAfricanDate(DateTime instant) => instant
+    .toUtc()
+    .add(const Duration(hours: 2))
+    .toIso8601String()
+    .split('T')
+    .first;
 
 /// Displays the details of a selected stokvel.
 class DetailScreen extends ConsumerWidget {
@@ -66,8 +75,9 @@ class DetailScreen extends ConsumerWidget {
         Empty() => StateMessage(
           message: cycleId == null ? 'Stokvel not found.' : 'Cycle not found.',
         ),
-        Failure(:final message) => StateMessage(
+        Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
+          apiFailure: apiFailure,
           retry: () => ref.invalidate(detailProvider(stokvelId)),
         ),
         Data(:final value) =>
@@ -75,7 +85,11 @@ class DetailScreen extends ConsumerWidget {
                   (cycleId != '${value!.currentCycle?.id}' ||
                       value.currentCycle?.stokvelId != stokvelId)
               ? const StateMessage(message: 'Cycle not found.')
-              : _DetailBody(detail: value!, isCycle: cycleId != null),
+              : _DetailBody(
+                  detail: value!,
+                  isCycle: cycleId != null,
+                  useApi: ref.watch(useApiProvider),
+                ),
       },
     );
   }
@@ -83,10 +97,15 @@ class DetailScreen extends ConsumerWidget {
 
 /// Displays the stokvel's cycle, contributions, and available actions.
 class _DetailBody extends StatelessWidget {
-  const new({required this.detail, required this.isCycle});
+  const new({
+    required this.detail,
+    required this.isCycle,
+    required this.useApi,
+  });
 
   final StokvelDetail detail;
   final bool isCycle;
+  final bool useApi;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +161,7 @@ class _DetailBody extends StatelessWidget {
                   ?.cycles[cycle.status],
             ),
           ),
-          Text('Due (UTC): ${cycle.dueDateUtc.toIso8601String()}'),
+          Text('Due: ${_southAfricanDate(cycle.dueDateUtc)}'),
           Text('Target: ${formatCents(cycle.targetAmount)}'),
           Text('Required: ${formatCents(cycle.requiredContribution)}'),
           TextButton(
@@ -196,6 +215,15 @@ class _DetailBody extends StatelessWidget {
             for (final action in actions)
               OutlinedButton(
                 onPressed: () {
+                  if (useApi &&
+                      action == StokvelAction.closeCycle &&
+                      cycle != null) {
+                    ClosePreviewRoute(
+                      id: '${detail.stokvel.id}',
+                      cycleId: '${cycle.id}',
+                    ).go(context);
+                    return;
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Coming in Week 11.')),
                   );

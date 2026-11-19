@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/auth_redirect.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/breakpoints.dart';
 import 'package:ronditrack_mobile/features/activity/activity_screen.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
@@ -11,6 +12,7 @@ import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/session/presentation/profile_screen.dart';
 import 'package:ronditrack_mobile/features/session/presentation/sign_in_screen.dart';
+import 'package:ronditrack_mobile/features/stokvels/presentation/close_preview_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/join_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/stokvel_list_screen.dart';
@@ -76,7 +78,10 @@ class JoinRoute extends GoRouteData with $JoinRoute {
               routes: [
                 TypedGoRoute<CycleRoute>(
                   path: 'cycles/:cycleId',
-                  routes: [TypedGoRoute<PayoutsRoute>(path: 'payouts')],
+                  routes: [
+                    TypedGoRoute<PayoutsRoute>(path: 'payouts'),
+                    TypedGoRoute<ClosePreviewRoute>(path: 'close-preview'),
+                  ],
                 ),
               ],
             ),
@@ -163,6 +168,19 @@ class PayoutsRoute extends GoRouteData with $PayoutsRoute {
   );
 }
 
+class ClosePreviewRoute extends GoRouteData with $ClosePreviewRoute {
+  const new({required this.id, required this.cycleId});
+
+  final String id;
+  final String cycleId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => ClosePreviewScreen(
+    stokvelId: int.tryParse(id) ?? -1,
+    cycleId: int.tryParse(cycleId) ?? -1,
+  );
+}
+
 class ActivityRoute extends GoRouteData with $ActivityRoute {
   const new();
   @override
@@ -222,8 +240,19 @@ class _AppShell extends ConsumerWidget {
                 child: PopupMenuButton<Persona>(
                   key: const Key('persona-switcher'),
                   tooltip: 'Switch dev persona',
-                  onSelected: (persona) =>
-                      ref.read(authProvider.notifier).signIn(persona.email),
+                  onSelected: (persona) async {
+                    try {
+                      await ref
+                          .read(authProvider.notifier)
+                          .signIn(persona.email);
+                    } on ApiFailure catch (error) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(error.message)));
+                      }
+                    }
+                  },
                   itemBuilder: (_) => [
                     for (final persona in Persona.values)
                       PopupMenuItem(value: persona, child: Text(persona.label)),
