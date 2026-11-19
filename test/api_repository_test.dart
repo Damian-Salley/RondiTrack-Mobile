@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
-import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/features/home/data/api_home_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/api_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
@@ -89,7 +88,7 @@ void main() {
             throw StateError('Unexpected request route');
         }
       });
-      final client = RondiTrackClient(dio);
+      final client = ApiClient(dio);
       final repository = ApiStokvelRepository(
         client,
         ApiHomeRepository(client),
@@ -137,7 +136,7 @@ void main() {
         }]
         ''', 200);
       });
-      final home = await ApiHomeRepository(RondiTrackClient(dio)).fetchHome();
+      final home = await ApiHomeRepository(ApiClient(dio)).fetchHome();
       final entry = home.single;
       expect(entry.membership.role, StokvelRole.treasurer);
       expect(entry.totalCollected.value, 25010);

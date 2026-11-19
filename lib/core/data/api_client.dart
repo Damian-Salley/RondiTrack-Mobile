@@ -14,7 +14,7 @@ class AccessToken {
 }
 
 // A plain Provider keeps the transport alive for the provider container.
-final apiClientProvider = Provider<RondiTrackClient>((ref) {
+final apiClientProvider = Provider<ApiClient>((ref) {
   final config = ref.watch(appConfigProvider);
   final dio = Dio(
     BaseOptions(
@@ -28,8 +28,15 @@ final apiClientProvider = Provider<RondiTrackClient>((ref) {
   );
   dio.interceptors.add(ApiInterceptor(ref.watch(accessTokenProvider)));
   ref.onDispose(() => dio.close(force: true));
-  return RondiTrackClient(dio);
+  return ApiClient(dio);
 });
+
+/// Keeps the generated Retrofit type inside the data layer.
+class ApiClient {
+  new(Dio dio) : rest = RondiTrackClient(dio);
+
+  final RondiTrackClient rest;
+}
 
 class ApiInterceptor extends Interceptor {
   new(this.token, {this.log = developer.log});

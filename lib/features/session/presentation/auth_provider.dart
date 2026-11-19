@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
-import 'package:ronditrack_mobile/features/session/data/session_api.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/session_provider.dart';
+import 'package:ronditrack_mobile/features/session/session_providers.dart';
 
 final authProvider = NotifierProvider<Auth, Persona?>(Auth.new);
 final seedPasswordProvider = Provider<String>(

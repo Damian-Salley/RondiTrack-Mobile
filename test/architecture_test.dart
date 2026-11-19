@@ -15,7 +15,11 @@ List<String> architectureViolations(String path, String source) {
   final screen =
       path.endsWith('_screen.dart') ||
       RegExp(r'\bclass\s+\w*Screen\b').hasMatch(source);
-  if (screen || path.contains('/presentation/') || path.contains('/domain/')) {
+  final provider = RegExp(r'_providers?\.dart$').hasMatch(path);
+  if (screen ||
+      provider ||
+      path.contains('/presentation/') ||
+      path.contains('/domain/')) {
     final imports = RegExp("(?:import|export)\\s+['\"]([^'\"]+)['\"]")
         .allMatches(source)
         .map((match) => match[1]!);
@@ -48,6 +52,16 @@ void main() {
       );
     }
     expect(violations, isEmpty, reason: violations.join('\n'));
+  });
+
+  test('architecture: provider cannot import a generated API client', () {
+    expect(
+      architectureViolations(
+        'lib/features/x/x_providers.dart',
+        "import '../../core/data/generated/rondi_track_client.dart';",
+      ),
+      isNotEmpty,
+    );
   });
 
   test(

@@ -1,5 +1,5 @@
+import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/core/data/api_result.dart';
-import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/result.dart';
 import 'package:ronditrack_mobile/features/payouts/domain/payout.dart';
@@ -8,7 +8,7 @@ import 'package:ronditrack_mobile/features/payouts/domain/payout_repository.dart
 class ApiPayoutRepository implements PayoutRepository {
   const new(this._client);
 
-  final RondiTrackClient _client;
+  final ApiClient _client;
 
   @override
   Future<List<PayoutEntry>> fetchOrder(PayoutCycle cycle) async =>
@@ -17,7 +17,7 @@ class ApiPayoutRepository implements PayoutRepository {
   /// Reads the server-owned order as a value or a typed failure.
   Future<Result<List<PayoutEntry>>> readOrder(PayoutCycle cycle) =>
       apiResult(() async {
-        final rows = await _client.stokvels
+        final rows = await _client.rest.stokvels
             .getApiV1StokvelsStokvelIdCyclesCycleIdPayouts(
               stokvelId: cycle.stokvelId,
               cycleId: cycle.cycleId,
