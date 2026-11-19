@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/features/home/data/api_home_repository.dart';
@@ -104,6 +105,11 @@ void main() {
       final preview = await repository.previewClose(1, 8);
       expect(preview.version, 'Opaque-Version');
       expect(preview.total.value, 25010);
+      await expectLater(
+        repository.fetchDetail(1, cycleId: 999),
+        throwsA(isA<NotFoundFailure>()),
+      );
+      expect(tokens, [null, token]);
     },
   );
 

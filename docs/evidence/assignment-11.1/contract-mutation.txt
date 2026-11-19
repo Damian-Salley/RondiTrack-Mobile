@@ -1,0 +1,9 @@
+Local contract comparison failed after backend renamed stokvelName to renamedStokvelName.
+Original SHA256: A2823B66AA96DF4737AA0DB2EB7FA4EE8B338F58D0FE4575F07D1609982AB04A
+Renamed SHA256:  7808550F987868C7A2A3AEEAB9193934CEFD4E59DD799A81F8048092EF74C65D
+
+Analyzing api_home_repository.dart...
+
+  error - api_home_repository.dart:31:20 - The getter 'stokvelName' isn't defined for the type 'HomeStokvelResponse'. Try importing the library that defines 'stokvelName', correcting the name to the name of an existing getter, or defining a getter or field named 'stokvelName'. - undefined_getter
+
+1 issue found.

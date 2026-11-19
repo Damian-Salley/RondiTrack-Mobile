@@ -1,0 +1,9 @@
+Command: flutter test --no-pub --tags live test/real_api_live_test.dart
+Environment: local ASP.NET Core backend with a fresh disposable PostgreSQL 17 seed.
+
+00:00 +0: loading test/real_api_live_test.dart
+00:00 +0: fresh seed Home, membership access, close role and wrong address
+00:03 +1: All tests passed!
+
+After stopping the same disposable database, authenticated GET /api/v1/me/home
+returned HTTP 500 after 10.41 seconds.

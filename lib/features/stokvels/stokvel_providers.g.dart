@@ -60,6 +60,81 @@ final class StokvelRepositoryProvider
 
 String _$stokvelRepositoryHash() => r'b2fcf87c12318fd9d2167440afe1760b3d5691be';
 
+@ProviderFor(cycleDetail)
+final cycleDetailProvider = CycleDetailFamily._();
+
+final class CycleDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<StokvelDetail?>,
+          StokvelDetail?,
+          FutureOr<StokvelDetail?>
+        >
+    with $FutureModifier<StokvelDetail?>, $FutureProvider<StokvelDetail?> {
+  CycleDetailProvider._({
+    required CycleDetailFamily super.from,
+    required (int, int) super.argument,
+  }) : super(
+         retry: null,
+         name: r'cycleDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$cycleDetailHash();
+
+  @override
+  String toString() {
+    return r'cycleDetailProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<StokvelDetail?> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<StokvelDetail?> create(Ref ref) {
+    final argument = this.argument as (int, int);
+    return cycleDetail(ref, argument.$1, argument.$2);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CycleDetailProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$cycleDetailHash() => r'20b5bb2101696f07b1668119fffa91614817bc4d';
+
+final class CycleDetailFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<StokvelDetail?>, (int, int)> {
+  CycleDetailFamily._()
+    : super(
+        retry: null,
+        name: r'cycleDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CycleDetailProvider call(int stokvelId, int cycleId) =>
+      CycleDetailProvider._(argument: (stokvelId, cycleId), from: this);
+
+  @override
+  String toString() => r'cycleDetailProvider';
+}
+
 @ProviderFor(cycleClosePreview)
 final cycleClosePreviewProvider = CycleClosePreviewFamily._();
 

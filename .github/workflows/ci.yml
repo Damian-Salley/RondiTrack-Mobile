@@ -43,4 +43,12 @@ jobs:
           ref: ${{ inputs.api_ref || 'main' }}
           path: backend
           persist-credentials: false
+      # Use the paired backend PR only until the new snapshot lands on main.
+      - uses: actions/checkout@v4.2.2
+        if: ${{ !inputs.api_ref && hashFiles('backend/openapi/v1.json') == '' }}
+        with:
+          repository: Damian-Salley/RondiTrack
+          ref: feature/assignment-11.1-backend
+          path: backend
+          persist-credentials: false
       - run: cmp contract/openapi/v1.json backend/openapi/v1.json

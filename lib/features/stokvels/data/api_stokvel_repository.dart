@@ -38,7 +38,7 @@ class ApiStokvelRepository implements StokvelRepository {
   }
 
   @override
-  Future<StokvelDetail?> fetchDetail(int stokvelId) async {
+  Future<StokvelDetail?> fetchDetail(int stokvelId, {int? cycleId}) async {
     final result = await apiResult(() async {
       // Resolve access before starting any dependent requests.
       final stokvel = await _client.stokvels.getApiV1StokvelsId(id: stokvelId);
@@ -50,12 +50,15 @@ class ApiStokvelRepository implements StokvelRepository {
       final entry = home
           .where((item) => item.membership.stokvelId == stokvelId)
           .firstOrNull;
-      if (entry == null) return null;
+      if (entry == null) throw const NotFoundFailure();
       final current = cycles.where((row) {
-        return entry.currentCycle != null &&
-            apiInteger(row.stokvelId) == stokvelId &&
-            apiInteger(row.number) == entry.currentCycle;
+        if (apiInteger(row.stokvelId) != stokvelId) return false;
+        // Cycle links use IDs. Stokvel detail defaults to the active cycle.
+        return cycleId != null
+            ? apiInteger(row.id) == cycleId
+            : apiInteger(row.number) == entry.currentCycle;
       }).firstOrNull;
+      if (cycleId != null && current == null) throw const NotFoundFailure();
       final cycle = current == null
           ? null
           : Cycle(

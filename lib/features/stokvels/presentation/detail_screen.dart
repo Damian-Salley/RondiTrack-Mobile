@@ -12,6 +12,7 @@ import 'package:ronditrack_mobile/features/stokvels/domain/actions.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_provider.dart';
+import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
 
 /// Displays the details of a selected stokvel.
 class DetailScreen extends ConsumerWidget {
@@ -22,9 +23,13 @@ class DetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the selected stokvel without storing its details locally.
+    // A real cycle link has its own provider key, including historical cycles.
+    final api = ref.watch(useApiProvider);
+    final provider = api && cycleId != null
+        ? cycleDetailProvider(stokvelId, int.tryParse(cycleId!) ?? -1)
+        : detailProvider(stokvelId);
     final state = toViewState(
-      ref.watch(detailProvider(stokvelId)),
+      ref.watch(provider),
       isEmpty: (detail) => detail == null,
     );
 
@@ -70,7 +75,7 @@ class DetailScreen extends ConsumerWidget {
         Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
           apiFailure: apiFailure,
-          retry: () => ref.invalidate(detailProvider(stokvelId)),
+          retry: () => ref.invalidate(provider),
         ),
         Data(:final value) =>
           cycleId != null &&
@@ -80,7 +85,7 @@ class DetailScreen extends ConsumerWidget {
               : _DetailBody(
                   detail: value!,
                   isCycle: cycleId != null,
-                  useApi: ref.watch(useApiProvider),
+                  useApi: api,
                 ),
       },
     );
