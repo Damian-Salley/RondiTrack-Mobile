@@ -1076,13 +1076,15 @@ Assignment 11.1 backend branch. [Backend PR #8](https://github.com/Damian-Salley
 ### Decisions
 
 The client is generated with the assignment's pinned tools so a backend field
-change is reflected in compile-time mapper references. A Dart record carries
-the value or failure inside the data layer. Existing repository interfaces
-unwrap it so Riverpod sees typed errors and Week 10 fakes remain compatible.
+change is reflected in compile-time mapper references. API reads return a Dart
+record carrying the value or failure. The Week 10 repository methods unwrap
+that record, which lets existing fakes work while Riverpod receives typed
+errors as `AsyncError`.
 Only the dev build can use the seed credentials. The token stays in memory.
 
-The transport allows 5 seconds each for connection and sending, and 25 seconds
-to receive a response. This leaves time for the API's three PostgreSQL retries.
+The transport allows 5 seconds to connect before reporting an unreachable
+host and 5 seconds to send the small JSON requests used here. It allows
+25 seconds to receive the response, including the API's three PostgreSQL retries.
 In an isolated test, authenticated Home reported 500 after 10.41 seconds
 when PostgreSQL was stopped. The app offers manual retry for connection
 failures and timeouts. It does not retry HTTP failures or writes.
