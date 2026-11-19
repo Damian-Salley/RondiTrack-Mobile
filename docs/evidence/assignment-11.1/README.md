@@ -5,6 +5,24 @@
 - [Three deliberate regressions and failing assertions](test-mutations.txt)
 - [Local contract comparison and mapper failure](contract-mutation.txt)
 
+## Hosted checks
+
+- The mobile PR passed dependency resolution, regeneration, tracked and
+  untracked drift checks, strict analysis and tests. [Green mobile run](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/44532646984)
+- The unchanged mobile contract failed against the renamed API contract.
+  [Red contract run](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/44532643338)
+  [Screenshot](ci-red-contract.png)
+- With the renamed snapshot and regenerated client, the contract job passed
+  and the analyzer flagged `api_home_repository.dart:31:20`.
+  [Red mapper run](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/44533042960)
+  [Screenshot](ci-red-mapper.png)
+  [Analyzer output](ci-red-mapper.txt)
+- Backend Build and Test and Build Docker Image passed. The backend workflow's
+  existing frontend `npm audit --omit=dev` job failed.
+  [Backend run](https://github.com/Damian-Salley/RondiTrack/actions/runs/44532348679)
+
+Both temporary branches used for the hosted demonstrations were removed.
+
 ## Dependency pins
 
 The package registry reported these publication dates. All six versions were
@@ -20,6 +38,17 @@ at least 14 days old on 19 November 2026.
 | swagger_parser | 1.45.1 | 30 October 2026 |
 
 ## Device screenshots
+
+- [Lerato's real Home](lerato-home.png)
+- [Non-member stokvel link](not-found.png)
+- [Family Savings close-preview 403](forbidden.png)
+- [Real login 429 with the API's wait](rate-limited.png)
+- [Server failure with its copyable reference](server-failure.png)
+  [Matching API log](server-reference.txt)
+
+| Android dev build | Matching API log |
+| --- | --- |
+| <img src="server-failure.png" width="260" alt="Server error with copyable reference"> | `Unexpected server error. CorrelationId=2378b48e4877e76be5ca3c4e549a5992` |
 
 Use the dev setup in the project README with a disposable database. Sign in as
 Lerato and capture Home. From Community and Family detail, record the actual
@@ -39,9 +68,9 @@ failure reference alongside the same correlation ID in the backend log.
 
 ## Hosted CI and submission
 
-After push permission, publish the backend fix and link its PR. Publish the
-mobile branch and create the PR with the assignment title. To reproduce the
-two hosted red runs, publish a throwaway backend branch with
+The [backend PR](https://github.com/Damian-Salley/RondiTrack/pull/8) and
+[mobile PR](https://github.com/Damian-Salley/RondiTrack-Mobile/pull/4) are open.
+To reproduce the two hosted red runs, publish a throwaway backend branch with
 `stokvelName` renamed in the Home response and re-export its contract.
 Dispatch mobile CI with that ref for the comparison failure. Next copy the
 renamed contract to a throwaway mobile branch and regenerate to show the

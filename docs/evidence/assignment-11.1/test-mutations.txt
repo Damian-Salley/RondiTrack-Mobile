@@ -1,0 +1,58 @@
+Mapped 404 to ForbiddenFailure
+Flutter exit code: 1
+
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_failure_test.dart
+00:00 +0: finds a 404 inside a parallel wait
+00:00 +0 -1: finds a 404 inside a parallel wait [E]
+  Expected: throws satisfies function
+    Actual: <Instance of 'Future<(void, void)>'>
+     Which: threw ParallelWaitError<(void, void), (AsyncError?, AsyncError?)>:<ParallelWaitError(2 errors): DioException [bad response]: This exception was thrown because the response has a status code of 502 and RequestOptions.validateStatus was configured to throw for this status code.
+                  The status code of 502 has the following meaning: "Server error - the server failed to fulfil an apparently valid request"
+                  Read more about status codes at https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+                  In order to resolve this exception you typically have either to verify and fix your request code or you have to fix the server code.
+                  >
+            stack dart:async                       FutureRecord2.wait
+                  test\api_failure_test.dart 90:9  main.<fn>
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\api_failure_test.dart 86:11                   main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_failure_test.dart: finds a 404 inside a parallel wait
+Changed the bearer authorization scheme
+Flutter exit code: 1
+
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_repository_test.dart
+00:00 +0: transport logs exclude private values and a 403 retains token
+00:00 +0 -1: transport logs exclude private values and a 403 retains token [E]
+  Expected: match '^POST /api/v1/stokvels/:value 403 \d+ms correlationId=trace-1$'
+    Actual: 'POST /api/v1/stokvels/:value - 17ms'
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\api_repository_test.dart 97:9                  main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_repository_test.dart: transport logs exclude private values and a 403 retains token
+Read paidThisCycle in place of totalCollectedCents
+Flutter exit code: 1
+
+00:00 +0: loading C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_repository_test.dart
+00:00 +0: generated Home response preserves role, cents and unknown statuses
+00:00 +0 -1: generated Home response preserves role, cents and unknown statuses [E]
+  Expected: <25010>
+    Actual: <25000>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\api_repository_test.dart 62:7                  main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/Damian/Desktop/RondiTrackApp/RondiTrack-Mobile/test/api_repository_test.dart: generated Home response preserves role, cents and unknown statuses

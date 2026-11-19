@@ -1,0 +1,1 @@
+2026-11-19T13:26:15.3149336Z   error - lib/features/home/data/api_home_repository.dart:31:20 - The getter 'stokvelName' isn't defined for the type 'HomeStokvelResponse'. Try importing the library that defines 'stokvelName', correcting the name to the name of an existing getter, or defining a getter or field named 'stokvelName'. - undefined_getter
