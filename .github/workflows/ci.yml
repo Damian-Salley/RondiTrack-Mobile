@@ -1,6 +1,12 @@
 name: Mobile checks
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      api_ref:
+        description: Backend branch, tag, or commit to compare
+        default: main
+        type: string
 permissions:
   contents: read
 jobs:
@@ -14,9 +20,27 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get --enforce-lockfile
+      - name: Recreate the API client from the committed contract
+        run: |
+          rm -rf lib/core/data/generated
+          dart run swagger_parser
+          dart format lib/core/data/generated
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: dart run build_runner build
       - name: Check committed generated files
-        run: git diff --exit-code
+        run: |
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
       - run: dart analyze --fatal-infos
-      - run: flutter test
+      - run: flutter test --exclude-tags live
+  backend-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
+        with:
+          repository: Damian-Salley/RondiTrack
+          ref: ${{ inputs.api_ref || 'main' }}
+          path: backend
+          persist-credentials: false
+      - run: cmp contract/openapi/v1.json backend/openapi/v1.json
