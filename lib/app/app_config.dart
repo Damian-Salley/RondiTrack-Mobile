@@ -1,21 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Main supplies its validated native config. The default also lets widget tests
-// run a dev app; prod/staging tests override it with those validated configs.
+// Main supplies network configuration. Fake widget tests only need a flavour.
 final appConfigProvider = Provider<AppConfig>(
-  (ref) => AppConfig.validate(
-    flavor: const String.fromEnvironment('FLAVOR', defaultValue: 'dev'),
-    apiBaseUrl: const String.fromEnvironment(
-      'API_BASE_URL',
-      defaultValue: 'https://localhost',
-    ),
-    nativeFlavor: const String.fromEnvironment('FLAVOR', defaultValue: 'dev'),
-  ),
+  (ref) => const AppConfig._('dev', null),
 );
 
 /// Stores the application's public configuration settings.
 class AppConfig {
-  const new _(this.flavor, this.apiBaseUrl);
+  const new _(this.flavor, this._apiBaseUrl);
 
   factory validate({
     required String flavor,
@@ -42,10 +34,18 @@ class AppConfig {
       throw StateError('API_BASE_URL must be an absolute HTTP(S) address.');
     }
 
+    // Only the dev build may connect to the local backend over plain HTTP.
+    if (flavor != 'dev' && uri.scheme != 'https') {
+      throw StateError('Staging and production API addresses must use HTTPS.');
+    }
+
     // Return the validated configuration.
     return AppConfig._(flavor, uri);
   }
 
   final String flavor;
-  final Uri apiBaseUrl;
+  final Uri? _apiBaseUrl;
+
+  Uri get apiBaseUrl =>
+      _apiBaseUrl ?? (throw StateError('The API address is not configured.'));
 }

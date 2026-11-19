@@ -3,6 +3,19 @@ import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 
 void main() {
+  test('staging and production reject plain HTTP', () {
+    for (final flavor in ['staging', 'prod']) {
+      expect(
+        () => AppConfig.validate(
+          flavor: flavor,
+          apiBaseUrl: 'http://10.0.2.2:5274/api/v1',
+          nativeFlavor: flavor,
+        ),
+        throwsStateError,
+      );
+    }
+  });
+
   // Verify that invalid application configurations are rejected.
   test('missing config refuses startup', () {
     expect(

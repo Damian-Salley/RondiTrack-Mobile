@@ -15,13 +15,17 @@ List<String> architectureViolations(String path, String source) {
   final screen =
       path.endsWith('_screen.dart') ||
       RegExp(r'\bclass\s+\w*Screen\b').hasMatch(source);
-  if (screen) {
+  if (screen || path.contains('/presentation/') || path.contains('/domain/')) {
     final imports = RegExp("(?:import|export)\\s+['\"]([^'\"]+)['\"]")
         .allMatches(source)
         .map((match) => match[1]!);
     for (final import in imports) {
-      if (RegExp(r'(^|/)data/|^package:(dio|drift)(/|\.)').hasMatch(import)) {
-        violations.add('$path: screen imports $import');
+      final transport = RegExp(r'(^|/)generated/|^package:(dio|retrofit)(/|\.)')
+          .hasMatch(import);
+      final screenData =
+          screen && RegExp(r'(^|/)data/|^package:drift(/|\.)').hasMatch(import);
+      if (transport || screenData) {
+        violations.add('$path: imports $import');
       }
     }
   }
