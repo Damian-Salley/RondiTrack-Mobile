@@ -1,6 +1,9 @@
 import 'package:ronditrack_mobile/core/data/map_api_failure.dart';
 import 'package:ronditrack_mobile/core/result.dart';
 
+/*This function executes an API request.
+If successful, it returns the data
+If unsuccessful, it converts the exception into an ApiFailure*/
 Future<Result<T>> apiResult<T>(Future<T> Function() request) async {
   try {
     return (value: await request(), failure: null);
