@@ -6,23 +6,26 @@ RondiTrack API. The seven contract answers and backend revision are in the
 
 ## Android
 
-The captures were saved in the local workspace. The results below describe
-the device run without printing account identifiers or balances.
+All 13 captures are available as [redacted PNGs](redacted/). Opaque masks
+cover form values, account identifiers, stokvel names and financial details.
+The same alias identifies the target stokvel across the join and detail views.
 
 | Check | Observed result |
 | --- | --- |
-| Cold start with a stored session | The splash appeared and Home loaded after reopening the app. |
-| Cold start in airplane mode | The splash showed Try again and Sign out. |
-| Shared phone | The first fixture opened its Treasurer stokvel. The dev picker filled the second fixture's email. After sign-out and the next sign-in, the second fixture saw an empty Home. |
-| Cold invite link opened while signed out | The link reached sign-in and opened the intended stokvel after authentication. |
-| Sign-in errors | A wrong password displayed the generic message. A live 429 displayed the wait time and disabled submission. |
-| Registration errors | The API's password-length error appeared under the password field. |
+| Cold start with a stored session | [Restore splash](redacted/restoring.png) and [restored Home](redacted/restored-home.png) |
+| Cold start in airplane mode | [Offline splash with Try again and Sign out](redacted/offline-restore.png) |
+| Shared phone | [First Home](redacted/first-person-home.png), [Treasurer stokvel](redacted/first-person-treasurer.png), [dev picker](redacted/dev-persona-picker.png), and [next account’s empty Home](redacted/next-person-home.png) |
+| Cold invite link opened while signed out | [Sign-in](redacted/join-signed-out.png) and [the intended stokvel after authentication](redacted/join-landed.png) |
+| Sign-in errors | [Generic incorrect-credentials message](redacted/wrong-password.png) and [live 429 countdown with disabled submission](redacted/rate-limit.png) |
+| Registration errors | [Registration form](redacted/registration-form.png) and [API error beneath the password field](redacted/registration-error.png) |
 
 The shared-phone run used the dev application's encrypted preferences file.
 A read-only `adb run-as` check counted string entries in
 `shared_prefs/FlutterSecureStorage.xml` while the app was signed in and after
 Profile sign-out in airplane mode. The count changed from **1** to **0**.
 The evidence records counts and leaves encrypted values out of the report.
+The assignment asks for Device Explorer views. The available device record
+uses ADB counts from the same preferences file.
 The sign-out regression test delays secure deletion and checks that the UI
 auth state reports completion only after the delete finishes.
 
@@ -32,6 +35,8 @@ Both live tests passed against the local API in strict reuse mode. The
 rotation test sent three concurrent Home requests with a spoiled access
 token. The application interceptor reported these statuses in the live test
 console. Correlation IDs are omitted here.
+The assignment also asks for the dev build’s Run console. This trace comes
+from the live test console.
 
 ```text
 GET /api/v1/me/home 401 20ms
