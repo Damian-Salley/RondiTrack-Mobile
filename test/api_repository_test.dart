@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/features/home/data/api_home_repository.dart';
+import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/api_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
@@ -151,8 +152,9 @@ void main() {
       final dio = Dio();
       addTearDown(dio.close);
       final logs = <String>[];
-      final token = AccessToken()..value = 'private-token';
-      dio.interceptors.add(ApiInterceptor(token, log: logs.add));
+      final token = _LogAuth();
+      dio.options.baseUrl = 'https://test.invalid';
+      dio.interceptors.add(SessionInterceptor(token, dio, log: logs.add));
       dio.httpClientAdapter = _FakeAdapter((request) {
         expect(request.headers['Authorization'], 'Bearer private-token');
         return _json(
@@ -171,7 +173,7 @@ void main() {
           throwsA(isA<DioException>()),
         );
       }
-      expect(token.value, 'private-token');
+      expect(token.accessToken(), 'private-token');
       expect(logs, hasLength(2));
       for (final line in logs) {
         expect(
@@ -192,4 +194,9 @@ void main() {
       }
     },
   );
+}
+
+class _LogAuth extends Auth {
+  @override
+  String accessToken() => 'private-token';
 }

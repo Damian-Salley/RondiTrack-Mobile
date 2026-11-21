@@ -18,7 +18,8 @@ void main() {
     '/stokvels/:id/cycles/:cycleId/payouts': 'Rotation and payouts',
     '/activity': 'Activity',
     '/profile': 'Profile',
-    '/join/:code': 'Invite code: family',
+    '/join/:code': 'Your role: Treasurer',
+    '/register': 'Register',
   };
 
   test(
@@ -38,7 +39,7 @@ void main() {
     ) async {
       final container = ProviderContainer(retry: appRetry);
       addTearDown(container.dispose);
-      if (entry.key != '/sign-in') {
+      if (!const {'/sign-in', '/register'}.contains(entry.key)) {
         container.read(authProvider.notifier).signIn(Persona.demo.email);
       }
       final address = entry.key
@@ -53,7 +54,10 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(router.routeInformationProvider.value.uri.path, address);
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        entry.key == '/join/:code' ? '/stokvels/1' : address,
+      );
       expect(find.text(entry.value), findsWidgets);
       expect(find.text('Page not found.'), findsNothing);
       expect(tester.takeException(), isNull);

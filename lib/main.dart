@@ -14,6 +14,7 @@ void main() {
   final config = AppConfig.validate(
     flavor: const String.fromEnvironment('FLAVOR'),
     apiBaseUrl: const String.fromEnvironment('API_BASE_URL'),
+    refreshCookieName: const String.fromEnvironment('REFRESH_COOKIE_NAME'),
     nativeFlavor: appFlavor,
   );
 

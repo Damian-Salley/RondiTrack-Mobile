@@ -31,6 +31,7 @@ ApiFailure mapApiFailure(Object error) {
         const ServerFailure(null);
   }
   if (error is! DioException) return const ServerFailure(null);
+  if (error.error case final ApiFailure failure) return failure;
 
   final response = error.response;
   if (response == null) {

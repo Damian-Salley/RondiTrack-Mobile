@@ -1,7 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Provider;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/features/home/home_providers.dart';
+import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/session/presentation/session_provider.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/api_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/fake_stokvel_repository.dart';
@@ -11,16 +13,30 @@ import 'package:ronditrack_mobile/features/stokvels/domain/stokvel_repository.da
 
 part 'stokvel_providers.g.dart';
 
+final joinInviteProvider = Provider<Future<int> Function(String)>((ref) {
+  if (!ref.watch(useApiProvider)) return (_) async => 1;
+  return ref.watch(apiClientProvider).join;
+});
+
+// The router keeps this active so a route change cannot repeat a join.
+final joinAttemptsProvider = Provider<Map<String, Future<int>>>((ref) {
+  ref.watch(authProvider);
+  final attempts = <String, Future<int>>{};
+  ref.onDispose(attempts.clear);
+  return attempts;
+});
+
 /// Provides the repository used to retrieve stokvel details.
 @riverpod
 StokvelRepository stokvelRepository(Ref ref) {
-  final persona = ref.watch(sessionProvider);
-  return ref.watch(useApiProvider)
-      ? ApiStokvelRepository(
-          ref.watch(apiClientProvider),
-          ref.watch(homeRepositoryProvider),
-        )
-      : FakeStokvelRepository(persona);
+  if (ref.watch(useApiProvider)) {
+    ref.watch(authProvider);
+    return ApiStokvelRepository(
+      ref.watch(apiClientProvider),
+      ref.watch(homeRepositoryProvider),
+    );
+  }
+  return FakeStokvelRepository(ref.watch(sessionProvider));
 }
 
 @riverpod
