@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/provider_retry.dart';
+import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 
 void main() {
@@ -20,7 +21,10 @@ void main() {
   runApp(
     ProviderScope(
       retry: appRetry,
-      overrides: [appConfigProvider.overrideWithValue(config)],
+      overrides: [
+        appConfigProvider.overrideWithValue(config),
+        useApiProvider.overrideWithValue(true),
+      ],
       child: const RondiTrackApp(),
     ),
   );

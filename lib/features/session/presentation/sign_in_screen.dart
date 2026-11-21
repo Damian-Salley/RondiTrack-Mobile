@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
+import 'package:ronditrack_mobile/app/repository_mode.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
@@ -27,17 +29,28 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     body: ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text('Fake sign-in: enter a seed email.'),
+        Text(
+          ref.watch(useApiProvider)
+              ? 'Enter a development seed email.'
+              : 'Fake sign-in: enter a seed email.',
+        ),
         TextField(
           controller: _email,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(labelText: 'Email', errorText: _error),
         ),
         FilledButton(
-          onPressed: () {
+          onPressed: () async {
             // The auth listener re-runs the gate and restores the destination.
-            if (!ref.read(authProvider.notifier).signIn(_email.text)) {
-              setState(() => _error = 'Enter a valid seed email.');
+            try {
+              final signedIn = await ref
+                  .read(authProvider.notifier)
+                  .signIn(_email.text);
+              if (mounted && !signedIn) {
+                setState(() => _error = 'Enter a valid seed email.');
+              }
+            } on ApiFailure catch (error) {
+              if (mounted) setState(() => _error = error.message);
             }
           },
           child: const Text('Sign in'),

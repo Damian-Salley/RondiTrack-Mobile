@@ -36,6 +36,16 @@ abstract class Cycle with _$Cycle {
   }) = _Cycle;
 }
 
+extension CycleCalendar on Cycle {
+  /// Johannesburg is UTC+02:00 year-round, independently of device settings.
+  String get southAfricanDueDate => dueDateUtc
+      .toUtc()
+      .add(const Duration(hours: 2))
+      .toIso8601String()
+      .split('T')
+      .first;
+}
+
 /// Stores a member's contribution and payment status.
 @freezed
 abstract class Contribution with _$Contribution {

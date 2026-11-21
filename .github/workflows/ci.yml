@@ -1,22 +1,76 @@
 name: Mobile checks
+
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      api_ref:
+        description: Backend branch, tag, or commit to compare
+        default: feature/assignment-11.1-backend
+        type: string
+
 permissions:
   contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
+
     steps:
+      # Download the mobile repository.
       - uses: actions/checkout@v4.2.2
+
+      # Install the Flutter version used by this project.
       - uses: subosito/flutter-action@v2.19.0
         with:
           flutter-version: '3.47.7'
           channel: stable
           cache: true
+
+      # Install the exact dependency versions in the lockfile.
       - run: flutter pub get --enforce-lockfile
+
+      # Regenerate the API client using the committed OpenAPI snapshot.
+      - name: Recreate the API client from the committed contract
+        run: |
+          rm -rf lib/core/data/generated
+          dart run swagger_parser
+          dart format lib/core/data/generated
+
+      # Check formatting across application and test code.
       - run: dart format --output=none --set-exit-if-changed lib test
+
+      # Regenerate Riverpod and other generated Dart files.
       - run: dart run build_runner build
+
+      # Fail if generated files differ from committed versions.
       - name: Check committed generated files
-        run: git diff --exit-code
+        run: |
+          git diff --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+
+      # Check for static-analysis errors.
       - run: dart analyze --fatal-infos
-      - run: flutter test
+
+      # Run automated tests without requiring a live backend.
+      - run: flutter test --exclude-tags live
+
+  backend-contract:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download the mobile repository.
+      - uses: actions/checkout@v4.2.2
+
+      # Download the backend branch containing the matching API contract.
+      # After the backend PR merges, change the default reference to main.
+      - uses: actions/checkout@v4.2.2
+        with:
+          repository: Damian-Salley/RondiTrack
+          ref: ${{ inputs.api_ref || 'feature/assignment-11.1-backend' }}
+          path: backend
+          persist-credentials: false
+
+      # Fail if the mobile snapshot differs from the backend contract.
+      - name: Check backend contract drift
+        run: cmp contract/openapi/v1.json backend/openapi/v1.json

@@ -29,8 +29,9 @@ class HomeScreen extends ConsumerWidget {
         Empty() => const StateMessage(
           message: 'No stokvels yet. Ask a stokvel organiser for an invite.',
         ),
-        Failure(:final message) => StateMessage(
+        Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
+          apiFailure: apiFailure,
           retry: () => ref.invalidate(homeProvider),
         ),
         Data(:final value, :final refreshing) => RefreshIndicator(

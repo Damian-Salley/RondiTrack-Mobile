@@ -21,8 +21,9 @@ class StokvelListScreen extends ConsumerWidget {
       body: switch (state) {
         Loading() => const Center(child: CircularProgressIndicator()),
         Empty() => const StateMessage(message: 'No stokvels yet.'),
-        Failure(:final message) => StateMessage(
+        Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
+          apiFailure: apiFailure,
           retry: () => ref.invalidate(homeProvider),
         ),
         Data(:final value) => ListView(

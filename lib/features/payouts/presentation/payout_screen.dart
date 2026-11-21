@@ -32,8 +32,9 @@ class PayoutScreen extends ConsumerWidget {
           child: CircularProgressIndicator(semanticsLabel: 'Loading payouts'),
         ),
         Empty() => const StateMessage(message: 'No payout order yet.'),
-        Failure(:final message) => StateMessage(
+        Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
+          apiFailure: apiFailure,
           retry: message == 'Cycle not found.'
               ? null
               : () => ref.invalidate(payoutsProvider(cycle)),

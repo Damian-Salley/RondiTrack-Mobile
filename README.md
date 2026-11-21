@@ -998,3 +998,93 @@ no push, merge or PR was made during this task.
 Family's empty order is a deliberate empty-response fixture for the required
 empty screen, not a claim that the backend's currently seeded Family rotation
 is empty. Both fakes use the API response shape, and mobile computes no order.
+
+## Assignment 11.1 contract notes
+
+Source review used backend commit `b88302cd58ed1bb84aeb54b899985f08608d10bb`.
+The client snapshot comes from backend fix commit
+`b2652fc8bec762024fec93e76fe49570078e8e04` on
+`feature/assignment-11.1-backend`. The backend integration test exported the
+live `/openapi/v1.json`, and both repositories use that same file.
+
+| Question | Verified in backend source |
+| --- | --- |
+| How does pagination end? | The repositories return a null `nextPageToken` when there is no next page. Contribution tokens include filter and sort criteria. Changing those criteria with an existing token returns 400. |
+| How are stale writes handled? | Close preview returns an opaque `version`. Close sends that string back in its JSON body with an `Idempotency-Key` header. A stale version returns 409. |
+| What are the exact statuses? | Cycle: `Active`, `Closed`, `Paid`. Contribution: `Pending`, `Paid`, `Confirmed`. Membership: `Member`, `Treasurer`, `Chairperson`. Payout order: `Paid`, `Next`, `Waiting`. |
+| What is the authentication lifetime? | The cookie is `refreshToken`. Access JWTs expire in 15 minutes. A used or revoked refresh token triggers family revocation immediately. |
+| Is every correlation ID documented and returned? | Problem-details writers attach `correlationId` as an extension. The checked-in schema does not declare the property. Activity also has explicit string 400 responses, so a correlation ID cannot be assumed from every body. |
+| What do members and non-members receive? | Membership checks conceal inaccessible stokvels and cycles with 404. A member attempting a treasurer-only contribution confirmation or cycle close receives 403. |
+| Which endpoints are rate limited? | Login uses the per-IP Login policy. Invite creation, lookup and join, cycle close, both contribution recording routes and payout recording use Financial. Rejections return 429 with integer seconds in `Retry-After`. |
+
+The development seed names its dual-role user **Demo Member**, a Treasurer of
+Community Savings and a Member of Family Savings. The assignment calls this
+persona **Lerato**. The other two seeded accounts are Sample Contributor and
+New Member.
+
+### Running against the API
+
+In the backend repository, use a fresh disposable PostgreSQL database and
+apply migrations with `dotnet ef database update`. Configure
+`ConnectionStrings:RondiTrack`, `Jwt:Key`, `SeedDemoData=true` and
+`DemoUserPassword` in your local environment or .NET user secrets. Use a
+development password of at least 12 characters. Run
+`dotnet run --launch-profile http` to serve the API at port 5274.
+
+On an Android emulator, start the mobile app with
+`flutter run --flavor dev --dart-define-from-file=config/dev.json --dart-define=SEED_PASSWORD="$env:DemoUserPassword"`.
+The emulator uses `10.0.2.2` to reach the host. The APK contains compile-time
+defines, so only use a disposable seed password and keep that APK local.
+
+For provider integration tests on the host, set `RONDI_LIVE_URL` to
+`http://127.0.0.1:5274` and `RONDI_LIVE_PASSWORD` to the seed password, then
+run `flutter test --tags live test/real_api_live_test.dart`. The test skips
+when these variables are absent.
+
+### The API client
+
+`contract/openapi/v1.json` is an exact copy of backend `openapi/v1.json`.
+Delete the generated directory before regenerating so obsolete files disappear.
+
+```powershell
+Remove-Item -LiteralPath lib/core/data/generated -Recurse
+dart run swagger_parser
+dart format lib/core/data/generated
+dart run build_runner build
+```
+
+CI regenerates the client and checks for both changed and untracked files. A
+separate job compares the contract with backend `main` by default. Use the
+`api_ref` workflow input to compare another backend branch or commit.
+Until backend `main` contains the snapshot, the job uses the paired
+Assignment 11.1 backend branch. [Backend PR #8](https://github.com/Damian-Salley/RondiTrack/pull/8)
+
+### Failures
+
+| API response | Failure | Screen message |
+| --- | --- | --- |
+| 400 | Validation | API detail, with field errors retained |
+| 401 | Unauthorised | Sign in to continue |
+| 403 | Forbidden | Your role does not allow this action |
+| 404 | Not found | Not found |
+| 409 or 412 | Conflict | API detail or a prompt to reload |
+| 410, 422 or another client rule | Rule | API detail or action unavailable |
+| 429 | Rate limited | Wait time in seconds from `Retry-After` |
+| 5xx or unreadable response | Server | Generic apology and a copyable reference when present |
+| Connection error or timeout | Offline | Offline or unreachable message and Try again |
+
+### Decisions
+
+The client is generated with the assignment's pinned tools so a backend field
+change is reflected in compile-time mapper references. API reads return a Dart
+record carrying the value or failure. The Week 10 repository methods unwrap
+that record, which lets existing fakes work while Riverpod receives typed
+errors as `AsyncError`.
+Only the dev build can use the seed credentials. The token stays in memory.
+
+The transport allows 5 seconds to connect before reporting an unreachable
+host and 5 seconds to send the small JSON requests used here. It allows
+25 seconds to receive the response, including the API's three PostgreSQL retries.
+In an isolated test, authenticated Home reported 500 after 10.41 seconds
+when PostgreSQL was stopped. The app offers manual retry for connection
+failures and timeouts. It does not retry HTTP failures or writes.

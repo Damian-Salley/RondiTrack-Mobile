@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
 
 /// Represents the different states a screen can display.
 sealed class ViewState<T> {
@@ -25,9 +26,10 @@ final class Data<T> extends ViewState<T> {
 
 /// Loading failed and an error message is available.
 final class Failure<T> extends ViewState<T> {
-  const new(this.message);
+  const new(this.message, {this.apiFailure});
 
   final String message;
+  final ApiFailure? apiFailure;
 }
 
 /// Converts Riverpod's asynchronous state into a screen-friendly state.
@@ -40,6 +42,9 @@ ViewState<T> toViewState<T>(
 
   // Display an error when loading fails.
   if (state.hasError && !state.isLoading) {
+    if (state.error case final ApiFailure failure) {
+      return Failure(failure.message, apiFailure: failure);
+    }
     return const Failure('Could not load your data. Please try again.');
   }
 
