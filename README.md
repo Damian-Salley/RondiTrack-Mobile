@@ -56,21 +56,23 @@ membership, never a global persona role.
 Custom schemes with host `app` keep installed flavours separate: `ronditrack-dev`,
 `ronditrack-staging`, and `ronditrack`. Flutter's native handler forwards cold and
 running-app links to the router. Build/install the matching flavour first.
-These commands omit a package to test Android's scheme resolution:
+These commands let Android resolve the scheme. Set `INVITE_CODE` to a valid
+invite returned by
+`POST /api/v1/stokvels/{stokvelId}/invites` on the API for the chosen flavour.
 
 ```bash
 # Dev
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/join/$INVITE_CODE"
 # Staging
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/join/$INVITE_CODE"
 # Prod
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/join/$INVITE_CODE"
 ```
 
 For a **cold** test, force-stop the matching package immediately before each link:
@@ -82,9 +84,10 @@ adb shell am force-stop za.co.damiansalley.ronditrack_mobile
 ```
 
 Sign in and check the requested screen and back chain. For a warm test, leave the
-app signed in and issue the link again. Family uses stokvel `2` and cycle `201`;
-cycle `201` under stokvel `1` must show not found. New Member must get the same
-not-found response as stokvel `999`.
+app signed in and issue the link again. Use IDs from the API when testing live
+data. In the widget fixtures, Family uses stokvel `2` and cycle `201`.
+Requesting cycle `201` under stokvel `1` returns the same not-found message as
+a missing cycle. New Member sees that same response for inaccessible cycles.
 
 adb checks intent resolution and navigation, not domain ownership or verified
 web-link handling. With an owned HTTPS domain, add an `android:autoVerify` intent
@@ -1138,9 +1141,10 @@ for a replaced access token uses the current access token for that retry.
 
 A refresh 401 clears the session. Transient failures keep it, and the restore
 screen offers **Try again** and **Sign out** when startup refresh fails.
-Profile sign-out clears the in-memory credentials and the secure entry, then
-attempts server logout in the background with a two-second timeout. A response
-from an earlier session cannot repopulate credentials or update a data request.
+Profile sign-out clears the in-memory credentials immediately. The sign-in
+screen appears after the secure entry has been deleted. Server logout runs in
+the background with a two-second timeout. A response from an earlier session
+cannot repopulate credentials or update a data request.
 
 ### Decisions
 
@@ -1157,3 +1161,5 @@ from an earlier session cannot repopulate credentials or update a data request.
   removing the overrides. The November 19 JNI release reaches two weeks on
   December 3, the November 18 JNI Flutter release on December 2, and
   the November 16 Material UI release on November 30.
+
+[Assignment 11.2 verification evidence](docs/evidence/assignment-11.2/README.md)
