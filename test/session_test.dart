@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/features/session/data/session_api.dart';
+import 'package:ronditrack_mobile/features/session/data/session_dependencies.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
 import 'support/session_fixture.dart';
@@ -216,9 +217,9 @@ void main() {
         expect(fixture.store.value, 'initial');
         fixture.offline = offline;
         final signOut = fixture.auth.signOut();
-        expect(fixture.state, isA<SignedOut>());
         expect(fixture.auth.accessToken(), isNull);
         await signOut;
+        expect(fixture.state, isA<SignedOut>());
         expect(fixture.store.value, isNull);
         await fixture.logoutStarted.future;
         expect(fixture.logouts, 1);
@@ -242,4 +243,41 @@ void main() {
       expect(fixture.state, isA<SignedOut>());
     },
   );
+
+  test(
+    'sign-out completes only after the secure entry has been deleted',
+    () async {
+      final store = _SlowWipe();
+      final fixture = SessionFixture(storage: store);
+      addTearDown(fixture.dispose);
+      await fixture.settled();
+      expect(
+        await fixture.auth.signIn('fixture@example.invalid', sampleInput),
+        isTrue,
+      );
+      final signOut = fixture.auth.signOut();
+      await store.started.future;
+      expect(fixture.auth.accessToken(), isNull);
+      expect(fixture.state, isA<SignedIn>());
+      expect(fixture.logouts, 0);
+      store.allowWipe.complete();
+      await signOut;
+      expect(fixture.state, isA<SignedOut>());
+      expect(store.value, isNull);
+    },
+  );
+}
+
+class _SlowWipe extends MemoryRefreshStore {
+  final started = Completer<void>();
+  final allowWipe = Completer<void>();
+
+  @override
+  Future<void> write(String? value) async {
+    if (value == null) {
+      started.complete();
+      await allowWipe.future;
+    }
+    await super.write(value);
+  }
 }

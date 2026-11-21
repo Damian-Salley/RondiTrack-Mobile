@@ -24,8 +24,11 @@ String jwt(int seconds, [int id = 1]) {
 }
 
 class SessionFixture {
-  new({String? stored, List<Override> overrides = const []})
-    : store = MemoryRefreshStore(stored) {
+  new({
+    String? stored,
+    MemoryRefreshStore? storage,
+    List<Override> overrides = const [],
+  }) : store = storage ?? MemoryRefreshStore(stored) {
     container = ProviderContainer(
       overrides: [
         useApiProvider.overrideWithValue(true),

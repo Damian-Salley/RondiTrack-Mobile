@@ -37,6 +37,7 @@ class Auth extends Notifier<AuthState> {
   Credentials? _credentials;
   String? _refreshToken;
   Future<void>? _refreshing;
+  Future<void>? _signingOut;
   Future<void> _storage = Future.value();
   int _generation = 0;
 
@@ -58,6 +59,7 @@ class Auth extends Notifier<AuthState> {
   }
 
   FutureOr<bool> signIn(String email, [String password = '']) {
+    if (_signingOut != null) return false;
     final address = email.trim();
     if (ref.read(useApiProvider)) return _login(address, password);
     final persona = Persona.values
@@ -92,7 +94,7 @@ class Auth extends Notifier<AuthState> {
   }
 
   Future<void> restore() async {
-    if (state is! Restoring) return;
+    if (state is! Restoring || _signingOut != null) return;
     state = const Restoring();
     final generation = _generation;
     try {
@@ -108,6 +110,7 @@ class Auth extends Notifier<AuthState> {
 
   // Share the same future, including its failure, among all refresh callers.
   Future<void> refresh() {
+    if (_signingOut != null) return Future.value();
     if (_refreshing case final active?) return active;
     final operation = _refresh(_generation);
     _refreshing = operation;
@@ -154,15 +157,21 @@ class Auth extends Notifier<AuthState> {
     return operation;
   }
 
-  Future<void> signOut({bool notifyServer = true}) async {
-    _generation++;
+  Future<void> signOut({bool notifyServer = true}) {
+    if (_signingOut case final active?) return active;
+    final operation = _signOut(notifyServer);
+    _signingOut = operation;
+    return operation.whenComplete(() => _signingOut = null);
+  }
+
+  Future<void> _signOut(bool notifyServer) async {
+    final generation = ++_generation;
     _credentials = null;
     final token = _refreshToken;
     _refreshToken = null;
     _refreshing = null;
-    final wasRestoring = state is Restoring;
-    state = const SignedOut();
     if (!ref.read(useApiProvider)) {
+      state = const SignedOut();
       ref.invalidate(sessionProvider);
       return;
     }
@@ -170,7 +179,7 @@ class Auth extends Notifier<AuthState> {
     final api = ref.read(sessionApiProvider);
     var logoutToken = token;
     await _write(() async {
-      if (wasRestoring && logoutToken == null && notifyServer) {
+      if (logoutToken == null && notifyServer) {
         try {
           logoutToken = await store.read();
         } on Object {
@@ -179,6 +188,8 @@ class Auth extends Notifier<AuthState> {
       }
       await store.write(null);
     });
+    // Finish local sign-out only after the secure entry has been deleted.
+    if (_current(generation)) state = const SignedOut();
     final value = logoutToken;
     if (notifyServer && value != null) {
       unawaited(

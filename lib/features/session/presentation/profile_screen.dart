@@ -17,9 +17,9 @@ class ProfileScreen extends ConsumerWidget {
           if (auth case SignedIn(:final label)) Text(label),
           FilledButton(
             onPressed: () async {
-              final wipe = ref.read(authProvider.notifier).signOut();
-              context.go('/sign-in');
-              await wipe;
+              final router = GoRouter.of(context);
+              await ref.read(authProvider.notifier).signOut();
+              router.go('/sign-in');
             },
             child: const Text('Sign out'),
           ),
