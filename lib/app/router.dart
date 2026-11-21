@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/auth_redirect.dart';
-import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/breakpoints.dart';
 import 'package:ronditrack_mobile/features/activity/activity_screen.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
 import 'package:ronditrack_mobile/features/payouts/presentation/payout_screen.dart';
-import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/session/presentation/profile_screen.dart';
 import 'package:ronditrack_mobile/features/session/presentation/sign_in_screen.dart';
@@ -16,15 +13,28 @@ import 'package:ronditrack_mobile/features/stokvels/presentation/close_preview_s
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/join_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/stokvel_list_screen.dart';
+import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
 
 part 'router.g.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Auth refreshes this router without replacing its navigation stacks.
   final refresh = ValueNotifier<int>(0);
-  ref.listen(authProvider, (_, _) => refresh.value++);
+  ref
+    ..listen(authProvider, (_, _) => refresh.value++)
+    ..listen(joinAttemptsProvider, (_, _) {});
   final router = GoRouter(
-    routes: $appRoutes,
+    routes: [
+      ...$appRoutes,
+      GoRoute(
+        path: '/register',
+        builder: (_, state) => SignInScreen(
+          register: true,
+          from: state.uri.queryParameters['from'],
+        ),
+      ),
+      GoRoute(path: '/restore', builder: (_, _) => const RestoreScreen()),
+    ],
     initialLocation: const HomeRoute().location,
     refreshListenable: refresh,
     redirect: (_, state) => authRedirect(ref.read(authProvider), state.uri),
@@ -45,7 +55,7 @@ class SignInRoute extends GoRouteData with $SignInRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const SignInScreen();
+      SignInScreen(from: from);
 }
 
 @TypedGoRoute<JoinRoute>(path: '/join/:code')
@@ -233,38 +243,6 @@ class _AppShell extends ConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Construct no switcher at all outside dev. There is no dev route.
-            if (ref.watch(appConfigProvider).flavor == 'dev')
-              Align(
-                alignment: Alignment.centerLeft,
-                child: PopupMenuButton<Persona>(
-                  key: const Key('persona-switcher'),
-                  tooltip: 'Switch dev persona',
-                  onSelected: (persona) async {
-                    try {
-                      await ref
-                          .read(authProvider.notifier)
-                          .signIn(persona.email);
-                    } on ApiFailure catch (error) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(error.message)));
-                      }
-                    }
-                  },
-                  itemBuilder: (_) => [
-                    for (final persona in Persona.values)
-                      PopupMenuItem(value: persona, child: Text(persona.label)),
-                  ],
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      'Dev persona: ${ref.watch(authProvider)?.label}',
-                    ),
-                  ),
-                ),
-              ),
             Expanded(
               child: Row(
                 children: [

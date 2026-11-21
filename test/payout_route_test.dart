@@ -22,8 +22,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(TextField), findsOneWidget);
-      await tester.enterText(find.byType(TextField), Persona.demo.email);
+      expect(find.byType(TextField), findsNWidgets(2));
+      await tester.enterText(find.byType(TextField).first, Persona.demo.email);
+      await tester.enterText(find.byType(TextField).last, 'test input');
       await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
       await tester.pumpAndSettle();
       expect(find.text('Rotation and payouts'), findsOneWidget);

@@ -10,26 +10,38 @@ import 'package:ronditrack_mobile/features/session/presentation/auth_provider.da
 
 void main() {
   test('gate covers signed out, signed in, invite and sign-in', () {
-    expect(authRedirect(null, Uri.parse('/sign-in')), isNull);
+    expect(authRedirect(const SignedOut(), Uri.parse('/sign-in')), isNull);
     expect(
-      authRedirect(null, Uri.parse('/join/family')),
+      authRedirect(const SignedOut(), Uri.parse('/join/family')),
       '/sign-in?from=%2Fjoin%2Ffamily',
     );
-    expect(authRedirect(Persona.demo, Uri.parse('/stokvels/1')), isNull);
     expect(
-      authRedirect(Persona.demo, Uri.parse('/sign-in?from=%2Fjoin%2Ffamily')),
+      authRedirect(const SignedIn('Lerato'), Uri.parse('/stokvels/1')),
+      isNull,
+    );
+    expect(
+      authRedirect(
+        const SignedIn('Lerato'),
+        Uri.parse('/sign-in?from=%2Fjoin%2Ffamily'),
+      ),
       '/join/family',
     );
-    expect(authRedirect(Persona.demo, Uri.parse('/sign-in')), '/home');
     expect(
-      authRedirect(null, Uri.parse('/stokvels/1/cycles/101')),
+      authRedirect(const SignedIn('Lerato'), Uri.parse('/sign-in')),
+      '/home',
+    );
+    expect(
+      authRedirect(const SignedOut(), Uri.parse('/stokvels/1/cycles/101')),
       '/sign-in?from=%2Fstokvels%2F1%2Fcycles%2F101',
     );
   });
 
   test('only safe internal destinations survive the gate', () {
     expect(
-      authRedirect(null, Uri.parse('ronditrack-dev://app/join/family')),
+      authRedirect(
+        const SignedOut(),
+        Uri.parse('ronditrack-dev://app/join/family'),
+      ),
       '/sign-in?from=%2Fjoin%2Ffamily',
     );
     for (final address in [
@@ -147,19 +159,18 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text('Sign in'), findsNWidgets(2));
-      await tester.enterText(find.byType(TextField), Persona.demo.email);
+      await tester.enterText(find.byType(TextField).first, Persona.demo.email);
+      await tester.enterText(find.byType(TextField).last, 'test input');
       await tester.tap(find.widgetWithText(FilledButton, 'Sign in'));
       await tester.pumpAndSettle();
-      expect(find.text('Invite code: family'), findsOneWidget);
-      await tester.tap(find.text('Join'));
-      await tester.pumpAndSettle();
+      expect(router.routeInformationProvider.value.uri.path, '/stokvels/1');
       router.go(const ProfileRoute().location);
       await tester.pumpAndSettle();
       await tester.tap(find.text('Sign out'));
       await tester.pumpAndSettle();
-      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byType(TextField), findsNWidgets(2));
       expect(router.canPop(), isFalse);
-      expect(container.read(authProvider), isNull);
+      expect(container.read(authProvider), isA<SignedOut>());
     },
   );
 

@@ -2,17 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Main supplies network configuration. Fake widget tests only need a flavour.
 final appConfigProvider = Provider<AppConfig>(
-  (ref) => const AppConfig._('dev', null),
+  (ref) => const AppConfig._('dev', null, ''),
 );
 
 /// Stores the application's public configuration settings.
 class AppConfig {
-  const new _(this.flavor, this._apiBaseUrl);
+  const new _(this.flavor, this._apiBaseUrl, this.refreshCookieName);
 
   factory validate({
     required String flavor,
     required String apiBaseUrl,
     required String? nativeFlavor,
+    required String refreshCookieName,
   }) {
     // Only allow the three flavours required by the assignment.
     // The API address must also be provided.
@@ -40,10 +41,15 @@ class AppConfig {
     }
 
     // Return the validated configuration.
-    return AppConfig._(flavor, uri);
+    if (!RegExp(r'^[!#$%&\x27*+.^_`|~0-9A-Za-z-]+$')
+        .hasMatch(refreshCookieName)) {
+      throw StateError('REFRESH_COOKIE_NAME must be a valid cookie name.');
+    }
+    return AppConfig._(flavor, uri, refreshCookieName);
   }
 
   final String flavor;
+  final String refreshCookieName;
   final Uri? _apiBaseUrl;
 
   Uri get apiBaseUrl =>
