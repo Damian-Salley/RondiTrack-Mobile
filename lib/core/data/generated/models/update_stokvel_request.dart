@@ -8,11 +8,16 @@ part 'update_stokvel_request.g.dart';
 
 @JsonSerializable()
 class UpdateStokvelRequest {
-  const UpdateStokvelRequest({this.name, this.contributionAmount});
+  const UpdateStokvelRequest({
+    this.version,
+    this.name,
+    this.contributionAmount,
+  });
 
   factory UpdateStokvelRequest.fromJson(Map<String, Object?> json) =>
       _$UpdateStokvelRequestFromJson(json);
 
+  final String? version;
   final String? name;
   final dynamic contributionAmount;
 

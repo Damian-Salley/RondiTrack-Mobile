@@ -170,6 +170,54 @@ class _StokvelsClient implements StokvelsClient {
   }
 
   @override
+  Future<PagedResponseOfContributionResponse>
+  getApiV1StokvelsStokvelIdContributions({
+    required int stokvelId,
+    int? cycleId,
+    String? status,
+    int? pageSize,
+    String? pageToken,
+    String? sortBy,
+    int? userId,
+    DateTime? from,
+    DateTime? to,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'CycleId': cycleId,
+      r'Status': status,
+      r'PageSize': pageSize,
+      r'PageToken': pageToken,
+      r'SortBy': sortBy,
+      r'UserId': userId,
+      r'From': from?.toIso8601String(),
+      r'To': to?.toIso8601String(),
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<PagedResponseOfContributionResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v1/stokvels/${stokvelId}/contributions',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, Object?>>(_options);
+    late PagedResponseOfContributionResponse _value;
+    try {
+      _value = PagedResponseOfContributionResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<List<PayoutOrderEntryResponse>>
   getApiV1StokvelsStokvelIdCyclesCycleIdPayouts({
     required int stokvelId,

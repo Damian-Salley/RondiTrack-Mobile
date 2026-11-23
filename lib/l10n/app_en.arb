@@ -1,0 +1,227 @@
+{
+  "@@locale": "en",
+  "homeLoading": "Loading home",
+  "homeEmpty": "No stokvels yet. Ask a stokvel organiser for an invite.",
+  "offline": "You are offline.",
+  "refreshing": "Refreshing…",
+  "refreshFailed": "Couldn’t refresh.",
+  "tryAgain": "Try again",
+  "lastUpdated": "Last updated {time}",
+  "@lastUpdated": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "stokvel": "Stokvel",
+  "stokvelLoading": "Loading stokvel",
+  "stokvelMissing": "Stokvel not found.",
+  "cycleMissing": "Cycle not found.",
+  "memberCount": "{count, plural, one{1 member} other{{count} members}}",
+  "@memberCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "createStokvel": "Create stokvel",
+  "editStokvel": "Edit stokvel",
+  "stokvelName": "Stokvel name",
+  "stokvelId": "Stokvel number",
+  "save": "Save",
+  "amount": "Amount in rand",
+  "invalidAmount": "Enter a positive rand amount with up to two decimal digits.",
+  "nameRequired": "Enter the stokvel name.",
+  "idRequired": "Enter a positive whole number.",
+  "saveFailed": "Couldn’t save. Try again.",
+  "staleStokvel": "This stokvel changed. Review the latest details before saving again.",
+  "latestStokvel": "Latest details: {name}, {amount}",
+  "@latestStokvel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "pay": "Pay",
+  "payContribution": "Pay contribution",
+  "pending": "Pending",
+  "paid": "Paid",
+  "confirmed": "Confirmed",
+  "late": "Late",
+  "unknownStatus": "Unknown status",
+  "pendingAmount": "Pending payment: {amount}",
+  "@pendingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "waiting": "Retry available at {time}",
+  "@waiting": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "storedPayment": "Payment queued on this phone.",
+  "paidPayment": "Payment recorded.",
+  "refusedPayment": "Payment refused. Check the cycle and your membership before trying again.",
+  "expiredPayment": "The payment expired. Check whether it went through before paying again.",
+  "contributions": "Contributions",
+  "firstPageLoading": "Loading contributions",
+  "noContributions": "There are no contributions yet.",
+  "noFilteredContributions": "No contributions match these filters.",
+  "clearFilters": "Clear filters",
+  "firstPageFailed": "Couldn’t load contributions.",
+  "nextPageFailed": "Couldn’t load the next page.",
+  "endOfContributions": "End of contributions",
+  "cycle": "Cycle",
+  "status": "Status",
+  "member": "Member",
+  "all": "All",
+  "fromDate": "Start date",
+  "toDate": "End date",
+  "invalidDateRange": "The end date must be on or after the start date.",
+  "cycleNumber": "Cycle {number}",
+  "@cycleNumber": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "profile": "Profile",
+  "language": "Language",
+  "systemLanguage": "Use phone language",
+  "english": "English",
+  "afrikaans": "Afrikaans",
+  "signOut": "Sign out",
+  "discardPayments": "Discard pending payments and sign out?",
+  "cancel": "Cancel",
+  "discardAndSignOut": "Discard and sign out",
+  "roleLabel": "Your role: {role}",
+  "@roleLabel": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "paidAmount": "Paid: {amount}",
+  "@paidAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedAmount": "Owed: {amount}",
+  "@owedAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "arrearsAmount": "Arrears: {amount}",
+  "@arrearsAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "nextPayout": "Next payout: {date}",
+  "@nextPayout": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "unscheduled": "Not scheduled",
+  "treasurer": "Treasurer",
+  "chairperson": "Chairperson",
+  "unknownRole": "Unknown role",
+  "duplicatePayment": "A contribution for this cycle was already recorded.",
+  "paymentMembership": "You can no longer pay for this stokvel or member.",
+  "paymentClosed": "This cycle is closed or can’t accept the payment.",
+  "open": "Open",
+  "closed": "Closed",
+  "paidOut": "Paid out",
+  "cycleDetails": "Cycle details",
+  "noCycle": "No current cycle.",
+  "openCycle": "Open cycle",
+  "cycleWithStatus": "Cycle {number}: {status}",
+  "@cycleWithStatus": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "dueDate": "Due: {date}",
+  "@dueDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "targetAmount": "Target: {amount}",
+  "@targetAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "requiredAmount": "Required: {amount}",
+  "@requiredAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "contributionAmount": "Contribution: {amount}",
+  "@contributionAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "payouts": "View rotation and payouts",
+  "actions": "Available actions",
+  "noActions": "No actions available for this cycle.",
+  "uploadProof": "Upload proof",
+  "confirmContributions": "Confirm contributions",
+  "closeCycle": "Close cycle",
+  "recordPayout": "Record payout",
+  "comingSoon": "Coming in Week 11.",
+  "homeTab": "Home",
+  "stokvelsTab": "Stokvels",
+  "activity": "Activity",
+  "pageMissing": "Page not found.",
+  "filtersUnavailable": "Couldn’t load filter options.",
+  "loadMore": "Load more contributions",
+  "viewContributions": "View contribution history",
+  "chosenStartDate": "Start date: {date}",
+  "@chosenStartDate": {"placeholders": {"date": {"type": "String"}}},
+  "chosenEndDate": "End date: {date}",
+  "@chosenEndDate": {"placeholders": {"date": {"type": "String"}}},
+  "contributionWhen": "{date}, {time} SAST",
+  "@contributionWhen": {"placeholders": {"date": {"type": "String"}, "time": {"type": "String"}}}
+}

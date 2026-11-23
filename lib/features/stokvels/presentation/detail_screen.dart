@@ -3,16 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_theme.dart';
 import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/app/router.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
+import 'package:ronditrack_mobile/core/cache_status.dart';
 import 'package:ronditrack_mobile/core/money.dart';
+import 'package:ronditrack_mobile/core/offline_mode.dart';
+import 'package:ronditrack_mobile/core/south_african_day.dart';
 import 'package:ronditrack_mobile/core/state_message.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
+import 'package:ronditrack_mobile/features/contributions/contribution_providers.dart';
+import 'package:ronditrack_mobile/features/contributions/domain/payment_intent.dart';
+import 'package:ronditrack_mobile/features/contributions/presentation/contribution_list_screen.dart';
+import 'package:ronditrack_mobile/features/contributions/presentation/pay_form.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
+import 'package:ronditrack_mobile/features/home/presentation/cached_home_provider.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_notifier.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/actions.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
+import 'package:ronditrack_mobile/features/stokvels/presentation/cached_stokvel_provider.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/detail_provider.dart';
+import 'package:ronditrack_mobile/features/stokvels/presentation/stokvel_form.dart';
 import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
+import 'package:ronditrack_mobile/l10n/localization.dart';
 
 /// Displays the details of a selected stokvel.
 class DetailScreen extends ConsumerWidget {
@@ -23,21 +35,18 @@ class DetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.strings;
+    final offline = ref.watch(offlineStorageEnabledProvider);
     // A real cycle link has its own provider key, including historical cycles.
     final api = ref.watch(useApiProvider);
     final provider = api && cycleId != null
         ? cycleDetailProvider(stokvelId, int.tryParse(cycleId!) ?? -1)
         : detailProvider(stokvelId);
-    final state = toViewState(
-      ref.watch(provider),
-      isEmpty: (detail) => detail == null,
-    );
 
     // Get the stokvels available to the current persona.
-    final home = ref.watch(homeProvider);
-    final entries = home.isReloading || home.hasError
-        ? <HomeEntry>[]
-        : home.value ?? [];
+    final entries = offline
+        ? ref.watch(cachedHomeProvider).value?.cached?.data ?? <HomeEntry>[]
+        : ref.watch(homeProvider).value ?? <HomeEntry>[];
     final choices = {
       for (final item in entries) item.membership.stokvelId: item,
     };
@@ -61,52 +70,114 @@ class DetailScreen extends ConsumerWidget {
                   if (id != null) StokvelRoute(id: '$id').go(context);
                 },
               )
-            : const Text('Stokvel'),
+            : Text(strings.stokvel),
       ),
 
       // Display the appropriate loading, empty, error, or data state.
-      body: switch (state) {
-        Loading() => const Center(
-          child: CircularProgressIndicator(semanticsLabel: 'Loading stokvel'),
-        ),
-        Empty() => StateMessage(
-          message: cycleId == null ? 'Stokvel not found.' : 'Cycle not found.',
-        ),
-        Failure(:final message, :final apiFailure) => StateMessage(
-          message: message,
-          apiFailure: apiFailure,
-          retry: () => ref.invalidate(provider),
-        ),
-        Data(:final value) =>
-          cycleId != null &&
-                  (cycleId != '${value!.currentCycle?.id}' ||
-                      value.currentCycle?.stokvelId != stokvelId)
-              ? const StateMessage(message: 'Cycle not found.')
-              : _DetailBody(
-                  detail: value!,
-                  isCycle: cycleId != null,
-                  useApi: api,
+      body: offline
+          ? _cachedBody(context, ref)
+          : switch (toViewState(
+              ref.watch(provider),
+              isEmpty: (detail) => detail == null,
+            )) {
+              Loading() => Center(
+                child: CircularProgressIndicator(
+                  semanticsLabel: strings.stokvelLoading,
                 ),
-      },
+              ),
+              Empty() => StateMessage(
+                message: cycleId == null
+                    ? strings.stokvelMissing
+                    : strings.cycleMissing,
+              ),
+              Failure(:final message, :final apiFailure) => StateMessage(
+                message: message,
+                apiFailure: apiFailure,
+                retry: () => ref.invalidate(provider),
+              ),
+              Data(:final value) =>
+                cycleId != null &&
+                        (cycleId != '${value!.currentCycle?.id}' ||
+                            value.currentCycle?.stokvelId != stokvelId)
+                    ? StateMessage(message: strings.cycleMissing)
+                    : _DetailBody(
+                        detail: value!,
+                        isCycle: cycleId != null,
+                        useApi: api,
+                      ),
+            },
+    );
+  }
+
+  Widget _cachedBody(BuildContext context, WidgetRef ref) {
+    final strings = context.strings;
+    final key = (
+      stokvelId: stokvelId,
+      cycleId: cycleId == null ? null : int.tryParse(cycleId!) ?? -1,
+    );
+    final state = ref.watch(cachedStokvelProvider(key)).value;
+    final cache = state?.cached;
+    final sync = ref.watch(stokvelSyncProvider(key));
+    final header = CacheStatus(
+      updatedAt: cache?.updatedAt,
+      refreshing: state?.refreshing ?? true,
+      failure: state?.failure,
+      retry: sync.refresh,
+    );
+    if (cache == null) {
+      return ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          header,
+          if (state?.failure is NotFoundFailure)
+            Text(
+              cycleId == null ? strings.stokvelMissing : strings.cycleMissing,
+            ),
+        ],
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: sync.refresh,
+      child: _DetailBody(
+        detail: cache.data,
+        isCycle: cycleId != null,
+        useApi: true,
+        header: header,
+      ),
     );
   }
 }
 
 /// Displays the stokvel's cycle, contributions, and available actions.
-class _DetailBody extends StatelessWidget {
+class _DetailBody extends ConsumerWidget {
   const new({
     required this.detail,
     required this.isCycle,
     required this.useApi,
+    this.header,
   });
 
   final StokvelDetail detail;
   final bool isCycle;
   final bool useApi;
+  final Widget? header;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.strings;
     final cycle = detail.currentCycle;
+    final offline = header != null;
+    final pending = offline && cycle != null
+        ? ref
+              .watch(pendingPaymentsProvider)
+              .value
+              ?.where(
+                (payment) =>
+                    payment.target.stokvelId == detail.stokvel.id &&
+                    payment.target.cycleId == cycle.id,
+              )
+              .toList()
+        : null;
 
     // Find the current user's contribution, if one exists.
     final own = detail.contributions
@@ -126,21 +197,39 @@ class _DetailBody extends StatelessWidget {
     );
 
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(20),
       children: [
-        if (isCycle) const Text('Cycle details'),
+        ?header,
+        if (isCycle) Text(strings.cycleDetails),
         Text(
           detail.stokvel.name,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
-        Text('Your role: ${detail.membership.role.label}'),
-        Text('Members: ${detail.stokvel.memberCount}'),
-        Text('Contribution: ${formatCents(detail.stokvel.contributionAmount)}'),
+        Text(strings.roleLabel(strings.membershipRole(detail.membership.role))),
+        Text(strings.memberCount(detail.stokvel.memberCount)),
+        Text(
+          strings.contributionAmount(
+            formatCents(detail.stokvel.contributionAmount),
+          ),
+        ),
+        if (offline &&
+            detail.membership.role == StokvelRole.chairperson &&
+            detail.stokvel.version != null)
+          TextButton(
+            onPressed: () => Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => StokvelForm(initial: detail.stokvel),
+              ),
+            ),
+            child: Text(strings.editStokvel),
+          ),
         const SizedBox(height: 20),
 
         // Display the current contribution cycle, if available.
         if (cycle == null)
-          const Text('No current cycle.')
+          Text(strings.noCycle)
         else ...[
           if (!isCycle)
             TextButton(
@@ -148,33 +237,70 @@ class _DetailBody extends StatelessWidget {
                 id: '${detail.stokvel.id}',
                 cycleId: '${cycle.id}',
               ).go(context),
-              child: const Text('Open cycle'),
+              child: Text(strings.openCycle),
             ),
           Text(
-            'Cycle ${cycle.number}: ${cycle.status.label}',
+            strings.cycleWithStatus(cycle.number, switch (cycle.status) {
+              .active => strings.open,
+              .closed => strings.closed,
+              .paid => strings.paidOut,
+              .unknown => strings.unknownStatus,
+            }),
             style: TextStyle(
               color: Theme.of(context)
                   .extension<StatusColors>()
                   ?.cycles[cycle.status],
             ),
           ),
-          Text('Due: ${cycle.southAfricanDueDate}'),
-          Text('Target: ${formatCents(cycle.targetAmount)}'),
-          Text('Required: ${formatCents(cycle.requiredContribution)}'),
+          Text(strings.dueDate(cycle.southAfricanDueDate)),
+          if (offline &&
+              cycle.status == CycleStatus.active &&
+              (own == null || own.status == ContributionStatus.pending) &&
+              !DateTime.now().isBefore(
+                SouthAfricanDay.fromInstant(cycle.dueDateUtc).endUtcExclusive,
+              ))
+            Text(strings.late),
+          Text(strings.targetAmount(formatCents(cycle.targetAmount))),
+          Text(strings.requiredAmount(formatCents(cycle.requiredContribution))),
           TextButton(
             onPressed: () => PayoutsRoute(
               id: '${detail.stokvel.id}',
               cycleId: '${cycle.id}',
             ).go(context),
-            child: const Text('View rotation and payouts'),
+            child: Text(strings.payouts),
           ),
         ],
 
         const SizedBox(height: 20),
-        Text('Contributions', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          strings.contributions,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        if (offline)
+          TextButton(
+            onPressed: () => Navigator.push<void>(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    ContributionListScreen(stokvelId: detail.stokvel.id),
+              ),
+            ),
+            child: Text(strings.viewContributions),
+          ),
+        for (final payment in pending ?? <PaymentIntent>[]) ...[
+          Text(strings.pendingAmount(formatCents(payment.amount))),
+          if (payment.retryAt case final retryAt?
+              when retryAt.isAfter(DateTime.now()))
+            Text(strings.waiting(context.formatTime(retryAt))),
+        ],
+        if (pending?.isNotEmpty ?? false)
+          TextButton(
+            onPressed: ref.read(paymentOutboxSyncProvider).flush,
+            child: Text(strings.tryAgain),
+          ),
 
         // Display each member's contribution.
-        if (detail.contributions.isEmpty) const Text('No contributions yet.'),
+        if (detail.contributions.isEmpty) Text(strings.noContributions),
         for (final contribution in detail.contributions)
           ListTile(
             key: ValueKey('${detail.stokvel.id}-${contribution.userId}'),
@@ -185,7 +311,7 @@ class _DetailBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  contribution.status.label,
+                  strings.contributionStatus(contribution.status),
                   style: TextStyle(
                     color: Theme.of(context)
                         .extension<StatusColors>()
@@ -198,12 +324,9 @@ class _DetailBody extends StatelessWidget {
           ),
 
         const SizedBox(height: 20),
-        Text(
-          'Available actions',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text(strings.actions, style: Theme.of(context).textTheme.titleLarge),
 
-        if (actions.isEmpty) const Text('No actions available for this cycle.'),
+        if (actions.isEmpty) Text(strings.noActions),
 
         // Show permitted actions; implementation follows in Week 11.
         Wrap(
@@ -211,21 +334,49 @@ class _DetailBody extends StatelessWidget {
           children: [
             for (final action in actions)
               OutlinedButton(
-                onPressed: () {
-                  if (useApi &&
-                      action == StokvelAction.closeCycle &&
-                      cycle != null) {
-                    ClosePreviewRoute(
-                      id: '${detail.stokvel.id}',
-                      cycleId: '${cycle.id}',
-                    ).go(context);
-                    return;
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Coming in Week 11.')),
-                  );
-                },
-                child: Text(action.label),
+                onPressed:
+                    action == StokvelAction.pay &&
+                        (pending?.isNotEmpty ?? false)
+                    ? null
+                    : () {
+                        if (offline &&
+                            action == StokvelAction.pay &&
+                            cycle != null) {
+                          Navigator.push<void>(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PayForm(
+                                target: (
+                                  stokvelId: detail.stokvel.id,
+                                  cycleId: cycle.id,
+                                  userId: detail.callerId,
+                                ),
+                                suggestedAmount: cycle.requiredContribution,
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+                        if (useApi &&
+                            action == StokvelAction.closeCycle &&
+                            cycle != null) {
+                          ClosePreviewRoute(
+                            id: '${detail.stokvel.id}',
+                            cycleId: '${cycle.id}',
+                          ).go(context);
+                          return;
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(strings.comingSoon)),
+                        );
+                      },
+                child: Text(switch (action) {
+                  .pay => strings.pay,
+                  .uploadProof => strings.uploadProof,
+                  .confirmContributions => strings.confirmContributions,
+                  .closeCycle => strings.closeCycle,
+                  .recordPayout => strings.recordPayout,
+                }),
               ),
           ],
         ),

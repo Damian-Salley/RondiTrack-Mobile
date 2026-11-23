@@ -5,6 +5,9 @@ import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
+import 'package:ronditrack_mobile/core/offline_mode.dart';
+import 'package:ronditrack_mobile/l10n/language_preference.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   // Initialise Flutter before accessing platform-specific functionality.
@@ -25,6 +28,8 @@ void main() {
       overrides: [
         appConfigProvider.overrideWithValue(config),
         useApiProvider.overrideWithValue(true),
+        offlineStorageEnabledProvider.overrideWithValue(true),
+        languagePreferencesProvider.overrideWithValue(SharedPreferencesAsync()),
       ],
       child: const RondiTrackApp(),
     ),
