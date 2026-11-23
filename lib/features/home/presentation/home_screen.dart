@@ -24,7 +24,7 @@ class HomeScreen extends ConsumerWidget {
       final state = ref.watch(cachedHomeProvider).value;
       final cached = state?.cached;
       return Scaffold(
-        appBar: AppBar(title: const Text('RondiTrack')),
+        appBar: AppBar(title: Text(strings.appName)),
         body: RefreshIndicator(
           onRefresh: sync.refresh,
           child: ListView(
@@ -53,7 +53,7 @@ class HomeScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('RondiTrack')),
+      appBar: AppBar(title: Text(strings.appName)),
       body: switch (state) {
         Loading() => Center(
           child: CircularProgressIndicator(semanticsLabel: strings.homeLoading),

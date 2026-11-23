@@ -77,7 +77,7 @@ class StokvelListScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(strings.stokvelsTab)),
       body: switch (state) {
         Loading() => const Center(child: CircularProgressIndicator()),
-        Empty() => const StateMessage(message: 'No stokvels yet.'),
+        Empty() => StateMessage(message: strings.noStokvels),
         Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
           apiFailure: apiFailure,

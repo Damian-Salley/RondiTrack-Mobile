@@ -1,5 +1,7 @@
 {
   "@@locale": "en",
+  "appName": "RondiTrack",
+  "noStokvels": "No stokvels yet.",
   "homeLoading": "Loading home",
   "homeEmpty": "No stokvels yet. Ask a stokvel organiser for an invite.",
   "offline": "You are offline.",

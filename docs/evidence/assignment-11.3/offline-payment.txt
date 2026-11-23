@@ -1,0 +1,12 @@
+Disposable Android development fixture
+Stokvel 1130001, active cycle 1130004, member 2
+
+Airplane mode, before force-stop: Drift stored 4125 cents and key 3c89f3b0-b58e-4b00-8673-2679d5461faf.
+Airplane mode, after force-stop and relaunch: the same Drift key and amount were present.
+After reconnection: the Android outbox was empty and the contribution was displayed as Paid.
+
+PostgreSQL contributions for that member and cycle: 1
+PostgreSQL payment receipts for that member and cycle: 1
+Receipt key: 3c89f3b0-b58e-4b00-8673-2679d5461faf
+An explicit HTTP replay with that key and body returned 201 and Idempotency-Replayed: true.
+PostgreSQL counts remained one contribution and one receipt.

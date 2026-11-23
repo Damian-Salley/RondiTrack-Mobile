@@ -10,6 +10,12 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
+  String get appName => 'RondiTrack';
+
+  @override
+  String get noStokvels => 'Nog geen stokvelle nie.';
+
+  @override
   String get homeLoading => 'Laai tuisblad';
 
   @override

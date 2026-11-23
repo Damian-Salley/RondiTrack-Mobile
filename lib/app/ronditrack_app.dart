@@ -64,7 +64,7 @@ class _RondiTrackAppState extends ConsumerState<RondiTrackApp> {
       }
     });
     return MaterialApp.router(
-      title: 'RondiTrack',
+      onGenerateTitle: (context) => context.strings.appName,
       scaffoldMessengerKey: _messenger,
       locale: ref.watch(languageProvider).value,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

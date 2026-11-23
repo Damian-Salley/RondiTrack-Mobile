@@ -1196,3 +1196,7 @@ English and Afrikaans use Flutter gen-l10n, ARB messages, and ICU plurals. Choos
 - Generate UUID v4 keys with `Random.secure()` at enqueue time. Every retry uses the stored key. A unique queue target prevents a second pending payment for the same member and cycle.
 - Page contribution history by hand. Only one request runs at a time. A filter change discards any stale result and starts at the first page. Pull-to-refresh keeps the old rows while the first page loads.
 - `cli_util` and `shared_preferences_android` are pinned because their selected newer versions were under two weeks old. Review both overrides on 4 December 2026. Existing `jni`, `jni_flutter`, and `material_ui` overrides remain from Assignment 11.2.
+
+## Assignment 11.3 verification
+
+The Android screenshots, PostgreSQL replay evidence, live test output, deliberate test failures, and hosted time-zone runs are linked from the evidence index. [Assignment 11.3 evidence](docs/evidence/assignment-11.3/README.md)

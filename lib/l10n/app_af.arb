@@ -1,5 +1,7 @@
 {
   "@@locale": "af",
+  "appName": "RondiTrack",
+  "noStokvels": "Nog geen stokvelle nie.",
   "homeLoading": "Laai tuisblad",
   "homeEmpty": "Nog geen stokvelle nie. Vra ’n stokvelorganiseerder vir ’n uitnodiging.",
   "offline": "Jy is vanlyn.",

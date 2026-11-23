@@ -98,6 +98,18 @@ abstract class AppLocalizations {
     Locale('af'),
   ];
 
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'RondiTrack'**
+  String get appName;
+
+  /// No description provided for @noStokvels.
+  ///
+  /// In en, this message translates to:
+  /// **'No stokvels yet.'**
+  String get noStokvels;
+
   /// No description provided for @homeLoading.
   ///
   /// In en, this message translates to:

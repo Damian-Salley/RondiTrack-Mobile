@@ -10,6 +10,12 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appName => 'RondiTrack';
+
+  @override
+  String get noStokvels => 'No stokvels yet.';
+
+  @override
   String get homeLoading => 'Loading home';
 
   @override
