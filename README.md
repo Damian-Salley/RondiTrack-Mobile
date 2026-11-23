@@ -1200,3 +1200,5 @@ English and Afrikaans use Flutter gen-l10n, ARB messages, and ICU plurals. Choos
 ## Assignment 11.3 verification
 
 The Android screenshots, PostgreSQL replay evidence, live test output, deliberate test failures, and hosted time-zone runs are linked from the evidence index. [Assignment 11.3 evidence](docs/evidence/assignment-11.3/README.md)
+
+The named first-language Afrikaans review and independent TalkBack audio verification remain incomplete. The Android walkthrough verified TalkBack focus and error layout at 200% text size.
