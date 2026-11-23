@@ -10,6 +10,7 @@ void main() {
           flavor: flavor,
           apiBaseUrl: 'http://10.0.2.2:5274/api/v1',
           nativeFlavor: flavor,
+          refreshCookieName: 'testSession',
         ),
         throwsStateError,
       );
@@ -19,7 +20,24 @@ void main() {
   // Verify that invalid application configurations are rejected.
   test('missing config refuses startup', () {
     expect(
-      () => AppConfig.validate(flavor: '', apiBaseUrl: '', nativeFlavor: 'dev'),
+      () => AppConfig.validate(
+        flavor: '',
+        apiBaseUrl: '',
+        nativeFlavor: 'dev',
+        refreshCookieName: '',
+      ),
+      throwsStateError,
+    );
+  });
+
+  test('missing cookie name refuses startup', () {
+    expect(
+      () => AppConfig.validate(
+        flavor: 'dev',
+        apiBaseUrl: 'http://127.0.0.1',
+        nativeFlavor: 'dev',
+        refreshCookieName: '',
+      ),
       throwsStateError,
     );
   });
@@ -30,6 +48,7 @@ void main() {
         flavor: 'dev',
         apiBaseUrl: 'http://10.0.2.2:5274/api/v1',
         nativeFlavor: 'prod',
+        refreshCookieName: 'testSession',
       ),
       throwsStateError,
     );
@@ -41,6 +60,7 @@ void main() {
         flavor: 'dev',
         apiBaseUrl: 'http://10.0.2.2:5274/api/v1',
         nativeFlavor: 'dev',
+        refreshCookieName: 'testSession',
       ).flavor,
       'dev',
     );

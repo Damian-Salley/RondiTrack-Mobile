@@ -6,7 +6,7 @@ on:
     inputs:
       api_ref:
         description: Backend branch, tag, or commit to compare
-        default: feature/assignment-11.1-backend
+        default: 7c7350e811c5c074b19cf14cf1b340c60efac987
         type: string
 
 permissions:
@@ -62,12 +62,11 @@ jobs:
       # Download the mobile repository.
       - uses: actions/checkout@v4.2.2
 
-      # Download the backend branch containing the matching API contract.
-      # After the backend PR merges, change the default reference to main.
+      # Compare against the backend revision recorded in the auth contract notes.
       - uses: actions/checkout@v4.2.2
         with:
           repository: Damian-Salley/RondiTrack
-          ref: ${{ inputs.api_ref || 'feature/assignment-11.1-backend' }}
+          ref: ${{ inputs.api_ref || '7c7350e811c5c074b19cf14cf1b340c60efac987' }}
           path: backend
           persist-credentials: false
 

@@ -1,12 +1,14 @@
-# RondiTrack Mobile — Assignment 10.3
+# RondiTrack Mobile — Assignment 11.2
 
 ## Routes
 
-Each address uses a generated typed route. All signed-in people share the same four tabs.
+All signed-in people share the same four tabs. The auth gate also uses an
+internal splash route while restoring.
 
 | Address | Screen and tab | Signed out | Not a member | Android back, including cold links |
 |---|---|---|---|---|
-| `/sign-in` | Fake email sign-in, outside tabs | Stay here | Not applicable | Exit |
+| `/sign-in` | Email and password, outside tabs | Stay here | Not applicable | Exit |
+| `/register` | Registration form, outside tabs | Stay here | Not applicable | Sign in link |
 | `/home` | Home summary, Home | Sign in, then Home | Empty Home | Exit |
 | `/stokvels` | Membership list, Stokvels | Sign in, then list | Empty list | Exit |
 | `/stokvels/:id` | Stokvel detail, Stokvels | Sign in, then requested detail | Stokvel not found | Stokvel list |
@@ -14,16 +16,14 @@ Each address uses a generated typed route. All signed-in people share the same f
 | `/stokvels/:id/cycles/:cycleId/payouts` | Rotation and payouts, Stokvels | Sign in, then requested payouts | Cycle not found | Parent cycle, then stokvel and list |
 | `/activity` | Fake cross-stokvel feed, Activity | Sign in, then Activity | Empty feed | Exit |
 | `/profile` | Current persona and sign-out, Profile | Sign in, then Profile | Not applicable | Exit |
-| `/join/:code` | Invite preview, outside tabs | Sign in, then same preview | Preview; fake join does not change memberships | Home |
+| `/join/:code` | Join and open the stokvel | Sign in, then join | Valid invite adds membership | Home |
 
 
 ## Authentication gate
 
-The app starts signed out. Enter a seed email on Sign in, or tap a persona to fill
-it. `authProvider` holds a persona or null and updates the existing 10.1 session
-provider. Dev sign-in has seed shortcuts; the dev shell also switches personas. Profile shows the
-current persona and signs out. Authentication stays in memory, so a cold start
-requires sign-in again.
+The app opens a splash while checking secure storage and restoring an existing
+session. Sign in accepts an email and password. The dev picker fills in only the
+email. Sign out from Profile to switch accounts.
 
 `authRedirect` is one pure, unit-tested gate. Protected addresses go to sign-in
 with an encoded `from`; signing in restores that address. `safeDestination`
@@ -34,9 +34,9 @@ Riverpod auth changes notify `GoRouter.refreshListenable`, so the gate runs even
 without navigation. Sign-out removes the shell and its stacks and invalidates
 the session's repositories.
 
-Invites display the original code after sign-in. Join demonstrates the fake flow,
-returns Home and shows confirmation; it does not modify seed memberships or call
-an API. Payment and treasurer buttons retain their 10.1 Week 11 placeholders.
+An invite opened before sign-in survives the splash and registration. A
+successful join opens the stokvel. The app shares one join operation per code
+within the current session.
 
 ## Navigation and Android back
 
@@ -46,8 +46,7 @@ list. At a branch root, back exits; it does not replay tab selections. Cold cycl
 links build both parents underneath. Invite back goes Home. After sign-out, back
 cannot reopen protected screens.
 
-The picker changes the address. Widgets use generated typed routes, with no
-string paths or `Navigator.push`. Missing and inaccessible resources give the
+Missing and inaccessible resources give the
 same response: `Stokvel not found.` or `Cycle not found.`. Cycles must belong to
 their addressed stokvel. The unchanged domain action rules use each stokvel's
 membership, never a global persona role.
@@ -57,21 +56,23 @@ membership, never a global persona role.
 Custom schemes with host `app` keep installed flavours separate: `ronditrack-dev`,
 `ronditrack-staging`, and `ronditrack`. Flutter's native handler forwards cold and
 running-app links to the router. Build/install the matching flavour first.
-These commands omit a package to test Android's scheme resolution:
+These commands let Android resolve the scheme. Set `INVITE_CODE` to a valid
+invite returned by
+`POST /api/v1/stokvels/{stokvelId}/invites` on the API for the chosen flavour.
 
 ```bash
 # Dev
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-dev://app/join/$INVITE_CODE"
 # Staging
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack-staging://app/join/$INVITE_CODE"
 # Prod
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1"
 adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/stokvels/1/cycles/101"
-adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/join/family"
+adb shell am start -W -a android.intent.action.VIEW -d "ronditrack://app/join/$INVITE_CODE"
 ```
 
 For a **cold** test, force-stop the matching package immediately before each link:
@@ -83,9 +84,10 @@ adb shell am force-stop za.co.damiansalley.ronditrack_mobile
 ```
 
 Sign in and check the requested screen and back chain. For a warm test, leave the
-app signed in and issue the link again. Family uses stokvel `2` and cycle `201`;
-cycle `201` under stokvel `1` must show not found. New Member must get the same
-not-found response as stokvel `999`.
+app signed in and issue the link again. Use IDs from the API when testing live
+data. In the widget fixtures, Family uses stokvel `2` and cycle `201`.
+Requesting cycle `201` under stokvel `1` returns the same not-found message as
+a missing cycle. New Member sees that same response for inaccessible cycles.
 
 adb checks intent resolution and navigation, not domain ownership or verified
 web-link handling. With an owned HTTPS domain, add an `android:autoVerify` intent
@@ -439,6 +441,7 @@ Each configuration file contains only:
 
 - `FLAVOR`
 - `API_BASE_URL`
+- `REFRESH_COOKIE_NAME`
 
 ### Development
 
@@ -447,6 +450,7 @@ File: `config/dev.json`
 ```json
 {
   "FLAVOR": "dev",
+  "REFRESH_COOKIE_NAME": "refreshToken",
   "API_BASE_URL": "http://10.0.2.2:5274/api/v1"
 }
 ```
@@ -464,6 +468,7 @@ File: `config/staging.json`
 ```json
 {
   "FLAVOR": "staging",
+  "REFRESH_COOKIE_NAME": "refreshToken",
   "API_BASE_URL": "https://staging.ronditrack.example/api/v1"
 }
 ```
@@ -475,6 +480,7 @@ File: `config/prod.json`
 ```json
 {
   "FLAVOR": "prod",
+  "REFRESH_COOKIE_NAME": "refreshToken",
   "API_BASE_URL": "https://ronditrack.example/api/v1"
 }
 ```
@@ -768,15 +774,11 @@ Tests verify:
 
 Disposal logs contain only stokvel identifiers, not personal or monetary information.
 
-### Future sign-out behavior
+### Sign-out behavior
 
-During Week 11, sign-out should:
-
-1. Delete stored credentials.
-2. Dispose the current session's provider container.
-3. Create a fresh provider container for the next login.
-
-Simply navigating to a login screen is not sufficient to clear all cached user-specific state.
+The API-backed repositories depend on the current auth state. Sign-out removes
+the signed-in shell, releases its auto-disposed providers, and rebuilds session
+dependencies when the next account signs in.
 
 ## Validation
 
@@ -949,18 +951,12 @@ for the backend's Family Savings fixture. These aliases change no API roles.
 | Sipho | Two stokvels; Paid R0.10 / Owed R249.90 in Community, Paid R0 / Owed R100 in Family | Member: own upload proof; no management actions | Member: Pay; no management actions | Same Community order without Record payout; Family: no payout order yet |
 | New Member | No stokvels; ask an organiser for an invite | Stokvel not found | Stokvel not found | Cycle not found for either cycle; no retry spinner |
 
-In dev only, tap **Dev persona: ...** above any shell screen and select a person.
-This invokes the same fake `authProvider.signIn` as email sign-in and keeps the
-current address. The menu has no address of its own. Staging and prod construct
-neither the menu nor sign-in seed shortcuts; `/dev/personas` is not found.
-`main` supplies the validated native `AppConfig` to the same provider read by
-these construction checks. Tests explicitly build both non-dev configs.
+The dev sign-in picker fills the email field. Sign out from Profile to choose
+another account. Staging and production tests verify that the picker is absent.
 
-Every persona-dependent repository watches `sessionProvider`. Reloads discard
-the previous person's visible data, including the stokvel picker and payouts.
-The first-frame tests in `test/persona_test.dart` exercise the real menu with
-Community and Mabena Family open, then sign out and sign in as New Member.
-Another first-frame test covers payouts. The same `appRetry` function is used in
+The fake repositories still watch `sessionProvider` for fixture changes. The
+first-frame tests in `test/persona_test.dart` cover stokvel details and payouts
+when the fixture changes. The same `appRetry` function is used in
 main and whole-app tests: requests do not automatically retry; recoverable
 failures expose a Retry button, while not-found exposes only its message.
 
@@ -968,7 +964,6 @@ failures expose a Retry button, while not-found exposes only its message.
 address. Existing navigation, access, activity and large-text tests still run.
 Payout records/actions remain fake/read-only Week 10 demonstrations; the record
 button retains the existing Week 11 placeholder, with no financial write.
-No optional stretch challenges or packages were added.
 
 ## Architecture rules
 
@@ -1032,14 +1027,18 @@ development password of at least 12 characters. Run
 `dotnet run --launch-profile http` to serve the API at port 5274.
 
 On an Android emulator, start the mobile app with
-`flutter run --flavor dev --dart-define-from-file=config/dev.json --dart-define=SEED_PASSWORD="$env:DemoUserPassword"`.
-The emulator uses `10.0.2.2` to reach the host. The APK contains compile-time
-defines, so only use a disposable seed password and keep that APK local.
+`flutter run --flavor dev --dart-define-from-file=config/dev.json`.
+The emulator uses `10.0.2.2` to reach the host. Type the development password
+on the sign-in screen.
 
-For provider integration tests on the host, set `RONDI_LIVE_URL` to
-`http://127.0.0.1:5274` and `RONDI_LIVE_PASSWORD` to the seed password, then
-run `flutter test --tags live test/real_api_live_test.dart`. The test skips
-when these variables are absent.
+For live tests on the host, set `RONDI_LIVE_URL` to
+`http://127.0.0.1:5274` and pass the development password through the
+`RONDI_LIVE_PASSWORD` process environment. Run
+`flutter test --tags live test/real_api_live_test.dart --reporter expanded`.
+The suite uses five local sign-ins, the default allowance per IP per minute.
+Wait for the window to reset if the emulator used a sign-in first. The tests
+skip when either variable is absent. The recorded backend commit enforces
+refresh-token reuse detection immediately and requires no grace-window setting.
 
 ### The API client
 
@@ -1054,10 +1053,9 @@ dart run build_runner build
 ```
 
 CI regenerates the client and checks for both changed and untracked files. A
-separate job compares the contract with backend `main` by default. Use the
-`api_ref` workflow input to compare another backend branch or commit.
-Until backend `main` contains the snapshot, the job uses the paired
-Assignment 11.1 backend branch. [Backend PR #8](https://github.com/Damian-Salley/RondiTrack/pull/8)
+separate job compares the contract with the backend revision recorded below.
+Use the `api_ref` workflow input to compare another backend branch or commit.
+[Assignment 11.1 backend PR #8](https://github.com/Damian-Salley/RondiTrack/pull/8)
 
 ### Failures
 
@@ -1080,7 +1078,7 @@ change is reflected in compile-time mapper references. API reads return a Dart
 record carrying the value or failure. The Week 10 repository methods unwrap
 that record, which lets existing fakes work while Riverpod receives typed
 errors as `AsyncError`.
-Only the dev build can use the seed credentials. The token stays in memory.
+The dev build offers a persona email picker.
 
 The transport allows 5 seconds to connect before reporting an unreachable
 host and 5 seconds to send the small JSON requests used here. It allows
@@ -1088,3 +1086,80 @@ host and 5 seconds to send the small JSON requests used here. It allows
 In an isolated test, authenticated Home reported 500 after 10.41 seconds
 when PostgreSQL was stopped. The app offers manual retry for connection
 failures and timeouts. It does not retry HTTP failures or writes.
+
+## Contract notes
+
+### Auth
+
+Backend source reviewed at `7c7350e811c5c074b19cf14cf1b340c60efac987`.
+The local API at port 5274 returned the header and status observations below.
+
+1. Under `/api/v1/auth`, register accepts JSON `firstName`, `lastName`,
+   `email`, `phoneNumber`, and `password`. It returns 201 with ID, names
+   and email. The user signs in next. Login accepts JSON `email` and
+   `password`, and returns 200 with `accessToken`, `tokenType` and
+   `expiresIn` plus a refresh cookie. Refresh accepts that cookie without
+   a body and returns the same response shape with replacement credentials.
+   Logout accepts the cookie without a body and returns 204. An empty
+   registration request returned 400 with an `errors` map keyed by all
+   five fields. The controller returns 409 for an existing email and 400
+   with password detail for a password shorter than 12 characters.
+2. Login and refresh set
+   `Set-Cookie: refreshToken=<redacted>; expires=<UTC date seven days after issuance>; path=/api/v1/auth; secure; samesite=strict; httponly`.
+   The name, path and attributes are also visible on the local logout
+   response. Access lifetime is hard-coded at 15 minutes in
+   `AuthController`, with `expiresIn: 900` and a JWT `exp`.
+3. Refresh consumes the old token and creates a replacement in the same
+   family. A subsequent reuse of a spent or revoked token returns 401 and
+   revokes that family, including its replacement. The rotation race
+   loser also returns 401. This commit has no grace window setting, so
+   strict behaviour is already active for live tests. A refresh without
+   a cookie returned 401 locally.
+4. The signed JWT contains `sub` (user ID), `jti`, the platform role
+   under the .NET role claim URI, `iss`, `aud`, and `exp`. Stokvel roles
+   come from membership data, as in 11.1.
+5. Logout returns 204 with a cookie deletion header for valid, spent, and
+   absent cookies. Valid and spent known cookies revoke the entire family.
+   The no-cookie request returned 204 and an empty cookie expiring at the
+   Unix epoch on the auth path.
+6. Login uses a fixed per-IP window, five requests per 60 seconds by
+   default, including successful attempts. Register has no rate limiter
+   in this commit. Rejections send 429 and integer seconds in `Retry-After`.
+7. Authenticated `POST /api/v1/invites/{code}/join` returns 200 with
+   `stokvelId` for new and existing members of a valid invite. An unknown
+   code returns 404 and an expired code returns 410. The authenticated
+   preview route also returns `alreadyMember` and `stokvelId`. A local
+   join without a bearer token returned 401.
+
+### The session
+
+The access JWT and its expiry live in memory. The refresh cookie value lives
+in a flavour-specific entry in `flutter_secure_storage`. Dio sends it only
+to refresh and logout. One in-flight refresh serves concurrent requests. The
+interceptor refreshes near expiry and retries a rejected request once. A 401
+for a replaced access token uses the current access token for that retry.
+
+A refresh 401 clears the session. Transient failures keep it, and the restore
+screen offers **Try again** and **Sign out** when startup refresh fails.
+Profile sign-out clears the in-memory credentials immediately. The sign-in
+screen appears after the secure entry has been deleted. Server logout runs in
+the background with a two-second timeout. A response from an earlier session
+cannot repopulate credentials or update a data request.
+
+### Decisions
+
+- Auth uses Dio directly so the app can read `Set-Cookie` and
+  `Retry-After`. Login and token responses reuse the generated models.
+  The invite join response uses the documented `stokvelId` field.
+- Each flavour requires `REFRESH_COOKIE_NAME` at startup. Android backup is
+  disabled with `android:allowBackup="false"`.
+- Refresh starts 30 seconds before the earlier of JWT expiry and the reported
+  lifetime. The retry uses a separate Dio client to avoid recursion.
+- `flutter_secure_storage` is pinned to 11.2.0. The lockfile pins each
+  hosted version. The November 21 audit required holding `jni` at 1.1.2,
+  `jni_flutter` at 1.0.4+1, and `material_ui` at 1.10.0. Re-audit before
+  removing the overrides. The November 19 JNI release reaches two weeks on
+  December 3, the November 18 JNI Flutter release on December 2, and
+  the November 16 Material UI release on November 30.
+
+[Assignment 11.2 verification evidence](docs/evidence/assignment-11.2/README.md)

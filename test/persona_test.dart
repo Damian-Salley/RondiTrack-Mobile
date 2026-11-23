@@ -37,6 +37,7 @@ void main() {
             AppConfig.validate(
               flavor: flavor,
               nativeFlavor: flavor,
+              refreshCookieName: 'testSession',
               apiBaseUrl: 'https://localhost',
             ),
           ),
@@ -52,11 +53,11 @@ void main() {
       router.go('/dev/personas');
       await tester.pumpAndSettle();
       expect(find.text('Page not found.'), findsOneWidget);
-      container.read(authProvider.notifier).signOut();
+      await container.read(authProvider.notifier).signOut();
       await tester.pumpAndSettle();
-      expect(find.byType(TextField), findsOneWidget);
-      // Seed shortcuts also do not exist in staging/prod sign-in.
-      expect(find.widgetWithText(ListTile, 'Sipho'), findsNothing);
+      expect(find.byType(TextField), findsNWidgets(2));
+      expect(find.byKey(const Key('persona-switcher')), findsNothing);
+      expect(find.byType(PopupMenuButton<Persona>), findsNothing);
     });
   }
 
@@ -188,13 +189,9 @@ void main() {
       await pumpApp(tester, container);
       await tester.pumpAndSettle();
       expect(find.byKey(ValueKey('$id-1')), findsOneWidget);
-      // Use the real dev menu, then inspect exactly the next rendered frame.
-      await tester.tap(find.byKey(const Key('persona-switcher')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(PopupMenuItem<Persona>, 'Sipho'));
+      container.read(authProvider.notifier).signIn(Persona.contributor.email);
       await tester.pump();
-      expect(container.read(authProvider), Persona.contributor);
-      expect(find.text('Dev persona: Sipho'), findsOneWidget);
+      expect(container.read(authProvider), isA<SignedIn>());
       expect(find.byKey(ValueKey('$id-1')), findsNothing);
       expect(find.text('Your role: Treasurer'), findsNothing);
       expect(find.text('Record payout'), findsNothing);
@@ -212,9 +209,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Your role: Member'), findsOneWidget);
       expect(find.text('Record payout'), findsNothing);
-      container.read(authProvider.notifier).signOut();
+      await container.read(authProvider.notifier).signOut();
       await tester.pumpAndSettle();
-      expect(find.byType(TextField), findsOneWidget);
+      expect(find.byType(TextField), findsNWidgets(2));
       expect(router.canPop(), isFalse);
       expect(find.byKey(ValueKey('$id-1')), findsNothing);
       container.read(authProvider.notifier).signIn(Persona.newcomer.email);
@@ -249,7 +246,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Record payout'), findsNothing);
       // Signing out and back in must not restore a cached treasurer frame.
-      container.read(authProvider.notifier).signOut();
+      await container.read(authProvider.notifier).signOut();
       await tester.pumpAndSettle();
       container.read(authProvider.notifier).signIn(Persona.newcomer.email);
       await tester.pump();

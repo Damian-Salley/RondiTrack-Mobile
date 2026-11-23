@@ -58,7 +58,7 @@ final class StokvelRepositoryProvider
   }
 }
 
-String _$stokvelRepositoryHash() => r'b2fcf87c12318fd9d2167440afe1760b3d5691be';
+String _$stokvelRepositoryHash() => r'117d98087cd7b3fc2a2e45cce09b79c0b98630fc';
 
 @ProviderFor(cycleDetail)
 final cycleDetailProvider = CycleDetailFamily._();

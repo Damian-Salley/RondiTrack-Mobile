@@ -1,4 +1,5 @@
 {
     "FLAVOR": "prod",
+    "REFRESH_COOKIE_NAME": "refreshToken",
     "API_BASE_URL": "https://ronditrack.example/api/v1"
 }
