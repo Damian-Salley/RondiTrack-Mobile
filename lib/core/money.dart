@@ -1,6 +1,21 @@
 /// Represents money as whole cents to avoid floating-point rounding errors.
 extension type const Cents(int value);
 
+const maximumContributionCents = 9007199254740991;
+
+/// Emits an exact JSON decimal token for the legacy rand API fields.
+String randDecimal(Cents amount) {
+  final absolute = amount.value.abs();
+  final sign = amount.value < 0 ? '-' : '';
+  final fraction = (absolute % 100).toString().padLeft(2, '0');
+  return '$sign${absolute ~/ 100}.$fraction';
+}
+
+bool isContributionAmount(MoneyParseResult result) =>
+    result is ParsedMoney &&
+    result.amount.value > 0 &&
+    result.amount.value <= maximumContributionCents;
+
 /// Converts cents into South African currency format.
 String formatCents(Cents amount) {
   final absolute = amount.value.abs();

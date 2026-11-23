@@ -10,6 +10,7 @@ part 'stokvel_response.g.dart';
 class StokvelResponse {
   const StokvelResponse({
     this.id,
+    this.version,
     this.name,
     this.contributionAmount,
     this.contributionAmountCents,
@@ -20,6 +21,7 @@ class StokvelResponse {
       _$StokvelResponseFromJson(json);
 
   final dynamic id;
+  final String? version;
   final String? name;
   final dynamic contributionAmount;
   final dynamic contributionAmountCents;

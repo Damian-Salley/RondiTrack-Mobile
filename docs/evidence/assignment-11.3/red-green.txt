@@ -1,0 +1,48 @@
+RED: UUID per send, UTC midnight instead of SAST, and a one-digit rand fraction
+00:00 +0: loading <workspace>/test/assignment113_offline_test.dart
+00:00 +0: <workspace>/test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:01 +0 -1: <workspace>/test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:01 +0 -1: <workspace>/test/south_african_day_test.dart: 00:30 SAST belongs to November 1 in any device time zone [E]
+  Expected: DateTime:<2026-10-31 22:00:00.000Z>
+    Actual: DateTime:<2026-11-01 00:00:00.000Z>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\south_african_day_test.dart 9:5                main.<fn>
+
+00:13 +0 -2: <workspace>/test/assignment113_offline_test.dart: one payment intent and its key survive an app restart [E]
+  Expected: ['key-1', 'key-1']
+    Actual: ['6ba88d08-0a70-43dd-9eb5-534a08137dcc', '4a749dd6-0ebe-4a2a-a99e-5747fba44236']
+     Which: at location [0] is '6ba88d08-0a70-43dd-9eb5-534a08137dcc' instead of 'key-1'
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\assignment113_offline_test.dart 236:5          main.<fn>
+
+00:15 +0 -2: <workspace>/test/assignment113_widgets_test.dart: rand input and exact JSON decimal tokens
+00:15 +0 -3: <workspace>/test/assignment113_widgets_test.dart: rand input and exact JSON decimal tokens [E]
+  Expected: '1250.50'
+    Actual: '1250.00'
+     Which: is different.
+            Expected: 1250.50
+              Actual: 1250.00
+                           ^
+             Differ at offset 5
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\assignment113_widgets_test.dart 58:7           main.<fn>
+
+00:15 +0 -3: Some tests failed.
+
+Failing tests:
+  <workspace>/test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+  <workspace>/test/assignment113_widgets_test.dart: rand input and exact JSON decimal tokens
+  <workspace>/test/south_african_day_test.dart: 00:30 SAST belongs to November 1 in any device time zone
+
+GREEN: production changes restored
+00:00 +0: loading <workspace>/test/assignment113_offline_test.dart
+00:00 +0: <workspace>/test/south_african_day_test.dart: 00:30 SAST belongs to November 1 in any device time zone
+00:00 +1: <workspace>/test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:00 +2: <workspace>/test/assignment113_widgets_test.dart: rand input and exact JSON decimal tokens
+00:00 +3: All tests passed!

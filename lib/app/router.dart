@@ -14,6 +14,7 @@ import 'package:ronditrack_mobile/features/stokvels/presentation/detail_screen.d
 import 'package:ronditrack_mobile/features/stokvels/presentation/join_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/presentation/stokvel_list_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
+import 'package:ronditrack_mobile/l10n/localization.dart';
 
 part 'router.g.dart';
 
@@ -38,8 +39,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: const HomeRoute().location,
     refreshListenable: refresh,
     redirect: (_, state) => authRedirect(ref.read(authProvider), state.uri),
-    errorBuilder: (_, _) =>
-        const Scaffold(body: Center(child: Text('Page not found.'))),
+    errorBuilder: (context, _) =>
+        Scaffold(body: Center(child: Text(context.strings.pageMissing))),
   );
   ref.onDispose(() {
     router.dispose();
@@ -229,16 +230,16 @@ class _StokvelPage extends StatelessWidget {
 class _AppShell extends ConsumerWidget {
   const new({required this.shell});
   final StatefulNavigationShell shell;
-  static const List<(IconData, String)> _tabs = [
-    (Icons.home_outlined, 'Home'),
-    (Icons.groups_outlined, 'Stokvels'),
-    (Icons.history, 'Activity'),
-    (Icons.person_outline, 'Profile'),
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wide = MediaQuery.sizeOf(context).width >= mediumWidth;
+    final strings = context.strings;
+    final tabs = [
+      (Icons.home_outlined, strings.homeTab),
+      (Icons.groups_outlined, strings.stokvelsTab),
+      (Icons.history, strings.activity),
+      (Icons.person_outline, strings.profile),
+    ];
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -253,7 +254,7 @@ class _AppShell extends ConsumerWidget {
                       onDestinationSelected: shell.goBranch,
                       labelType: NavigationRailLabelType.all,
                       destinations: [
-                        for (final (icon, label) in _tabs)
+                        for (final (icon, label) in tabs)
                           NavigationRailDestination(
                             icon: Icon(icon),
                             label: Text(label),
@@ -276,7 +277,7 @@ class _AppShell extends ConsumerWidget {
               // Reselecting a tab keeps its page and scroll.
               onDestinationSelected: shell.goBranch,
               destinations: [
-                for (final (icon, label) in _tabs)
+                for (final (icon, label) in tabs)
                   NavigationDestination(icon: Icon(icon), label: label),
               ],
             ),

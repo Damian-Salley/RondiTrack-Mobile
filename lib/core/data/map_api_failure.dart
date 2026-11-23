@@ -57,7 +57,7 @@ ApiFailure mapApiFailure(Object error) {
     401 => const UnauthorisedFailure(),
     403 => const ForbiddenFailure(),
     404 => const NotFoundFailure(),
-    409 || 412 => ConflictFailure(text),
+    409 || 412 => ConflictFailure(text, title: problem?['title'] as String?),
     429 => RateLimitedFailure(
       int.tryParse(response.headers.value('retry-after') ?? ''),
     ),

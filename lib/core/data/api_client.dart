@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
 import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/core/data/map_api_failure.dart';
+import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/features/session/data/session_dependencies.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
@@ -29,6 +31,48 @@ class ApiClient {
 
   final Dio _dio;
   final RondiTrackClient rest;
+
+  Future<void> saveStokvel({
+    required int id,
+    required String name,
+    required Cents amount,
+    String? version,
+  }) async {
+    // Stringify the decimal token separately to keep the request exact.
+    final fields = jsonEncode({'id': id, 'name': name, 'version': ?version});
+    final body =
+        '${fields.substring(0, fields.length - 1)},'
+        '"contributionAmount":${randDecimal(amount)}}';
+    try {
+      await _dio.request<void>(
+        version == null ? '/api/v1/stokvels' : '/api/v1/stokvels/$id',
+        data: body,
+        options: Options(
+          method: version == null ? 'POST' : 'PUT',
+          contentType: Headers.jsonContentType,
+        ),
+      );
+    } on Object catch (error) {
+      throw mapApiFailure(error);
+    }
+  }
+
+  Future<List<({int id, String name})>> stokvelMembers(int stokvelId) async {
+    try {
+      final response = await _dio.get<List<dynamic>>(
+        '/api/v1/stokvels/$stokvelId/members',
+      );
+      return [
+        for (final member in response.data!.cast<Map<String, Object?>>())
+          (
+            id: member['id']! as int,
+            name: "${member['firstName']} ${member['lastName']}",
+          ),
+      ];
+    } on Object catch (error) {
+      throw mapApiFailure(error);
+    }
+  }
 
   Future<int> join(String code) async {
     try {

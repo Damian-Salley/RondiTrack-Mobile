@@ -6,7 +6,7 @@ on:
     inputs:
       api_ref:
         description: Backend branch, tag, or commit to compare
-        default: 7c7350e811c5c074b19cf14cf1b340c60efac987
+        default: 616730a7e4d09d4839c32b8317b6a39748a35ad8
         type: string
 
 permissions:
@@ -15,6 +15,11 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        timezone: [UTC, Africa/Johannesburg]
+    env:
+      TZ: ${{ matrix.timezone }}
 
     steps:
       # Download the mobile repository.
@@ -62,11 +67,11 @@ jobs:
       # Download the mobile repository.
       - uses: actions/checkout@v4.2.2
 
-      # Compare against the backend revision recorded in the auth contract notes.
+      # Compare against the backend revision recorded in the contract notes.
       - uses: actions/checkout@v4.2.2
         with:
           repository: Damian-Salley/RondiTrack
-          ref: ${{ inputs.api_ref || '7c7350e811c5c074b19cf14cf1b340c60efac987' }}
+          ref: ${{ inputs.api_ref || '616730a7e4d09d4839c32b8317b6a39748a35ad8' }}
           path: backend
           persist-credentials: false
 

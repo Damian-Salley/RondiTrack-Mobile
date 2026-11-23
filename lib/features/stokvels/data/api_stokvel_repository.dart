@@ -104,6 +104,7 @@ class ApiStokvelRepository implements StokvelRepository {
               apiInteger(stokvel.contributionAmountCents),
             ),
             memberCount: apiInteger(stokvel.memberCount),
+            version: stokvel.version,
           ),
           membership: entry.membership,
           callerId: apiInteger(identity.id),

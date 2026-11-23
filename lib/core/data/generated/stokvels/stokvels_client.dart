@@ -52,6 +52,20 @@ abstract class StokvelsClient {
     @Query('To') DateTime? to,
   });
 
+  @GET('/api/v1/stokvels/{stokvelId}/contributions')
+  Future<PagedResponseOfContributionResponse>
+  getApiV1StokvelsStokvelIdContributions({
+    @Path('stokvelId') required int stokvelId,
+    @Query('CycleId') int? cycleId,
+    @Query('Status') String? status,
+    @Query('PageSize') int? pageSize,
+    @Query('PageToken') String? pageToken,
+    @Query('SortBy') String? sortBy,
+    @Query('UserId') int? userId,
+    @Query('From') DateTime? from,
+    @Query('To') DateTime? to,
+  });
+
   @GET('/api/v1/stokvels/{stokvelId}/cycles/{cycleId}/payouts')
   Future<List<PayoutOrderEntryResponse>>
   getApiV1StokvelsStokvelIdCyclesCycleIdPayouts({

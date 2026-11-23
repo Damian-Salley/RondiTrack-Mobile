@@ -37,9 +37,10 @@ final class NotFoundFailure extends ApiFailure {
 }
 
 final class ConflictFailure extends ApiFailure {
-  const new(this.detail);
+  const new(this.detail, {this.title});
 
   final String? detail;
+  final String? title;
 
   @override
   String get message =>

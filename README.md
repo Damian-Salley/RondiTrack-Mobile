@@ -1,4 +1,4 @@
-# RondiTrack Mobile — Assignment 11.2
+# RondiTrack Mobile — Assignment 11.3
 
 ## Routes
 
@@ -1089,6 +1089,17 @@ failures and timeouts. It does not retry HTTP failures or writes.
 
 ## Contract notes
 
+### Offline, forms and lists
+
+Verified the initial contract against backend `7c7350e811c5c074b19cf14cf1b340c60efac987`. This app consumes the exported contract from `616730a7e4d09d4839c32b8317b6a39748a35ad8`, which adds persistent replay, ordinary stokvel versions, and combined history filters. [Backend PR #9](https://github.com/Damian-Salley/RondiTrack/pull/9)
+
+1. Both contribution POST routes take `Idempotency-Key`. The cycle route returns HTTP 201 with the original contribution on a same-key, same-body replay and sets `Idempotency-Replayed: true`. The legacy route returns HTTP 200. Changed payloads return 409 with title “Idempotency conflict”. The contribution and its replay receipt commit together in PostgreSQL. Keys remain valid for 24 hours (M = 1 day), with hourly housekeeping. The contribution's database key also prevents a second contribution for the same member and cycle. The close-cycle POST takes an idempotency key and has a separate persisted receipt.
+2. The current cycle payment route returns 409 with title “Duplicate contribution” when a member has already contributed. A closed or paid-out cycle returns 422 with title “Business rule violated” and generic detail. Access outside the caller's membership returns 404. A payer with insufficient permission to act for another member receives 403. The financial limiter defaults to 20 operations per minute and replies with 429 and `Retry-After` in seconds.
+3. Stokvel GET returns a version and PUT accepts it in `version`. A stale edit returns 409 with detail “This stokvel changed. Review the latest details and try again.” The form preserves the draft and shows the current server values before another save. The existing cycle close workflow checks its preview version and returns 409 with “Payments or membership changed. Review the new preview and confirm again.” Ordinary cycle edits do not use the stokvel version.
+4. Contribution history accepts `pageSize`, opaque `pageToken`, `cycleId`, `status` (`Paid`, `Confirmed`, or `Pending`), `userId`, and UTC `from` and `to` instants. Default size is 20 and the cap is 100. A null `nextPageToken` ends pagination. The interval is inclusive at the start and exclusive at the end. Unfiltered history shows timestamped payments. The explicit `Pending` filter also finds undated server rows when the date range is clear.
+5. Payment sends integer `userId` and `amountInCents` with stokvel and cycle IDs in the path. The server sets the payment time. Create sends `id`, `name`, and `contributionAmount` as an exact JSON decimal in rands. Both endpoints use those camel-case field names in validation `errors`. Create currently requires a caller-supplied positive ID and accepts no date field. Cycle writes use UTC date-time fields.
+6. Proof endpoints return payment files and proof details. Those responses and member contact details are excluded from the offline cache. Home, stokvel detail, and cycle DTOs carry the summary fields used by the offline views. Credentials remain in secure session storage.
+
 ### Auth
 
 Backend source reviewed at `7c7350e811c5c074b19cf14cf1b340c60efac987`.
@@ -1163,3 +1174,31 @@ cannot repopulate credentials or update a data request.
   the November 16 Material UI release on November 30.
 
 [Assignment 11.2 verification evidence](docs/evidence/assignment-11.2/README.md)
+
+## Offline
+
+Drift keeps one Home snapshot, stokvel detail snapshots keyed by route, and current-cycle summaries. Each feature owns the tables and maps them to domain values before presenting them. Screens watch the database directly through their feature repositories, show the last successful update, and retry failed refreshes on demand. A missing stokvel or cycle evicts its cached detail. A previously signed-in session can reopen its cache while a network error prevents token rotation. The first protected request that reaches the server restores the session.
+
+Each queued payment stores its UUID, target, original amount, creation time, and any rate-limit deadline. Pending payments appear separately from amounts supplied by the server. The mobile outbox expires at **12 hours**, and the API keeps payment keys for **24 hours**. Sign-out confirms discard when the queue has entries, clears Drift, removes the refresh credential from secure storage, and invalidates prior session writes. Proof files, proof metadata, bank details, ID numbers, and member contact details stay out of Drift. SharedPreferences holds the language preference.
+
+## Money and dates
+
+The forms parse rand text with a comma or a full stop and accept thousands grouping with ordinary or non-breaking spaces. Integer arithmetic converts the input to cents and rejects zero, negative values, more than two decimal places, and amounts outside the API limit. Payment sends integer cents. Stokvel create and edit serialize an exact JSON decimal token from those cents for the existing `contributionAmount` field. The API sets payment timestamps and accepts no creation date on a stokvel.
+
+Dates in contribution filters mean South African calendar days. For 1 November 2026, the app sends `from=2026-10-31T22:00:00Z` and `to=2026-11-01T22:00:00Z`. The start is inclusive and the end exclusive. The 00:30 SAST payment is 22:30 UTC on 31 October and belongs to 1 November regardless of the device zone.
+
+## Languages
+
+English and Afrikaans use Flutter gen-l10n, ARB messages, and ICU plurals. Choose a language in Profile or use the phone's locale. **Afrikaans is a draft pending first-language review.** No reviewer or review changes have been recorded yet.
+
+## Decisions
+
+- Generate UUID v4 keys with `Random.secure()` at enqueue time. Every retry uses the stored key. A unique queue target prevents a second pending payment for the same member and cycle.
+- Page contribution history by hand. Only one request runs at a time. A filter change discards any stale result and starts at the first page. Pull-to-refresh keeps the old rows while the first page loads.
+- `cli_util` and `shared_preferences_android` are pinned because their selected newer versions were under two weeks old. Review both overrides on 4 December 2026. Existing `jni`, `jni_flutter`, and `material_ui` overrides remain from Assignment 11.2.
+
+## Assignment 11.3 verification
+
+The Android screenshots, PostgreSQL replay evidence, live test output, deliberate test failures, and hosted time-zone runs are linked from the evidence index. [Assignment 11.3 evidence](docs/evidence/assignment-11.3/README.md)
+
+The named first-language Afrikaans review and independent TalkBack audio verification remain incomplete. The Android walkthrough verified TalkBack focus and error layout at 200% text size.

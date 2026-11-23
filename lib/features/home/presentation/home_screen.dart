@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_theme.dart';
 import 'package:ronditrack_mobile/app/router.dart';
+import 'package:ronditrack_mobile/core/cache_status.dart';
 import 'package:ronditrack_mobile/core/money.dart';
+import 'package:ronditrack_mobile/core/offline_mode.dart';
 import 'package:ronditrack_mobile/core/state_message.dart';
 import 'package:ronditrack_mobile/core/view_state.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
+import 'package:ronditrack_mobile/features/home/presentation/cached_home_provider.dart';
 import 'package:ronditrack_mobile/features/home/presentation/home_notifier.dart';
+import 'package:ronditrack_mobile/l10n/localization.dart';
 
 /// Displays the user's stokvels and their contribution information.
 class HomeScreen extends ConsumerWidget {
@@ -14,6 +18,34 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final strings = context.strings;
+    if (ref.watch(offlineStorageEnabledProvider)) {
+      final sync = ref.watch(homeSyncProvider);
+      final state = ref.watch(cachedHomeProvider).value;
+      final cached = state?.cached;
+      return Scaffold(
+        appBar: AppBar(title: Text(strings.appName)),
+        body: RefreshIndicator(
+          onRefresh: sync.refresh,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
+            children: [
+              CacheStatus(
+                updatedAt: cached?.updatedAt,
+                refreshing: state?.refreshing ?? true,
+                failure: state?.failure,
+                retry: sync.refresh,
+              ),
+              if (cached != null && cached.data.isEmpty)
+                Text(strings.homeEmpty),
+              for (final entry in cached?.data ?? <HomeEntry>[])
+                _HomeCard(entry: entry),
+            ],
+          ),
+        ),
+      );
+    }
     // Watch Home data and convert it into a display state.
     final state = toViewState(
       ref.watch(homeProvider),
@@ -21,14 +53,12 @@ class HomeScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('RondiTrack')),
+      appBar: AppBar(title: Text(strings.appName)),
       body: switch (state) {
-        Loading() => const Center(
-          child: CircularProgressIndicator(semanticsLabel: 'Loading home'),
+        Loading() => Center(
+          child: CircularProgressIndicator(semanticsLabel: strings.homeLoading),
         ),
-        Empty() => const StateMessage(
-          message: 'No stokvels yet. Ask a stokvel organiser for an invite.',
-        ),
+        Empty() => StateMessage(message: strings.homeEmpty),
         Failure(:final message, :final apiFailure) => StateMessage(
           message: message,
           apiFailure: apiFailure,
@@ -59,39 +89,48 @@ class _HomeCard extends StatelessWidget {
   final HomeEntry entry;
 
   @override
-  Widget build(BuildContext context) => Card(
-    child: InkWell(
-      // Open the selected stokvel's detail screen.
-      onTap: () =>
-          StokvelRoute(id: '${entry.membership.stokvelId}').go(context),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 8,
-          children: [
-            Text(
-              entry.stokvelName,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Text('Your role: ${entry.membership.role.label}'),
-
-            // Display financial amounts using South African currency format.
-            Text('Paid: ${formatCents(entry.paidThisCycle)}'),
-            Text('Owed: ${formatCents(entry.stillOwes)}'),
-            Text(
-              'Arrears: ${formatCents(entry.arrears)}',
-              style: TextStyle(
-                color: Theme.of(context).extension<StatusColors>()?.arrears,
+  Widget build(BuildContext context) {
+    final strings = context.strings;
+    return Card(
+      child: InkWell(
+        // Open the selected stokvel's detail screen.
+        onTap: () =>
+            StokvelRoute(id: '${entry.membership.stokvelId}').go(context),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 8,
+            children: [
+              Text(
+                entry.stokvelName,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-            ),
-            Text(
-              'Next payout: '
-              '${entry.nextPayoutDate?.toIso8601String() ?? 'Not scheduled'}',
-            ),
-          ],
+              Text(
+                strings.roleLabel(
+                  strings.membershipRole(entry.membership.role),
+                ),
+              ),
+
+              // Display financial amounts using South African currency format.
+              Text(strings.paidAmount(formatCents(entry.paidThisCycle))),
+              Text(strings.owedAmount(formatCents(entry.stillOwes))),
+              Text(
+                strings.arrearsAmount(formatCents(entry.arrears)),
+                style: TextStyle(
+                  color: Theme.of(context).extension<StatusColors>()?.arrears,
+                ),
+              ),
+              Text(
+                strings.nextPayout(
+                  entry.nextPayoutDate?.toIso8601String() ??
+                      strings.unscheduled,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

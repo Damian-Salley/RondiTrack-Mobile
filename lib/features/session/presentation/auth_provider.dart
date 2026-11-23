@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/repository_mode.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/data/map_api_failure.dart';
+import 'package:ronditrack_mobile/core/data/offline_database.dart';
+import 'package:ronditrack_mobile/core/offline_mode.dart';
 import 'package:ronditrack_mobile/features/session/data/session_api.dart';
 import 'package:ronditrack_mobile/features/session/data/session_dependencies.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
@@ -45,7 +47,7 @@ class Auth extends Notifier<AuthState> {
   int generation() => _generation;
   bool needsRefresh() =>
       _credentials?.expiresAt.isBefore(DateTime.now().add(refreshMargin)) ??
-      false;
+      (_refreshToken != null && _signingOut == null);
 
   @override
   AuthState build() {
@@ -97,14 +99,33 @@ class Auth extends Notifier<AuthState> {
     if (state is! Restoring || _signingOut != null) return;
     state = const Restoring();
     final generation = _generation;
+    final offlineEnabled = ref.read(offlineStorageEnabledProvider);
     try {
+      if (offlineEnabled) {
+        final store = ref.read(refreshStoreProvider);
+        final token = _refreshToken ?? await store.read();
+        if (!_current(generation)) return;
+        if (token == null) {
+          await ref.read(offlineDatabaseProvider).clearUserData();
+          if (_current(generation)) state = const SignedOut();
+          return;
+        }
+        // The secure session already belongs to this phone's cached data.
+        // Its server refresh can finish after the first cached frame.
+        _refreshToken = token;
+        state = const SignedIn('Signed in');
+      }
       await refresh();
       if (!_current(generation)) return;
-      state = _credentials == null
-          ? const SignedOut()
-          : const SignedIn('Signed in');
+      if (state is! SignedIn) {
+        state = _credentials == null
+            ? const SignedOut()
+            : const SignedIn('Signed in');
+      }
     } on Object {
-      if (_current(generation)) state = const Restoring(failed: true);
+      if (_current(generation) && state is! SignedIn) {
+        state = const Restoring(failed: true);
+      }
     }
   }
 
@@ -179,6 +200,9 @@ class Auth extends Notifier<AuthState> {
     final api = ref.read(sessionApiProvider);
     var logoutToken = token;
     await _write(() async {
+      if (ref.read(offlineStorageEnabledProvider)) {
+        await ref.read(offlineDatabaseProvider).clearUserData();
+      }
       if (logoutToken == null && notifyServer) {
         try {
           logoutToken = await store.read();

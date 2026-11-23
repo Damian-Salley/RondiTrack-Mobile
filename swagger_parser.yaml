@@ -11,5 +11,6 @@ swagger_parser:
     - /api/v1/contributioncycles
     - /api/v1/contributioncycles/{cycleId}/close-preview
     - /api/v1/stokvels/{id}
+    - /api/v1/stokvels/{stokvelId}/contributions
     - /api/v1/stokvels/{stokvelId}/cycles/{cycleId}/contributions
     - /api/v1/stokvels/{stokvelId}/cycles/{cycleId}/payouts

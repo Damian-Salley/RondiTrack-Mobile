@@ -19,6 +19,7 @@ abstract class Stokvel with _$Stokvel {
     required String name,
     required Cents contributionAmount,
     required int memberCount,
+    String? version,
   }) = _Stokvel;
 }
 

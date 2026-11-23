@@ -282,7 +282,7 @@ as StokvelRole,
 /// @nodoc
 mixin _$Stokvel {
 
- int get id; String get name; Cents get contributionAmount; int get memberCount;
+ int get id; String get name; Cents get contributionAmount; int get memberCount; String? get version;
 /// Create a copy of Stokvel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -294,20 +294,20 @@ $StokvelCopyWith<Stokvel> get copyWith => _$StokvelCopyWithImpl<Stokvel>(this as
 @override
 bool operator ==(Object other) {
   final _this = this as Stokvel;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Stokvel&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.contributionAmount, _this.contributionAmount) || other.contributionAmount == _this.contributionAmount)&&(identical(other.memberCount, _this.memberCount) || other.memberCount == _this.memberCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Stokvel&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.contributionAmount, _this.contributionAmount) || other.contributionAmount == _this.contributionAmount)&&(identical(other.memberCount, _this.memberCount) || other.memberCount == _this.memberCount)&&(identical(other.version, _this.version) || other.version == _this.version));
 }
 
 
 @override
 int get hashCode {
   final _this = this as Stokvel;
-  return Object.hash(runtimeType,_this.id,_this.name,_this.contributionAmount,_this.memberCount);
+  return Object.hash(runtimeType,_this.id,_this.name,_this.contributionAmount,_this.memberCount,_this.version);
 }
 
 @override
 String toString() {
   final _this = this as Stokvel;
-  return 'Stokvel(id: ${_this.id}, name: ${_this.name}, contributionAmount: ${_this.contributionAmount}, memberCount: ${_this.memberCount})';
+  return 'Stokvel(id: ${_this.id}, name: ${_this.name}, contributionAmount: ${_this.contributionAmount}, memberCount: ${_this.memberCount}, version: ${_this.version})';
 }
 
 
@@ -318,7 +318,7 @@ abstract mixin class $StokvelCopyWith<$Res>  {
   factory $StokvelCopyWith(Stokvel value, $Res Function(Stokvel) _then) = _$StokvelCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, Cents contributionAmount, int memberCount
+ int id, String name, Cents contributionAmount, int memberCount, String? version
 });
 
 
@@ -335,13 +335,14 @@ class _$StokvelCopyWithImpl<$Res>
 
 /// Create a copy of Stokvel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? contributionAmount = null,Object? memberCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? contributionAmount = null,Object? memberCount = null,Object? version = freezed,}) {
   return _then(Stokvel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,contributionAmount: null == contributionAmount ? _self.contributionAmount : contributionAmount // ignore: cast_nullable_to_non_nullable
 as Cents,memberCount: null == memberCount ? _self.memberCount : memberCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -426,10 +427,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  Cents contributionAmount,  int memberCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  Cents contributionAmount,  int memberCount,  String? version)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Stokvel() when $default != null:
-return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);case _:
+return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount,_that.version);case _:
   return orElse();
 
 }
@@ -447,10 +448,10 @@ return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  Cents contributionAmount,  int memberCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  Cents contributionAmount,  int memberCount,  String? version)  $default,) {final _that = this;
 switch (_that) {
 case _Stokvel():
-return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);case _:
+return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount,_that.version);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -467,10 +468,10 @@ return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  Cents contributionAmount,  int memberCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  Cents contributionAmount,  int memberCount,  String? version)?  $default,) {final _that = this;
 switch (_that) {
 case _Stokvel() when $default != null:
-return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);case _:
+return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount,_that.version);case _:
   return null;
 
 }
@@ -482,13 +483,14 @@ return $default(_that.id,_that.name,_that.contributionAmount,_that.memberCount);
 
 
 class _Stokvel implements Stokvel {
-  const _Stokvel({required this.id, required this.name, required this.contributionAmount, required this.memberCount});
+  const _Stokvel({required this.id, required this.name, required this.contributionAmount, required this.memberCount, this.version});
   
 
 @override final  int id;
 @override final  String name;
 @override final  Cents contributionAmount;
 @override final  int memberCount;
+@override final  String? version;
 
 /// Create a copy of Stokvel
 /// with the given fields replaced by the non-null parameter values.
@@ -500,18 +502,18 @@ _$StokvelCopyWith<_Stokvel> get copyWith => __$StokvelCopyWithImpl<_Stokvel>(thi
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Stokvel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.contributionAmount, contributionAmount) || other.contributionAmount == contributionAmount)&&(identical(other.memberCount, memberCount) || other.memberCount == memberCount));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Stokvel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.contributionAmount, contributionAmount) || other.contributionAmount == contributionAmount)&&(identical(other.memberCount, memberCount) || other.memberCount == memberCount)&&(identical(other.version, version) || other.version == version));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,name,contributionAmount,memberCount);
+    return Object.hash(runtimeType,id,name,contributionAmount,memberCount,version);
 }
 
 @override
 String toString() {
-    return 'Stokvel(id: $id, name: $name, contributionAmount: $contributionAmount, memberCount: $memberCount)';
+    return 'Stokvel(id: $id, name: $name, contributionAmount: $contributionAmount, memberCount: $memberCount, version: $version)';
 }
 
 
@@ -522,7 +524,7 @@ abstract mixin class _$StokvelCopyWith<$Res> implements $StokvelCopyWith<$Res> {
   factory _$StokvelCopyWith(_Stokvel value, $Res Function(_Stokvel) _then) = __$StokvelCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, Cents contributionAmount, int memberCount
+ int id, String name, Cents contributionAmount, int memberCount, String? version
 });
 
 
@@ -539,13 +541,14 @@ class __$StokvelCopyWithImpl<$Res>
 
 /// Create a copy of Stokvel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? contributionAmount = null,Object? memberCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? contributionAmount = null,Object? memberCount = null,Object? version = freezed,}) {
   return _then(_Stokvel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,contributionAmount: null == contributionAmount ? _self.contributionAmount : contributionAmount // ignore: cast_nullable_to_non_nullable
 as Cents,memberCount: null == memberCount ? _self.memberCount : memberCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,version: freezed == version ? _self.version : version // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
