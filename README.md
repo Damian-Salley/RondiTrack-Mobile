@@ -1370,4 +1370,12 @@ on 30 November, 2 December and 3 December 2026 respectively.
 Re-audit `cli_util` and `shared_preferences_android` on 4 December 2026
 before removing those overrides.
 
+### Deferred Sentry evidence
+
+The real Sentry event and dashboard screenshot are outstanding. The Sentry
+integration and passing privacy tests are included in this submission.
+The automated scrubber test verifies that synthetic sensitive fields are
+removed and the API correlation ID is retained. A real event and screenshot
+will be collected separately when the private Sentry project is available.
+
 [Assignment 12.1 evidence](docs/evidence/assignment-12.1/README.md)
