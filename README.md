@@ -1202,3 +1202,180 @@ English and Afrikaans use Flutter gen-l10n, ARB messages, and ICU plurals. Choos
 The Android screenshots, PostgreSQL replay evidence, live test output, deliberate test failures, and hosted time-zone runs are linked from the evidence index. [Assignment 11.3 evidence](docs/evidence/assignment-11.3/README.md)
 
 The named first-language Afrikaans review and independent TalkBack audio verification remain incomplete. The Android walkthrough verified TalkBack focus and error layout at 200% text size.
+
+## Assignment 12.1
+
+### Test plan
+
+| Rule that protects members | Test |
+| --- | --- |
+| Concurrent expired requests share one refresh | `session_test.dart`, “three expired requests share one rotation and all succeed” |
+| Losing signal keeps the known session and its saved Home | `assignment113_offline_test.dart`, “offline startup keeps the known session until a request can refresh it” |
+| Sign-out wipes Home, detail and queued payments and blocks old writes | `assignment113_offline_test.dart`, “Drift watches emit domain data and sign-out clears every table” |
+| Failed refresh leaves cached detail available, but a 404 evicts it | `assignment113_offline_test.dart`, “cached detail survives offline, refreshes in Drift, and is evicted on 404” |
+| One payment target receives one key and retries reuse it | “one payment intent and its key survive an app restart” and “outbox reuses the key when the first response is lost” |
+| Rate limiting preserves the key and delays the next send | “429 preserves key and wait, a refusal removes it, and expiry never sends” |
+| A payment at the 12-hour limit never sends | “429 preserves key and wait, a refusal removes it, and expiry never sends” |
+| Rand input preserves exact integer cents | `assignment113_widgets_test.dart`, “rand input and exact JSON decimal tokens” |
+| A near-midnight payment belongs to its South African day | `south_african_day_test.dart`, “00:30 SAST belongs to November 1 in any device time zone” |
+
+| Cycle contribution POST outcome | Queue behavior to prove |
+| --- | --- |
+| 201 new or 201 replay with `Idempotency-Replayed: true` | Remove the item, publish paid and refresh the cycle. Replay stores one contribution. |
+| 400 invalid fields or missing key | Remove and surface validation |
+| 401 authentication unavailable after session handling | Retain for session recovery or sign-out wipe |
+| 403 payer lacks permission, 404 resource missing or inaccessible | Remove, surface the reason and stop retrying |
+| 409 duplicate contribution or idempotency conflict | Remove, communicate the reason and never resend |
+| 422 closed or paid-out cycle | Remove and communicate the business rule |
+| 429 | Retain key and payment, wait for Retry-After in seconds (60 seconds if absent), then reuse the key |
+| No response, 5xx or unreadable response | Retain for a later flush with the same key |
+| Item reaches the 12-hour client limit | Remove and publish expiry without sending, inside the API's 24-hour replay window |
+
+Unit tests cover notifier transitions, failure mapping, session and outbox
+behavior with mock repositories, scripted transport and local databases.
+Widget tests cover visible states, navigation, accessibility and rebuilds.
+Goldens cover card appearance, with deterministic CI images and Windows
+real-text comparisons. The fast CI job runs these layers in UTC and
+Africa/Johannesburg. The dependent Android job signs in with synthetic
+fixtures, records a contribution, waits for it on the cycle and checks that
+Drift's outbox is empty. This crosses session, payment and visible
+confirmation in one journey. Live API tests run separately against an
+isolated backend with synthetic data.
+
+#### Coverage
+
+On Assignment 11.3 commit `6f791a6`, `flutter test --coverage` passed 187 tests and skipped three live tests. LCOV reported 1,759 of 2,338 non-generated lines hit (75.24%). The floor is 74%, allowing 1.24 percentage points for ordinary changes while catching a material drop.
+Exclude generated API code, localization, Drift, Riverpod and Freezed output. The verified Windows runs reached 77.56% (1,873 of 2,415). Both hosted Linux runs reached 77.43% (1,870 of 2,415).
+
+#### Limits
+
+Manually walk through Home and payment with TalkBack and 200% text. Use the
+isolated live checks for API contract and persistence. Check real-text
+rendering separately on other supported platforms. Use profile mode on a
+physical low-end Android device for timings. Debug mode is sufficient for
+counting rebuilds.
+
+### Privacy
+
+| Channel outside normal API requests | Destination and fields |
+| --- | --- |
+| Error reports | Sentry error events only when a DSN is provided. The reconstructed event carries an event ID, timestamp, environment, release, distribution, SDK metadata, platform, error level, a fixed message and the optional API trace tag. Sentry receives the transport connection address. The signed-in profile name stays in memory for scrubbing. |
+| Session data | Automatic session reporting, performance tracing, native crash handling, and client reports are disabled. Launching the app sends no session envelope. |
+| Analytics | The production implementation discards the event and the test implementation records it locally. Contribution-recorded contains only integer stokvelId and memberId. These IDs can identify a member in combination with API records and must be treated as personal information. |
+| App logs | Local debug console. The detail provider logs a stokvel ID on disposal. The API interceptor logs method, route template, status, elapsed time and correlation ID. The release has no remote log provider and print breadcrumbs are disabled. |
+
+Report unexpected exceptions and server failures centrally. Validation,
+permission refusals, unavailable resources, business conflicts, rate
+limits and lack of signal are expected outcomes. The backend includes a
+top-level `correlationId` on its ProblemDetails writers and logs that value.
+It uses the W3C activity trace ID, falling back to the ASP.NET request trace
+identifier. A plain-text response, proxy page or connection failure may
+provide no reference.
+
+#### Android minimum SDK
+
+Raise Android's Flutter-provided minimum of API 24 to API 26 for
+Sentry 10. This excludes Android 7.0 and 7.1 devices. Member device
+distribution is unknown. Run the Android journey with controlled fakes
+so it exercises the application without contacting a shared API.
+
+
+### Running the tests
+
+From the mobile repository root, use the pinned Flutter SDK.
+
+```sh
+flutter pub get --enforce-lockfile
+dart format --output=none --set-exit-if-changed lib test tool integration_test
+dart analyze --fatal-infos
+flutter test --exclude-tags live --exclude-tags golden
+flutter test test/stokvel_card_golden_test.dart
+flutter test --coverage --exclude-tags live
+dart run tool/check_coverage.dart
+flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
+```
+
+Update an intentionally changed golden with
+`flutter test --update-goldens test/stokvel_card_golden_test.dart`. Review
+both variants after updating. Windows compares real text. The CI variant
+uses block text and runs in the fast job in both time zones.
+
+To capture the final Android cycle, run the same journey through the Flutter
+SDK driver. The driver saves `assignment-12.1-contribution.png` in the
+repository root.
+
+```sh
+flutter drive --debug -d emulator-5554 --flavor dev --dart-define-from-file=config/dev.json --dart-define=CAPTURE_ANDROID_SCREENSHOT=true --driver=integration_test/screenshot_driver.dart --target=integration_test/contribution_test.dart
+```
+
+Run `flutter test --tags live` after configuring `RONDI_LIVE_URL` and
+`RONDI_LIVE_PASSWORD` for a disposable, seeded Development backend only.
+In the backend checkout, set `POSTGRES_PASSWORD`, `JWT_KEY` and
+`E2E_PASSWORD` privately to disposable values. On a fresh database, run the migration and bootstrap seed in a one-off container first.
+
+```sh
+docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml run --build --rm api
+```
+
+Wait for the API to listen, then stop the one-off container with Ctrl+C.
+Start the mobile fixture API on loopback with the demo accounts enabled.
+
+```sh
+docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml -f ../RondiTrack-Mobile/tool/compose.assignment-12.1.yaml up -d --build
+```
+
+Set `RONDI_LIVE_URL` to `http://127.0.0.1:8080/api/v1` and
+`RONDI_LIVE_PASSWORD` to the disposable `E2E_PASSWORD` value. Run the fresh-seed checks first
+because the replay test creates an extra stokvel.
+
+```sh
+flutter test --tags live test/real_api_live_test.dart
+flutter test --tags live test/assignment113_live_test.dart
+```
+
+### Performance
+
+Use `dart run tool/contribution_fixtures.dart seed` and
+`dart run tool/contribution_fixtures.dart clean` from
+the mobile checkout. The scripts select the database of the dedicated
+Compose project, add 300 identifiable historical rows and track their
+exact keys in a fixture table. The API has no deletion operation for
+those contributions. Cleanup checks the fixture keys and values before
+removing them and releases the fixture cycles.
+
+The history regression uses 300 synthetic rows, scrolls to the first
+row and refreshes the existing page at 200% text scale. The contribution
+rows now use a lazy sliver that is reused while controls and progress
+indicators update. Row height follows content and text scale. The comparison used the same 300 synthetic rows and 200% text scale in
+the Windows x64 Flutter debug test renderer at 800 by 600 logical pixels.
+The VM traces use Flutter's widget-build profiling flag and DevTools'
+timeline data. They include new mounts. The regression counts only rows
+that were already mounted before the refresh.
+
+| Refresh measurement | Before | After |
+| --- | ---: | ---: |
+| `ListTile` builds in the VM timeline | 9 | 3 |
+| Previously mounted rows rebuilt | 1 | 0 |
+
+### Decisions
+
+Use mocktail to check repository calls in provider tests and to isolate
+the session in the interceptor test. Use the existing repository fakes
+for whole-app widgets and the Android journey, with a programmable
+contribution write fake and real Drift storage in the journey.
+
+The assignment adds no new dependency overrides. The existing
+`material_ui`, `jni_flutter` and `jni` overrides reach their review dates
+on 30 November, 2 December and 3 December 2026 respectively.
+Re-audit `cli_util` and `shared_preferences_android` on 4 December 2026
+before removing those overrides.
+
+### Deferred Sentry evidence
+
+The real Sentry event and dashboard screenshot are outstanding. The Sentry
+integration and passing privacy tests are included in this submission.
+The automated scrubber test verifies that synthetic sensitive fields are
+removed and the API correlation ID is retained. A real event and screenshot
+will be collected separately when the private Sentry project is available.
+
+[Assignment 12.1 evidence](docs/evidence/assignment-12.1/README.md)

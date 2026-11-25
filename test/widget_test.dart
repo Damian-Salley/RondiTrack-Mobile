@@ -1,15 +1,23 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ronditrack_mobile/app/provider_retry.dart';
 import 'package:ronditrack_mobile/app/ronditrack_app.dart';
 import 'package:ronditrack_mobile/app/router.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
+import 'package:ronditrack_mobile/core/data/offline_database.dart';
+import 'package:ronditrack_mobile/core/offline_mode.dart';
+import 'package:ronditrack_mobile/features/contributions/contribution_providers.dart';
 import 'package:ronditrack_mobile/features/home/data/fake_home_repository.dart';
+import 'package:ronditrack_mobile/features/home/data/home_cache.dart';
 import 'package:ronditrack_mobile/features/home/domain/home_entry.dart';
+import 'package:ronditrack_mobile/features/home/domain/home_repository.dart';
 import 'package:ronditrack_mobile/features/home/home_providers.dart';
-import 'package:ronditrack_mobile/features/home/presentation/home_screen.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/fake_stokvel_repository.dart';
@@ -19,37 +27,66 @@ import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
 
 import 'support/repositories.dart';
 
+Future<void> _pumpHome(
+  WidgetTester tester,
+  HomeRepository repository, {
+  List<Override> overrides = const [],
+}) async {
+  final container = ProviderContainer(
+    retry: appRetry,
+    overrides: [
+      homeRepositoryProvider.overrideWithValue(repository),
+      ...overrides,
+    ],
+  );
+  addTearDown(container.dispose);
+  container.read(authProvider.notifier).signIn(Persona.demo.email);
+  await tester.pumpWidget(
+    UncontrolledProviderScope(
+      container: container,
+      child: const RondiTrackApp(),
+    ),
+  );
+}
+
 void main() {
+  for (final brightness in Brightness.values) {
+    testWidgets('Home accessibility in ${brightness.name} mode', (
+      tester,
+    ) async {
+      tester.binding.platformDispatcher.platformBrightnessTestValue =
+          brightness;
+      addTearDown(
+        tester.binding.platformDispatcher.clearPlatformBrightnessTestValue,
+      );
+      final semantics = tester.ensureSemantics();
+
+      await _pumpHome(
+        tester,
+        const FakeHomeRepository(Persona.demo, delay: Duration.zero),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Community Savings'), findsOneWidget);
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      semantics.dispose();
+    });
+  }
+
   // Test the Home screen's loading, empty, data, and error states.
   testWidgets('Home loading', (tester) async {
     final pending = Completer<List<HomeEntry>>();
 
-    await tester.pumpWidget(
-      ProviderScope(
-        retry: appRetry,
-        overrides: [
-          homeRepositoryProvider.overrideWithValue(
-            TestHomeRepository(() => pending.future),
-          ),
-        ],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
-    );
+    await _pumpHome(tester, TestHomeRepository(() => pending.future));
 
     expect(find.bySemanticsLabel('Loading home'), findsOneWidget);
   });
 
   testWidgets('Home empty explains next step', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        retry: appRetry,
-        overrides: [
-          homeRepositoryProvider.overrideWithValue(
-            const FakeHomeRepository(Persona.newcomer, delay: Duration.zero),
-          ),
-        ],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
+    await _pumpHome(
+      tester,
+      const FakeHomeRepository(Persona.newcomer, delay: Duration.zero),
     );
 
     await tester.pumpAndSettle();
@@ -63,16 +100,9 @@ void main() {
   testWidgets('Home data uses server amounts and per-stokvel roles', (
     tester,
   ) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        retry: appRetry,
-        overrides: [
-          homeRepositoryProvider.overrideWithValue(
-            const FakeHomeRepository(Persona.demo, delay: Duration.zero),
-          ),
-        ],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
+    await _pumpHome(
+      tester,
+      const FakeHomeRepository(Persona.demo, delay: Duration.zero),
     );
 
     await tester.pumpAndSettle();
@@ -89,7 +119,7 @@ void main() {
     var fail = true;
 
     final repo = TestHomeRepository(() async {
-      if (fail) throw StateError('offline');
+      if (fail) throw const ServerFailure('trace-7');
 
       return await const FakeHomeRepository(
         Persona.demo,
@@ -97,28 +127,60 @@ void main() {
       ).fetchHome();
     });
 
-    await tester.pumpWidget(
-      ProviderScope(
-        retry: appRetry,
-        overrides: [homeRepositoryProvider.overrideWithValue(repo)],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
-    );
+    await _pumpHome(tester, repo);
 
     await tester.pumpAndSettle();
 
-    expect(
-      find.text('Could not load your data. Please try again.'),
-      findsOneWidget,
-    );
+    expect(find.text('Sorry, something went wrong.'), findsOneWidget);
 
+    expect(find.text('Copy reference: trace-7'), findsOneWidget);
     fail = false;
 
-    await tester.tap(find.text('Retry'));
+    await tester.tap(find.text('Try again'));
     await tester.pumpAndSettle();
 
     expect(find.text('Community Savings'), findsOneWidget);
     expect(repo.calls, 2);
+  });
+
+  testWidgets('Home keeps cached stokvels and shows when they last updated', (
+    tester,
+  ) async {
+    final db = OfflineDatabase(
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
+    );
+    addTearDown(db.close);
+    await tester.runAsync(() async {
+      final entries = await const FakeHomeRepository(
+        Persona.demo,
+        delay: Duration.zero,
+      ).fetchHome();
+      await HomeCache(db)
+          .save(entries, DateTime(2026, 11, 25, 12, 15).toUtc(), db.generation);
+    });
+    await _pumpHome(
+      tester,
+      TestHomeRepository(() async => throw const OfflineFailure()),
+      overrides: [
+        offlineStorageEnabledProvider.overrideWithValue(true),
+        offlineDatabaseProvider.overrideWithValue(db),
+        paymentNoticeProvider.overrideWith((ref) => const Stream.empty()),
+      ],
+    );
+    for (
+      var frame = 0;
+      frame < 30 && find.text('Try again').evaluate().isEmpty;
+      frame++
+    ) {
+      await tester.pump(const Duration(milliseconds: 20));
+    }
+    expect(find.text('Try again'), findsOneWidget);
+    expect(find.text('Community Savings'), findsOneWidget);
+    expect(find.textContaining('Last updated'), findsOneWidget);
+    expect(find.textContaining('12:15'), findsOneWidget);
   });
 
   testWidgets('pull to refresh retains old Home cards', (tester) async {
@@ -136,13 +198,7 @@ void main() {
       () async => ++calls == 1 ? entries : await pending.future,
     );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        retry: appRetry,
-        overrides: [homeRepositoryProvider.overrideWithValue(repo)],
-        child: const MaterialApp(home: HomeScreen()),
-      ),
-    );
+    await _pumpHome(tester, repo);
 
     await tester.pumpAndSettle();
 

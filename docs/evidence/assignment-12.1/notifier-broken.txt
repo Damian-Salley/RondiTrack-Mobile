@@ -1,0 +1,15 @@
+00:00 +0: loading test/provider_test.dart
+00:00 +0: Home failure waits for an explicit retry
+00:00 +0 -1: Home failure waits for an explicit retry [E]
+  Expected: throws <Instance of 'ServerFailure'>
+    Actual: <Instance of 'Future<List<HomeEntry>>'>
+     Which: emitted []
+
+  package:matcher                                    expectLater
+  package:flutter_test/src/widget_tester.dart 507:8  expectLater
+  test\provider_test.dart 42:20                      main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  test/provider_test.dart: Home failure waits for an explicit retry

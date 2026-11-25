@@ -43,7 +43,7 @@ jobs:
           dart format lib/core/data/generated
 
       # Check formatting across application and test code.
-      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: dart format --output=none --set-exit-if-changed lib test tool integration_test
 
       # Regenerate Riverpod and other generated Dart files.
       - run: dart run build_runner build
@@ -58,7 +58,46 @@ jobs:
       - run: dart analyze --fatal-infos
 
       # Run automated tests without requiring a live backend.
-      - run: flutter test --exclude-tags live
+      - run: flutter test --coverage --exclude-tags live
+      - run: dart run tool/check_coverage.dart
+      - name: Upload golden failure images
+        if: failure() && matrix.timezone == 'UTC'
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: test/failures/
+          if-no-files-found: ignore
+
+  android-integration:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: subosito/flutter-action@v2.19.0
+        with:
+          flutter-version: '3.47.7'
+          channel: stable
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          script: |
+            flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
+            flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
+            flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
+            flutter drive --debug -d emulator-5554 --flavor dev --dart-define-from-file=config/dev.json --dart-define=CAPTURE_ANDROID_SCREENSHOT=true --driver=integration_test/screenshot_driver.dart --target=integration_test/contribution_test.dart
+      - uses: actions/upload-artifact@v4
+        with:
+          name: assignment-12.1-android
+          path: assignment-12.1-contribution.png
+          if-no-files-found: error
 
   backend-contract:
     runs-on: ubuntu-latest

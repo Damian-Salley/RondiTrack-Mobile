@@ -47,6 +47,7 @@ ApiFailure mapApiFailure(Object error) {
   final body = response.data;
   final problem = body is Map<String, dynamic> ? body : null;
   final detail = problem?['detail'];
+  final title = problem?['title'];
   final text = detail is String ? detail : null;
   final status = response.statusCode ?? 0;
   return switch (status) {
@@ -57,7 +58,7 @@ ApiFailure mapApiFailure(Object error) {
     401 => const UnauthorisedFailure(),
     403 => const ForbiddenFailure(),
     404 => const NotFoundFailure(),
-    409 || 412 => ConflictFailure(text, title: problem?['title'] as String?),
+    409 || 412 => ConflictFailure(text, title: title is String ? title : null),
     429 => RateLimitedFailure(
       int.tryParse(response.headers.value('retry-after') ?? ''),
     ),

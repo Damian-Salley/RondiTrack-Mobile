@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ronditrack_mobile/app/app_config.dart';
+import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/data/generated/rondi_track_client.dart';
 import 'package:ronditrack_mobile/core/data/map_api_failure.dart';
 import 'package:ronditrack_mobile/core/money.dart';
+import 'package:ronditrack_mobile/core/telemetry/error_reporter.dart';
 import 'package:ronditrack_mobile/features/session/data/session_dependencies.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
@@ -16,7 +19,11 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   final dio = createDio(config);
   final retry = createDio(config);
   dio.interceptors.add(
-    SessionInterceptor(ref.read(authProvider.notifier), retry),
+    SessionInterceptor(
+      ref.read(authProvider.notifier),
+      retry,
+      reporter: ref.watch(errorReporterProvider),
+    ),
   );
   ref.onDispose(() {
     dio.close(force: true);
@@ -87,8 +94,14 @@ class ApiClient {
 }
 
 class SessionInterceptor extends Interceptor {
-  new(this.auth, this.retry, {this.log = developer.log});
+  new(
+    this.auth,
+    this.retry, {
+    this.log = developer.log,
+    this.reporter = const DisabledErrorReporter(),
+  });
 
+  final ErrorReporter reporter;
   final Auth auth;
   final Dio retry;
   final void Function(String message) log;
@@ -149,6 +162,7 @@ class SessionInterceptor extends Interceptor {
       err.response?.statusCode,
       responseCorrelationId(err.response?.data),
     );
+    _reportServer(err);
     final request = err.requestOptions;
     final generation = request.extra['sessionGeneration'];
     final sent = request.headers['Authorization'];
@@ -178,7 +192,20 @@ class SessionInterceptor extends Interceptor {
       _write(options, response.statusCode, null);
       handler.resolve(response);
     } on Object catch (error) {
-      handler.reject(_requestError(error, request));
+      final failure = _requestError(error, request);
+      _reportServer(failure);
+      handler.reject(failure);
+    }
+  }
+
+  void _reportServer(DioException error) {
+    final status = error.response?.statusCode;
+    if (status != null && status >= 500) {
+      unawaited(
+        reporter.report(
+          ServerFailure(responseCorrelationId(error.response?.data)),
+        ),
+      );
     }
   }
 

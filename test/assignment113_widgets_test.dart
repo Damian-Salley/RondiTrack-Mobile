@@ -286,6 +286,60 @@ void main() {
       semantics.dispose();
     },
   );
+  testWidgets('history refresh leaves unchanged visible rows alone at 200%', (
+    tester,
+  ) async {
+    final history = _History();
+    addTearDown(history.dispose);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [contributionHistoryProvider.overrideWithValue(history)],
+        child: _app(const ContributionListScreen(stokvelId: 1)),
+      ),
+    );
+    history.calls.single.response.complete((
+      rows: List.generate(
+        300,
+        (index) => _row.copyWith(memberName: 'Fixture payer $index'),
+      ),
+      nextToken: null,
+    ));
+    await tester.pumpAndSettle();
+    await tester.dragUntilVisible(
+      find.text('Fixture payer 0'),
+      find.byType(Scrollable).first,
+      const Offset(0, -120),
+    );
+    expect(find.text('Fixture payer 0'), findsOneWidget);
+
+    final mountedRows = tester.elementList(find.byType(ListTile)).toSet();
+    expect(mountedRows, isNotEmpty);
+    var builds = 0;
+    debugOnRebuildDirtyWidget = (element, _) {
+      if (mountedRows.contains(element)) builds++;
+    };
+    try {
+      unawaited(
+        tester
+            .state<RefreshIndicatorState>(find.byType(RefreshIndicator))
+            .show(),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump();
+      expect(history.calls, hasLength(2));
+
+      debugPrint(
+        'Previously mounted history row rebuilds while refreshing: $builds',
+      );
+      expect(builds, 0);
+    } finally {
+      debugOnRebuildDirtyWidget = null;
+      history.calls.last.response.complete((rows: [_row], nextToken: null));
+      await tester.pumpAndSettle();
+    }
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _History extends ContributionHistory {

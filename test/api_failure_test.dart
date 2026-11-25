@@ -90,6 +90,36 @@ void main() {
     );
   });
 
+  test('ignores missing or malformed ProblemDetails fields', () {
+    expect(
+      mapApiFailure(_response(409, {'title': 4, 'detail': false})),
+      isA<ConflictFailure>()
+          .having((item) => item.title, 'title', isNull)
+          .having((item) => item.detail, 'detail', isNull),
+    );
+    expect(mapApiFailure(_response(412, {})), isA<ConflictFailure>());
+    expect(
+      mapApiFailure(_response(429, {}, wait: 'invalid')),
+      isA<RateLimitedFailure>().having(
+        (item) => item.waitSeconds,
+        'wait',
+        isNull,
+      ),
+    );
+    expect(
+      mapApiFailure(
+        _response(500, {
+          'correlationId': ['unexpected'],
+        }),
+      ),
+      isA<ServerFailure>().having(
+        (item) => item.correlationId,
+        'reference',
+        isNull,
+      ),
+    );
+  });
+
   test('finds a 404 inside a parallel wait', () async {
     await expectLater(
       (

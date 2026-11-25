@@ -4,11 +4,18 @@ import 'package:ronditrack_mobile/core/api_failure.dart';
 
 /// Displays a message for empty or failed screen states.
 class StateMessage extends StatelessWidget {
-  const new({required this.message, this.retry, this.apiFailure, super.key});
+  const new({
+    required this.message,
+    this.retry,
+    this.apiFailure,
+    this.retryServerFailure = false,
+    super.key,
+  });
 
   final String message;
   final VoidCallback? retry;
   final ApiFailure? apiFailure;
+  final bool retryServerFailure;
 
   @override
   Widget build(BuildContext context) => Center(
@@ -21,14 +28,16 @@ class StateMessage extends StatelessWidget {
           Text(message, textAlign: TextAlign.center),
 
           if (apiFailure case ServerFailure(correlationId: final reference?))
-            _FailureReference(key: ValueKey(reference), reference: reference),
+            FailureReference(key: ValueKey(reference), reference: reference),
 
           // Only show the retry button when a retry action is provided.
           if (retry != null &&
-              (apiFailure == null || apiFailure is OfflineFailure))
+              (apiFailure == null ||
+                  apiFailure is OfflineFailure ||
+                  (retryServerFailure && apiFailure is ServerFailure)))
             FilledButton(
               onPressed: retry,
-              child: Text(apiFailure is OfflineFailure ? 'Try again' : 'Retry'),
+              child: Text(apiFailure == null ? 'Retry' : 'Try again'),
             ),
         ],
       ),
@@ -37,16 +46,16 @@ class StateMessage extends StatelessWidget {
 }
 
 /// Retain the displayed reference until the person dismisses it.
-class _FailureReference extends StatefulWidget {
+class FailureReference extends StatefulWidget {
   const new({required this.reference, super.key});
 
   final String reference;
 
   @override
-  State<_FailureReference> createState() => _FailureReferenceState();
+  State<FailureReference> createState() => FailureReferenceState();
 }
 
-class _FailureReferenceState extends State<_FailureReference> {
+class FailureReferenceState extends State<FailureReference> {
   bool _dismissed = false;
 
   @override

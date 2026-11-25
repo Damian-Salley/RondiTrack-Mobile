@@ -1,0 +1,15 @@
+00:00 +0: loading test/privacy_test.dart
+00:00 +0: realistic event exposes only safe information and the API trace
+00:00 +0 -1: realistic event exposes only safe information and the API trace [E]
+  Expected: not contains 'Thandi Nkosi'
+    Actual: '{"event_id":"191cfa1e0c2e4e5aaa8b94aafaf709ff","timestamp":"2026-11-25T07:48:02.411Z","tags":{"correlationId":"4bf92f3577b34da6a3ce929d0e0e4736"},"breadcrumbs":[{"timestamp":"2026-11-25T07:48:02.401Z","message":"Thandi Nkosi | thandi@example.invalid | R 1 250,50 | R 1 250,50 | Bearer fake.token.value | Thandi_proof_Nov.jpg https://fixture.invalid/pay?q=Thandi%20Nkosi%20%7C%20thandi%40example.invalid%20%7C%20R%201%20250%2C50%20%7C%20R%C2%A01%C2%A0250%2C50%20%7C%20Bearer%20fake.token.value%20%7C%20Thandi_proof_Nov.jpg","data":{"url":"https://fixture.invalid/pay?q=Thandi%20Nkosi%20%7C%20thandi%40example.invalid%20%7C%20R%201%20250%2C50%20%7C%20R%C2%A01%C2%A0250%2C50%20%7C%20Bearer%20fake.token.value%20%7C%20Thandi_proof_Nov.jpg","raw":"Thandi Nkosi | thandi@example.invalid | R 1 250,50 | R 1 250,50 | Bearer fake.token.value | Thandi_proof_Nov.jpg"},"level":"info"}],"message":{"formatted":"Unexpected application error"}}'
+  Leaked Thandi Nkosi
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\privacy_test.dart 40:7                         main.<fn>
+
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  test/privacy_test.dart: realistic event exposes only safe information and the API trace

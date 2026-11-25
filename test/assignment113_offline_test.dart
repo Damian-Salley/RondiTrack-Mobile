@@ -8,6 +8,7 @@ import 'package:ronditrack_mobile/core/cache_sync.dart';
 import 'package:ronditrack_mobile/core/data/offline_database.dart';
 import 'package:ronditrack_mobile/core/money.dart';
 import 'package:ronditrack_mobile/core/offline_mode.dart';
+import 'package:ronditrack_mobile/core/telemetry/analytics.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_outbox.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_outbox_store.dart';
 import 'package:ronditrack_mobile/features/contributions/domain/payment_intent.dart';
@@ -185,6 +186,80 @@ void main() {
     },
   );
 
+  test('outbox reuses the key when the first response is lost', () async {
+    final db = OfflineDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    final store = PaymentOutboxStore(db);
+    final recorded = <String, PaymentIntent>{};
+    final analytics = _RecordingAnalytics();
+    final attempts = <String>[];
+    final sync = PaymentOutboxSync(
+      store,
+      (payment) async {
+        attempts.add(payment.key);
+        recorded.putIfAbsent(payment.key, () => payment);
+        if (attempts.length == 1) throw const OfflineFailure();
+      },
+      (_) {},
+      now: () => _initialTime,
+      analytics: analytics,
+    );
+    addTearDown(sync.dispose);
+    await sync.enqueue(_paymentTarget, const Cents(1000));
+    final key = (await store.read()).single.key;
+    final paid = sync.notices.first;
+    await sync.flush();
+    expect(attempts, [key, key]);
+    expect(recorded.values, hasLength(1));
+    expect(analytics.events, [(stokvelId: 1, memberId: 8)]);
+    expect((await paid).disposition, PaymentDisposition.paid);
+    expect(await store.read(), isEmpty);
+  });
+
+  for (final (failure, retain) in <(ApiFailure, bool)>[
+    (const ValidationFailure('Invalid amount', {}), false),
+    (const UnauthorisedFailure(), true),
+    (const ForbiddenFailure(), false),
+    (const NotFoundFailure(), false),
+    (const ConflictFailure('Key already used'), false),
+    (const RuleFailure('Cycle closed'), false),
+    (const ServerFailure('trace'), true),
+  ]) {
+    test('outbox handles ${failure.runtimeType}', () async {
+      final db = OfflineDatabase(NativeDatabase.memory());
+      addTearDown(db.close);
+      final store = PaymentOutboxStore(db);
+      final notices = <PaymentNotice>[];
+      final attempts = <String>[];
+      final sync = PaymentOutboxSync(
+        store,
+        (payment) async {
+          attempts.add(payment.key);
+          throw failure;
+        },
+        (_) => fail('A failed payment cannot refresh contributions.'),
+        now: () => _initialTime,
+        newKey: () => 'stored-key',
+      );
+      addTearDown(sync.dispose);
+      final subscription = sync.notices.listen(notices.add);
+      addTearDown(subscription.cancel);
+      await sync.enqueue(_paymentTarget, const Cents(1000));
+      await sync.flush();
+      await Future<void>.delayed(Duration.zero);
+      if (retain) {
+        expect(notices, isEmpty);
+        expect((await store.read()).single.key, 'stored-key');
+        expect(attempts, ['stored-key', 'stored-key']);
+      } else {
+        expect(await store.read(), isEmpty);
+        expect(notices.single.disposition, PaymentDisposition.refused);
+        expect(notices.single.failure?.message, failure.message);
+        expect(attempts, ['stored-key']);
+      }
+    });
+  }
+
   test('one payment intent and its key survive an app restart', () async {
     final temp = await Directory.systemTemp.createTemp('ronditrack-outbox-');
     addTearDown(() => temp.delete(recursive: true));
@@ -198,25 +273,32 @@ void main() {
     var store = PaymentOutboxStore(db);
     final attempts = <String>[];
     var keys = 0;
+    final started = Completer<void>();
+    final response = Completer<void>();
     var sync = PaymentOutboxSync(
       store,
       (payment) async {
         attempts.add(payment.key);
-        throw const OfflineFailure();
+        started.complete();
+        await response.future;
       },
       (_) {},
+      now: () => _initialTime,
       newKey: () => 'key-${++keys}',
     );
-    await Future.wait([
+    final interrupted = Future.wait([
       sync.enqueue(_paymentTarget, const Cents(1000)),
       sync.enqueue(_paymentTarget, const Cents(1000)),
     ]);
+    await started.future;
     expect(keys, 1);
     expect((await store.read()).single.key, 'key-1');
     expect(attempts, hasLength(1));
     sync.dispose();
     await db.close();
     initialDbClosed = true;
+    response.completeError(const OfflineFailure());
+    await interrupted;
 
     db = OfflineDatabase(NativeDatabase(databaseFile));
     addTearDown(db.close);
@@ -226,6 +308,7 @@ void main() {
       store,
       (payment) async => attempts.add(payment.key),
       refreshed.add,
+      now: () => _initialTime,
       newKey: () => 'key-${++keys}',
     );
     addTearDown(sync.dispose);
@@ -236,6 +319,24 @@ void main() {
     expect(attempts, ['key-1', 'key-1']);
     expect(refreshed, [1]);
     expect(await store.read(), isEmpty);
+  });
+
+  test('429 without Retry-After schedules the one-minute fallback', () async {
+    final db = OfflineDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    final store = PaymentOutboxStore(db);
+    final sync = PaymentOutboxSync(
+      store,
+      (_) async => throw const RateLimitedFailure(null),
+      (_) => fail('An unpaid contribution cannot refresh totals.'),
+      now: () => _initialTime,
+      newKey: () => 'stored-key',
+    );
+    addTearDown(sync.dispose);
+    await sync.enqueue(_paymentTarget, const Cents(1000));
+    final payment = (await store.read()).single;
+    expect(payment.key, 'stored-key');
+    expect(payment.retryAt, _initialTime.add(const Duration(minutes: 1)));
   });
 
   test(
@@ -269,7 +370,9 @@ void main() {
       );
       final refused = sync.notices.first;
       await sync.flush();
-      expect((await refused).disposition, PaymentDisposition.refused);
+      final notice = await refused;
+      expect(notice.disposition, PaymentDisposition.refused);
+      expect(notice.failure?.message, 'Already paid');
       expect(attempts, [queued.key, queued.key]);
       expect(await store.read(), isEmpty);
 
@@ -289,4 +392,13 @@ void main() {
       expect(await store.read(), isEmpty);
     },
   );
+}
+
+class _RecordingAnalytics implements Analytics {
+  final events = <({int stokvelId, int memberId})>[];
+
+  @override
+  void contributionRecorded({required int stokvelId, required int memberId}) {
+    events.add((stokvelId: stokvelId, memberId: memberId));
+  }
 }
