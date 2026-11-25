@@ -1300,6 +1300,14 @@ Update an intentionally changed golden with
 both variants after updating. Windows compares real text. The CI variant
 uses block text and runs in the fast job in both time zones.
 
+To capture the final Android cycle, run the same journey through the Flutter
+SDK driver. The driver saves `assignment-12.1-contribution.png` in the
+repository root.
+
+```sh
+flutter drive --debug -d emulator-5554 --flavor dev --dart-define-from-file=config/dev.json --dart-define=CAPTURE_ANDROID_SCREENSHOT=true --driver=integration_test/screenshot_driver.dart --target=integration_test/contribution_test.dart
+```
+
 Run `flutter test --tags live` after configuring `RONDI_LIVE_URL` and
 `RONDI_LIVE_PASSWORD` for a disposable, seeded Development backend only.
 In the backend checkout, set `POSTGRES_PASSWORD`, `JWT_KEY` and

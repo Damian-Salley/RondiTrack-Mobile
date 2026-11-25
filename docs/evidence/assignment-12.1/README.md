@@ -9,17 +9,16 @@
 
 - Loading the old history list made the rebuild regression fail. The count fell from one previous row rebuild to zero on Windows x64 in Flutter debug widget tests, using 300 synthetic rows at 200% text scale. [Old list](rebuild-broken.txt) · [Restored](rebuild-after.txt)
 
-- Assignment 11.3 baseline had 187 passing fast tests and three skipped live tests. Coverage was 1,759 of 2,338 reported lines (75.24%). Both local configured time-zone runs passed 208 fast tests and covered 1,873 of 2,415 lines (77.56%). [UTC tests](tests-UTC.txt) · [UTC coverage](coverage-UTC.txt) · [Johannesburg tests](tests-Africa-Johannesburg.txt) · [Johannesburg coverage](coverage-Africa-Johannesburg.txt)
+- Assignment 11.3 baseline had 187 passing fast tests and three skipped live tests. Coverage was 1,759 of 2,338 reported lines (75.24%). Both local configured time-zone runs passed 209 fast tests and covered 1,873 of 2,415 lines (77.56%). [UTC tests](tests-UTC.txt) · [UTC coverage](coverage-UTC.txt) · [Johannesburg tests](tests-Africa-Johannesburg.txt) · [Johannesburg coverage](coverage-Africa-Johannesburg.txt)
 - The dedicated database script inserted and deleted exactly 300 contribution fixtures. [Fixture commands](fixtures.txt)
 
 - All three isolated live API tests passed when the fresh-seed checks ran before payment replay. [Live API output](live-api.txt)
 
 - DevTools widget-build instrumentation recorded 9 ListTile builds before the change and 3 afterward on the Windows x64 Flutter debug renderer at 200% text scale. [Before VM timeline](devtools-before.json) · [After VM timeline](devtools-after.json)
-- Hosted Linux UTC and Africa/Johannesburg each passed 206 tests and enforced 77.43% coverage. The backend contract passed. [Hosted matrix](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/45580262226)
+- Hosted Linux UTC and Africa/Johannesburg each passed 207 tests and enforced 77.43% coverage. The backend contract passed. [Hosted matrix](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/45588671365)
+
+- The Android journey passed three consecutive times on the hosted Android API 34 emulator. Local Gradle builds succeeded with an isolated cache after two shared-cache failures. The local emulator then disconnected or timed out before starting the test app. [Three hosted passes](android-hosted.txt) · [Android screenshot](android-contribution.png) · [Successful hosted workflow](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/45588671365) · [Local build and connection diagnostics](android-build-failures.txt)
 
 ## Pending verification
 
-- The Android journey passed three consecutive times on the hosted Android API 34 emulator. Two local builds failed before installation. A later isolated-cache build succeeded but the local emulator disconnected. The screenshot from the first hosted run could not be retrieved after app uninstall. [Three hosted passes](android-hosted.txt) · [Local build diagnostics](android-build-failures.txt)
-
-- A real Sentry event from a private DSN using synthetic data.
-- Confirm the validated Android screenshot artifact from the latest CI run.
+- Capture a real sanitized Sentry event in a privately configured project using synthetic data.

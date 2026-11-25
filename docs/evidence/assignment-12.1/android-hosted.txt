@@ -1,3 +1,8 @@
-Hosted API 34 dev-flavour journey. GitHub Actions run 45583985597.
+Hosted Android API 34 dev-flavour integration test. GitHub Actions run 45588671365.
 
-2026-11-25T09:26:43.5263887Z ✅ sign in, record contribution, and reconcile the outbox 2026-11-25T09:27:18.3304118Z ✅ sign in, record contribution, and reconcile the outbox 2026-11-25T09:27:51.5812969Z ✅ sign in, record contribution, and reconcile the outbox
+2026-11-25T09:55:20.4075376Z ✅ sign in, record contribution, and reconcile the outbox
+2026-11-25T09:55:51.4007534Z ✅ sign in, record contribution, and reconcile the outbox
+2026-11-25T09:56:21.7052961Z ✅ sign in, record contribution, and reconcile the outbox
+
+The Flutter SDK driver separately completed the same journey and exported the inspected screenshot.
+Screenshot artifact 15010775856.

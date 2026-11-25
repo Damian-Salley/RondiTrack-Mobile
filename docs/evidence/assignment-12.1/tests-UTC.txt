@@ -1,127 +1,103 @@
 00:00 +0: loading test/activity_test.dart
 00:00 +0: test/activity_test.dart: activity renders loading and empty
-00:03 +1: test/activity_test.dart: activity renders loading and empty
-00:03 +2: test/activity_test.dart: activity renders loading and empty
-00:03 +3: test/activity_test.dart: activity renders loading and empty
-00:03 +4: test/activity_test.dart: activity renders loading and empty
-00:03 +5: test/activity_test.dart: activity renders loading and empty
-00:03 +6: test/activity_test.dart: activity renders loading and empty
-00:03 +7: test/activity_test.dart: activity renders loading and empty
-00:04 +8: test/activity_test.dart: activity renders loading and empty
-00:04 +9: test/activity_test.dart: activity renders loading and empty
-00:04 +10: test/activity_test.dart: activity renders loading and empty
-00:06 +11: test/api_failure_test.dart: failure screen displays Not found
-00:09 +12: test/activity_test.dart: activity renders failure and retries
-00:12 +13: test/activity_test.dart: activity renders failure and retries
-00:12 +14: test/api_failure_test.dart: failure screen displays Too many requests. Try again in 43 seconds.
-00:13 +15: test/activity_test.dart: activity combines the signed-in personas stokvels
-00:15 +16: test/api_failure_test.dart: failure screen displays Sorry, something went wrong.
-00:15 +17: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:15 +18: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:22 +19: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:22 +20: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +21: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +22: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +23: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +24: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +25: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +26: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +27: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +28: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +29: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +30: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +31: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +32: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +33: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +34: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +35: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +36: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +37: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +38: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +39: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +40: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +41: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +42: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +43: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:30 +44: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:31 +45: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:31 +46: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:31 +47: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:32 +48: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:32 +48: test/assignment113_widgets_test.dart: history refresh leaves unchanged visible rows alone at 200%
+00:00 +1: test/activity_test.dart: activity renders loading and empty
+00:00 +2: test/activity_test.dart: activity renders loading and empty
+00:00 +3: test/activity_test.dart: activity renders loading and empty
+00:00 +4: test/activity_test.dart: activity renders loading and empty
+00:01 +5: test/activity_test.dart: activity renders loading and empty
+00:01 +6: test/activity_test.dart: activity renders loading and empty
+00:01 +7: test/activity_test.dart: activity renders loading and empty
+00:01 +8: test/api_repository_test.dart: detail follows the page token and keeps SA date and close version
+00:01 +9: test/architecture_test.dart: architecture: feature colours and screen data boundaries
+00:01 +10: test/architecture_test.dart: architecture: feature colours and screen data boundaries
+00:01 +11: test/api_failure_test.dart: failure screen displays Sorry, something went wrong.
+00:01 +12: test/api_failure_test.dart: failure screen displays Sorry, something went wrong.
+00:01 +13: test/api_failure_test.dart: failure screen displays Sorry, something went wrong.
+00:01 +14: test/api_failure_test.dart: failure screen displays Sorry, something went wrong.
+00:01 +15: test/activity_test.dart: activity renders failure and retries
+00:01 +16: test/activity_test.dart: activity renders failure and retries
+00:02 +17: test/activity_test.dart: activity combines the signed-in personas stokvels
+00:02 +18: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
+00:07 +19: test/assignment113_offline_test.dart: Drift watches emit domain data and sign-out clears every table
+00:07 +20: test/assignment113_offline_test.dart: cached detail survives offline, refreshes in Drift, and is evicted on 404
+00:07 +21: test/assignment113_offline_test.dart: outbox reuses the key when the first response is lost
+00:07 +22: test/assignment113_offline_test.dart: outbox handles ValidationFailure
+00:07 +23: test/assignment113_offline_test.dart: outbox handles UnauthorisedFailure
+00:07 +24: test/assignment113_offline_test.dart: outbox handles ForbiddenFailure
+00:07 +25: test/assignment113_offline_test.dart: outbox handles NotFoundFailure
+00:07 +26: test/assignment113_offline_test.dart: outbox handles ConflictFailure
+00:07 +27: test/assignment113_offline_test.dart: outbox handles RuleFailure
+00:07 +28: test/assignment113_offline_test.dart: outbox handles ServerFailure
+00:07 +29: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +30: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +31: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +32: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +33: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +34: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +35: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +36: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +37: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +38: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +39: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +40: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +41: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +42: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +43: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +44: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +45: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +46: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +47: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +48: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +49: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +50: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +51: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +52: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +53: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:08 +54: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:10 +55: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:10 +56: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:10 +57: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:10 +58: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:11 +59: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:11 +59: test/assignment113_widgets_test.dart: history refresh leaves unchanged visible rows alone at 200%
 Previously mounted history row rebuilds while refreshing: 0
-00:32 +49: test/assignment113_offline_test.dart: offline startup keeps the known session until a request can refresh it
-00:34 +50: test/assignment113_offline_test.dart: Drift watches emit domain data and sign-out clears every table
-00:34 +51: test/assignment113_offline_test.dart: cached detail survives offline, refreshes in Drift, and is evicted on 404
-00:34 +52: test/assignment113_offline_test.dart: outbox reuses the key when the first response is lost
-00:34 +53: test/assignment113_offline_test.dart: outbox handles ValidationFailure
-00:34 +54: test/assignment113_offline_test.dart: outbox handles UnauthorisedFailure
-00:34 +55: test/assignment113_offline_test.dart: outbox handles ForbiddenFailure
-00:34 +56: test/assignment113_offline_test.dart: outbox handles NotFoundFailure
-00:34 +57: test/assignment113_offline_test.dart: outbox handles ConflictFailure
-00:34 +58: test/assignment113_offline_test.dart: outbox handles RuleFailure
-00:34 +59: test/assignment113_offline_test.dart: outbox handles ServerFailure
-00:34 +60: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
-00:40 +61: test/assignment113_offline_test.dart: 429 preserves key and wait, a refusal removes it, and expiry never sends
-00:47 +62: test/foundation_test.dart: staging and production reject plain HTTP
-00:47 +63: test/foundation_test.dart: missing config refuses startup
-00:47 +64: test/foundation_test.dart: missing cookie name refuses startup
-00:47 +65: test/foundation_test.dart: native flavour must match config
-00:47 +66: test/foundation_test.dart: matching config is accepted
-00:47 +67: test/foundation_test.dart: formats 10 without floating point
-00:47 +68: test/foundation_test.dart: formats 15050 without floating point
-00:47 +69: test/foundation_test.dart: formats 150000 without floating point
-00:47 +70: test/foundation_test.dart: formats 100000000 without floating point
-00:47 +71: test/foundation_test.dart: formats -15050 without floating point
-00:47 +72: test/foundation_test.dart: formats 0 without floating point
-00:47 +73: test/foundation_test.dart: parses 150
-00:47 +74: test/foundation_test.dart: parses 150,50
-00:47 +75: test/foundation_test.dart: parses R150
-00:47 +76: test/foundation_test.dart: parses R 1 500
-00:47 +77: test/foundation_test.dart: parses 1 500,50
-00:47 +78: test/foundation_test.dart: parses 1 500,50
-00:47 +79: test/foundation_test.dart: parses R 1 500
-00:47 +80: test/foundation_test.dart: parses 150.50
-00:47 +81: test/foundation_test.dart: parses 0,1
-00:47 +82: test/foundation_test.dart: rejects "1,500.50" with a reason
-00:47 +83: test/foundation_test.dart: rejects "150,505" with a reason
-00:47 +84: test/foundation_test.dart: rejects "150." with a reason
-00:47 +85: test/foundation_test.dart: rejects "" with a reason
-00:47 +86: test/foundation_test.dart: rejects "abc" with a reason
-00:47 +87: test/foundation_test.dart: rejects "15 00" with a reason
-00:47 +88: test/foundation_test.dart: rejects "-1" with a reason
-01:06 +89: test/layout_theme_test.dart: /home at 360x640 and 200 percent has no overflow
-01:08 +90: test/layout_theme_test.dart: /home at 360x640 and 200 percent has no overflow
-01:08 +91: test/layout_theme_test.dart: /home at 360x640 and 200 percent has no overflow
-01:10 +92: test/navigation_test.dart: Persona.newcomer at /stokvels/1 returns Stokvel not found.
+00:11 +60: test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+00:11 +61: test/assignment113_offline_test.dart: 429 without Retry-After schedules the one-minute fallback
+00:11 +62: test/assignment113_offline_test.dart: 429 preserves key and wait, a refusal removes it, and expiry never sends
+00:12 +63: test/foundation_test.dart: staging and production reject plain HTTP
+00:12 +64: test/foundation_test.dart: missing config refuses startup
+00:12 +65: test/foundation_test.dart: missing cookie name refuses startup
+00:12 +66: test/foundation_test.dart: native flavour must match config
+00:12 +67: test/foundation_test.dart: matching config is accepted
+00:12 +68: test/foundation_test.dart: formats 10 without floating point
+00:12 +69: test/foundation_test.dart: formats 15050 without floating point
+00:12 +70: test/foundation_test.dart: formats 150000 without floating point
+00:12 +71: test/foundation_test.dart: formats 100000000 without floating point
+00:12 +72: test/foundation_test.dart: formats -15050 without floating point
+00:12 +73: test/foundation_test.dart: formats 0 without floating point
+00:12 +74: test/foundation_test.dart: parses 150
+00:12 +75: test/foundation_test.dart: parses 150,50
+00:12 +76: test/foundation_test.dart: parses R150
+00:12 +77: test/foundation_test.dart: parses R 1 500
+00:12 +78: test/foundation_test.dart: parses 1 500,50
+00:12 +79: test/foundation_test.dart: parses 1 500,50
+00:12 +80: test/foundation_test.dart: parses R 1 500
+00:12 +81: test/foundation_test.dart: parses 150.50
+00:12 +82: test/foundation_test.dart: parses 0,1
+00:12 +83: test/foundation_test.dart: rejects "1,500.50" with a reason
+00:12 +84: test/foundation_test.dart: rejects "150,505" with a reason
+00:12 +85: test/foundation_test.dart: rejects "150." with a reason
+00:12 +86: test/foundation_test.dart: rejects "" with a reason
+00:12 +87: test/foundation_test.dart: rejects "abc" with a reason
+00:12 +88: test/foundation_test.dart: rejects "15 00" with a reason
+00:12 +89: test/foundation_test.dart: rejects "-1" with a reason
+00:32 +90: test/layout_theme_test.dart: /home at 360x640 and 200 percent has no overflow
+00:35 +91: test/layout_theme_test.dart: /stokvels at 360x640 and 200 percent has no overflow
+00:35 +92: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
 Disposed stokvel id=1
-01:10 +93: test/layout_theme_test.dart: /stokvels at 360x640 and 200 percent has no overflow
-01:10 +94: test/navigation_test.dart: Persona.demo at /stokvels/999 returns Stokvel not found.
-Disposed stokvel id=999
-01:10 +95: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
-01:11 +95: test/navigation_test.dart: Persona.demo at /stokvels/bad returns Stokvel not found.
-Disposed stokvel id=-1
-01:11 +96: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
-01:11 +96: test/navigation_test.dart: Persona.newcomer at /stokvels/1/cycles/101 returns Cycle not found.
-Disposed stokvel id=1
-01:11 +97: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
-01:11 +97: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/201 returns Cycle not found.
-Disposed stokvel id=1
-01:11 +98: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
-01:11 +98: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/999 returns Cycle not found.
-Disposed stokvel id=1
-01:11 +99: test/layout_theme_test.dart: /stokvels/1 at 360x640 and 200 percent has no overflow
-Disposed stokvel id=1
-01:11 +100: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/bad returns Cycle not found.
-Disposed stokvel id=1
-01:11 +101: test/layout_theme_test.dart: tablet panes share an address and survive rotation and back
-01:12 +101: test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
-Disposed stokvel id=1
+00:36 +93: test/layout_theme_test.dart: tablet panes share an address and survive rotation and back
 Disposed stokvel id=2
-01:12 +102: test/layout_theme_test.dart: tablet panes share an address and survive rotation and back
-Disposed stokvel id=2
-01:12 +103: test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
-01:12 +103: test/layout_theme_test.dart: theme tokens meet measured WCAG contrast in both themes
+00:36 +94: test/layout_theme_test.dart: theme tokens meet measured WCAG contrast in both themes
 dark|onSurface|ffdee4df|ff0f1512|14.32
 dark|onSurfaceVariant|ffbfc9c2|ff0f1512|10.87
 dark|primary|ff8ad6b7|ff0f1512|10.90
@@ -150,35 +126,54 @@ light|cycle.active|ff14633e|fff5fbf6|6.94
 light|cycle.closed|ff6b4800|fff5fbf6|7.84
 light|cycle.paid|ff174ea6|fff5fbf6|7.48
 light|cycle.unknown|ff43525f|fff5fbf6|7.67
-01:12 +104: test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+00:40 +95: test/navigation_test.dart: gate covers signed out, signed in, invite and sign-in
+00:41 +96: test/navigation_test.dart: only safe internal destinations survive the gate
+00:41 +97: test/navigation_test.dart: Persona.newcomer at /stokvels/1 returns Stokvel not found.
 Disposed stokvel id=1
-01:13 +105: test/navigation_test.dart: cycle branch keeps its stack and scroll across tabs
+00:43 +98: test/navigation_test.dart: Persona.demo at /stokvels/999 returns Stokvel not found.
+Disposed stokvel id=999
+00:43 +99: test/navigation_test.dart: Persona.demo at /stokvels/bad returns Stokvel not found.
+Disposed stokvel id=-1
+00:44 +100: test/navigation_test.dart: Persona.newcomer at /stokvels/1/cycles/101 returns Cycle not found.
 Disposed stokvel id=1
-01:15 +106: test/payout_domain_test.dart: domain: every API payout status maps, future strings are unknown
-01:15 +107: test/payout_domain_test.dart: domain: immutable row preserves server position, cents and date
-01:42 +108: test/payout_fake_test.dart: fake: Persona.demo membership and exact seeded order
-01:42 +109: test/payout_fake_test.dart: fake: Persona.demo cannot address missing or mismatched cycles
-01:42 +110: test/payout_fake_test.dart: fake: Persona.contributor membership and exact seeded order
-01:42 +111: test/payout_fake_test.dart: fake: Persona.contributor cannot address missing or mismatched cycles
-01:42 +112: test/payout_fake_test.dart: fake: Persona.newcomer membership and exact seeded order
-01:42 +113: test/payout_fake_test.dart: fake: Persona.newcomer cannot address missing or mismatched cycles
-01:51 +114: test/payout_provider_test.dart: provider: empty is Empty, not Data; loading maps once
-01:52 +115: test/payout_provider_test.dart: provider: two value-keyed cycles keep data and failure separate
-01:52 +116: test/payout_provider_test.dart: provider: not found is immediate and never automatically retried
-02:00 +117: test/payout_route_test.dart: route: cold signed-out payouts survives sign-in in Stokvels tab
+00:44 +101: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/201 returns Cycle not found.
 Disposed stokvel id=1
-02:14 +118: test/payout_screen_test.dart: screen: loading then empty is visible
+00:44 +102: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/999 returns Cycle not found.
 Disposed stokvel id=1
-02:16 +119: test/payout_screen_test.dart: screen: failure retries and not found never retries
+00:44 +103: test/navigation_test.dart: Persona.demo at /stokvels/1/cycles/bad returns Cycle not found.
+Disposed stokvel id=1
+00:44 +104: test/navigation_test.dart: same persona has treasurer actions only in its treasurer stokvel
+Disposed stokvel id=1
+Disposed stokvel id=2
+00:45 +105: test/navigation_test.dart: signed-out invite survives email sign-in and sign-out clears back
+Disposed stokvel id=1
+00:46 +106: test/navigation_test.dart: cycle branch keeps its stack and scroll across tabs
+Disposed stokvel id=1
+00:48 +107: test/payout_domain_test.dart: domain: every API payout status maps, future strings are unknown
+00:48 +108: test/payout_domain_test.dart: domain: immutable row preserves server position, cents and date
+00:56 +109: test/payout_fake_test.dart: fake: Persona.demo membership and exact seeded order
+00:56 +110: test/payout_fake_test.dart: fake: Persona.demo cannot address missing or mismatched cycles
+00:56 +111: test/payout_fake_test.dart: fake: Persona.contributor membership and exact seeded order
+00:56 +112: test/payout_fake_test.dart: fake: Persona.contributor cannot address missing or mismatched cycles
+00:56 +113: test/payout_fake_test.dart: fake: Persona.newcomer membership and exact seeded order
+00:56 +114: test/payout_fake_test.dart: fake: Persona.newcomer cannot address missing or mismatched cycles
+01:03 +115: test/payout_provider_test.dart: provider: empty is Empty, not Data; loading maps once
+01:03 +116: test/payout_provider_test.dart: provider: two value-keyed cycles keep data and failure separate
+01:03 +117: test/payout_provider_test.dart: provider: not found is immediate and never automatically retried
+01:09 +118: test/payout_route_test.dart: route: cold signed-out payouts survives sign-in in Stokvels tab
+Disposed stokvel id=1
+01:17 +119: test/payout_screen_test.dart: screen: loading then empty is visible
+Disposed stokvel id=1
+01:19 +120: test/payout_screen_test.dart: screen: failure retries and not found never retries
 Disposed stokvel id=1
 Disposed stokvel id=1
-02:16 +120: test/payout_screen_test.dart: screen: server order, rands, every status and Brightness.dark tokens
+01:20 +121: test/payout_screen_test.dart: screen: server order, rands, every status and Brightness.dark tokens
 Disposed stokvel id=1
-02:17 +121: test/payout_screen_test.dart: screen: server order, rands, every status and Brightness.light tokens
+01:20 +122: test/payout_screen_test.dart: screen: server order, rands, every status and Brightness.light tokens
 Disposed stokvel id=1
-02:17 +122: test/payout_screen_test.dart: screen: 360 dp at 200 percent has no overflow through all rows
+01:20 +123: test/payout_screen_test.dart: screen: 360 dp at 200 percent has no overflow through all rows
 Disposed stokvel id=1
-02:22 +123: test/payout_theme_test.dart: theme: every payout status uses its measured light and dark pair
+01:22 +124: test/payout_theme_test.dart: theme: every payout status uses its measured light and dark pair
 dark|payout.paid|10.75
 dark|payout.next|11.17
 dark|payout.waiting|12.92
@@ -187,140 +182,141 @@ light|payout.paid|7.48
 light|payout.next|6.94
 light|payout.waiting|7.84
 light|payout.unknown|7.67
-02:32 +124: test/privacy_test.dart: realistic event exposes only safe information and the API trace
-02:36 +125: test/persona_test.dart: twist: staging config constructs no switcher or dev route
-02:40 +126: test/persona_test.dart: twist: prod config constructs no switcher or dev route
-02:40 +127: test/persona_test.dart: twist: Home table for Lerato
-02:40 +128: test/persona_test.dart: twist: stokvel 1 table for Lerato
+01:29 +125: test/privacy_test.dart: realistic event exposes only safe information and the API trace
+01:30 +126: test/persona_test.dart: twist: staging config constructs no switcher or dev route
+01:33 +127: test/persona_test.dart: twist: prod config constructs no switcher or dev route
+01:33 +128: test/persona_test.dart: twist: Home table for Lerato
+01:33 +129: test/persona_test.dart: twist: stokvel 1 table for Lerato
 Disposed stokvel id=1
-02:41 +129: test/persona_test.dart: twist: payouts 1 table for Lerato
+01:34 +130: test/persona_test.dart: twist: payouts 1 table for Lerato
 Disposed stokvel id=1
-02:41 +130: test/persona_test.dart: twist: stokvel 2 table for Lerato
+01:34 +131: test/persona_test.dart: twist: stokvel 2 table for Lerato
 Disposed stokvel id=2
-02:41 +131: test/persona_test.dart: twist: payouts 2 table for Lerato
+01:34 +132: test/persona_test.dart: twist: payouts 2 table for Lerato
 Disposed stokvel id=2
-02:41 +132: test/persona_test.dart: twist: Home table for Sipho
-02:41 +133: test/persona_test.dart: twist: stokvel 1 table for Sipho
+01:34 +133: test/persona_test.dart: twist: Home table for Sipho
+01:34 +134: test/persona_test.dart: twist: stokvel 1 table for Sipho
 Disposed stokvel id=1
-02:42 +134: test/persona_test.dart: twist: payouts 1 table for Sipho
+01:34 +135: test/persona_test.dart: twist: payouts 1 table for Sipho
 Disposed stokvel id=1
-02:42 +135: test/persona_test.dart: twist: stokvel 2 table for Sipho
+01:34 +136: test/persona_test.dart: twist: stokvel 2 table for Sipho
 Disposed stokvel id=2
-02:42 +136: test/persona_test.dart: twist: payouts 2 table for Sipho
+01:35 +137: test/persona_test.dart: twist: payouts 2 table for Sipho
 Disposed stokvel id=2
-02:42 +137: test/persona_test.dart: twist: Home table for New Member
-02:42 +138: test/persona_test.dart: twist: stokvel 1 table for New Member
+01:35 +138: test/persona_test.dart: twist: Home table for New Member
+01:35 +139: test/persona_test.dart: twist: stokvel 1 table for New Member
 Disposed stokvel id=1
-02:43 +139: test/persona_test.dart: twist: payouts 1 table for New Member
+01:35 +140: test/persona_test.dart: twist: payouts 1 table for New Member
 Disposed stokvel id=1
-02:43 +140: test/persona_test.dart: twist: stokvel 2 table for New Member
+01:35 +141: test/persona_test.dart: twist: stokvel 2 table for New Member
 Disposed stokvel id=2
-02:43 +141: test/persona_test.dart: twist: payouts 2 table for New Member
+01:35 +142: test/persona_test.dart: twist: payouts 2 table for New Member
 Disposed stokvel id=2
-02:43 +142: test/persona_test.dart: twist: switching with stokvel 1 open clears the first frame and sign-out
+01:35 +143: test/persona_test.dart: twist: switching with stokvel 1 open clears the first frame and sign-out
 Disposed stokvel id=1
 Disposed stokvel id=1
 Disposed stokvel id=1
 Disposed stokvel id=1
-02:44 +143: test/persona_test.dart: twist: switching with stokvel 2 open clears the first frame and sign-out
-Disposed stokvel id=2
-Disposed stokvel id=2
+01:35 +144: test/persona_test.dart: twist: switching with stokvel 2 open clears the first frame and sign-out
 Disposed stokvel id=2
 Disposed stokvel id=2
-02:45 +144: test/provider_test.dart: Home failure waits for an explicit retry
-02:46 +145: test/persona_test.dart: twist: open payouts hides old order on the first persona frame
-02:46 +145: test/provider_test.dart: detail preserves independent failures for separate stokvels
+Disposed stokvel id=2
+Disposed stokvel id=2
+01:35 +145: test/persona_test.dart: twist: open payouts hides old order on the first persona frame
+Disposed stokvel id=1
+Disposed stokvel id=1
+Disposed stokvel id=1
+Disposed stokvel id=1
+01:36 +146: test/persona_test.dart: twist: failed new membership cannot retain old actions
+Disposed stokvel id=1
+Disposed stokvel id=1
+01:37 +147: test/provider_test.dart: Home failure waits for an explicit retry
+01:37 +148: test/provider_test.dart: detail preserves independent failures for separate stokvels
 Disposed stokvel id=2
 Disposed stokvel id=1
-02:46 +146: test/persona_test.dart: twist: open payouts hides old order on the first persona frame
-Disposed stokvel id=1
-Disposed stokvel id=1
-Disposed stokvel id=1
-Disposed stokvel id=1
-02:46 +147: test/provider_test.dart: view conversion retains manual refresh data but hides a new persona
-02:46 +147: test/persona_test.dart: twist: failed new membership cannot retain old actions
-Disposed stokvel id=1
-Disposed stokvel id=1
-02:46 +148: test/provider_test.dart: view conversion retains manual refresh data but hides a new persona
-02:46 +149: test/provider_test.dart: two IDs remain separate; two listeners share one fetch
+01:37 +149: test/provider_test.dart: view conversion retains manual refresh data but hides a new persona
+01:38 +150: test/provider_test.dart: two IDs remain separate; two listeners share one fetch
 Disposed stokvel id=2
 Disposed stokvel id=1
-02:46 +150: test/provider_test.dart: detail is disposed only after its final listener closes
+01:38 +151: test/provider_test.dart: detail is disposed only after its final listener closes
 Disposed stokvel id=1
 Disposed stokvel id=1
-02:55 +151: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
-02:56 +152: test/routes_table_test.dart: route: README /sign-in opens Sign in
-02:58 +153: test/routes_table_test.dart: route: README /home opens RondiTrack
-02:59 +154: test/routes_table_test.dart: route: README /stokvels opens Stokvels
-02:59 +155: test/routes_table_test.dart: route: README /stokvels/:id opens Your role: Treasurer
+01:44 +152: test/session_test.dart: 403 never refreshes and only 5xx reaches the reporting interface
+01:44 +153: test/session_test.dart: cookie extraction uses the configured name and requires a value
+01:44 +154: test/session_test.dart: three expired requests share one rotation and all succeed
+01:45 +155: test/session_test.dart: simultaneous and late 401 responses reuse the one replacement
+01:45 +156: test/session_test.dart: broken per-401 interceptor reuses a spent cookie and ends the session
+01:45 +157: test/session_test.dart: a nearly expired token refreshes before the first resource request
+01:45 +158: test/session_test.dart: refresh failure 401 has the correct session effect
+01:45 +159: test/session_test.dart: refresh failure 403 has the correct session effect
+01:45 +160: test/session_test.dart: refresh failure 429 has the correct session effect
+01:45 +161: test/session_test.dart: refresh failure 500 has the correct session effect
+01:45 +162: test/session_test.dart: refresh failure offline has the correct session effect
+01:45 +163: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +164: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +165: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +166: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +167: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +168: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +169: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +170: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:45 +171: test/routes_table_test.dart: route: README table and address checks cover exactly the same screens
+01:46 +172: test/routes_table_test.dart: route: README /sign-in opens Sign in
+01:47 +173: test/routes_table_test.dart: route: README /sign-in opens Sign in
+01:48 +174: test/session_screen_test.dart: offline splash preserves the invite and supports retry
+01:49 +175: test/session_screen_test.dart: offline splash preserves the invite and supports retry
+01:49 +176: test/session_screen_test.dart: offline splash preserves the invite and supports retry
+01:50 +176: test/routes_table_test.dart: route: README /stokvels/:id opens Your role: Treasurer
 Disposed stokvel id=1
-02:59 +156: test/routes_table_test.dart: route: README /stokvels/:id/cycles/:cycleId opens Cycle details
+01:50 +177: test/session_screen_test.dart: offline splash preserves the invite and supports retry
 Disposed stokvel id=1
-02:59 +157: test/routes_table_test.dart: route: README /stokvels/:id/cycles/:cycleId/payouts opens Rotation and payouts
+01:50 +178: test/routes_table_test.dart: route: README /stokvels/:id/cycles/:cycleId opens Cycle details
 Disposed stokvel id=1
-02:59 +158: test/routes_table_test.dart: route: README /activity opens Activity
-02:59 +159: test/routes_table_test.dart: route: README /profile opens Profile
-03:00 +160: test/routes_table_test.dart: route: README /join/:code opens Your role: Treasurer
+01:50 +179: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:50 +179: test/routes_table_test.dart: route: README /stokvels/:id/cycles/:cycleId/payouts opens Rotation and payouts
 Disposed stokvel id=1
-03:00 +161: test/routes_table_test.dart: route: README /register opens Register
-03:03 +162: test/session_screen_test.dart: restoring directs every protected route to splash with its destination
-03:03 +163: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +164: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +165: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +166: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +167: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +168: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +169: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +170: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +171: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +172: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +173: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +174: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +175: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +176: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +177: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +178: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +179: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +180: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +181: test/session_screen_test.dart: offline splash preserves the invite and supports retry
-03:05 +182: test/session_screen_test.dart: offline splash preserves the invite and supports retry
+01:50 +180: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:50 +181: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:50 +182: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:51 +182: test/routes_table_test.dart: route: README /join/:code opens Your role: Treasurer
 Disposed stokvel id=1
-03:07 +183: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
-03:08 +184: test/session_screen_test.dart: registration errors stay on their fields and the join survives both forms
+01:51 +183: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:51 +184: test/session_screen_test.dart: incorrect credentials and Retry-After countdown
+01:51 +185: test/session_screen_test.dart: registration errors stay on their fields and the join survives both forms
 Disposed stokvel id=1
 Disposed stokvel id=1
-03:09 +185: test/session_screen_test.dart: signed-out invite shows Invite code not found. Check the code and try again.
-03:10 +186: test/session_screen_test.dart: signed-out invite shows Ask for a new invite.
-03:10 +187: test/session_screen_test.dart: family phone removes Lerato’s treasurer state before the next account
+01:52 +186: test/south_african_day_test.dart: 00:30 SAST belongs to November 1 in any device time zone
+01:52 +187: test/session_screen_test.dart: signed-out invite shows Invite code not found. Check the code and try again.
+01:52 +188: test/session_screen_test.dart: signed-out invite shows Ask for a new invite.
+01:52 +189: test/session_screen_test.dart: family phone removes Lerato’s treasurer state before the next account
 Disposed stokvel id=1
-03:16 +188: test/south_african_day_test.dart: 00:30 SAST belongs to November 1 in any device time zone
-03:19 +189: test/stokvel_card_golden_test.dart: Stokvel card dark (variant: Windows)
-03:22 +190: test/stokvel_card_golden_test.dart: Stokvel card dark (variant: CI)
-03:22 +191: test/stokvel_card_golden_test.dart: Stokvel card light (variant: Windows)
-03:22 +192: test/stokvel_card_golden_test.dart: Stokvel card light (variant: CI)
-03:23 +193: test/widget_test.dart: Home accessibility in dark mode
-03:25 +194: test/widget_test.dart: Home accessibility in light mode
-03:26 +195: test/widget_test.dart: Home loading
-03:26 +196: test/widget_test.dart: Home empty explains next step
-03:26 +197: test/widget_test.dart: Home data uses server amounts and per-stokvel roles
-03:26 +198: test/widget_test.dart: Home failure retries the overridden repository
-03:26 +199: test/widget_test.dart: Home keeps cached stokvels and shows when they last updated
-03:27 +200: test/widget_test.dart: pull to refresh retains old Home cards
-03:27 +201: test/widget_test.dart: detail loading
+01:54 +190: test/stokvel_card_golden_test.dart: Stokvel card dark (variant: Windows)
+01:59 +191: test/stokvel_card_golden_test.dart: Stokvel card dark (variant: CI)
+01:59 +192: test/stokvel_card_golden_test.dart: Stokvel card light (variant: Windows)
+01:59 +193: test/stokvel_card_golden_test.dart: Stokvel card light (variant: CI)
+02:00 +194: test/widget_test.dart: Home accessibility in dark mode
+02:01 +195: test/widget_test.dart: Home accessibility in light mode
+02:01 +196: test/widget_test.dart: Home loading
+02:01 +197: test/widget_test.dart: Home empty explains next step
+02:02 +198: test/widget_test.dart: Home data uses server amounts and per-stokvel roles
+02:02 +199: test/widget_test.dart: Home failure retries the overridden repository
+02:02 +200: test/widget_test.dart: Home keeps cached stokvels and shows when they last updated
+02:02 +201: test/widget_test.dart: pull to refresh retains old Home cards
+02:02 +202: test/widget_test.dart: detail loading
 Disposed stokvel id=1
-03:27 +202: test/widget_test.dart: detail empty is not found for inaccessible and nonexistent IDs
+02:02 +203: test/widget_test.dart: detail empty is not found for inaccessible and nonexistent IDs
 Disposed stokvel id=1
 Disposed stokvel id=999
-03:27 +203: test/widget_test.dart: detail data shows treasurer actions in that membership
+02:02 +204: test/widget_test.dart: detail data shows treasurer actions in that membership
 Disposed stokvel id=1
-03:28 +204: test/widget_test.dart: treasurer detail hides confirmation when nobody has a paid row
+02:03 +205: test/widget_test.dart: treasurer detail hides confirmation when nobody has a paid row
 Disposed stokvel id=1
-03:28 +205: test/widget_test.dart: detail member has no treasurer actions
+02:03 +206: test/widget_test.dart: detail member has no treasurer actions
 Disposed stokvel id=2
-03:28 +206: test/widget_test.dart: detail failure retry works
+02:03 +207: test/widget_test.dart: detail failure retry works
 Disposed stokvel id=1
 Disposed stokvel id=1
-03:28 +207: test/widget_test.dart: switch to slow B shows B loading and no A contributions for a frame
+02:03 +208: test/widget_test.dart: switch to slow B shows B loading and no A contributions for a frame
 Disposed stokvel id=1
 Disposed stokvel id=2
-03:30 +208: All tests passed!
+02:05 +209: All tests passed!
