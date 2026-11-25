@@ -1245,7 +1245,7 @@ isolated backend with synthetic data.
 #### Coverage
 
 On Assignment 11.3 commit `6f791a6`, `flutter test --coverage` passed 187 tests and skipped three live tests. LCOV reported 1,759 of 2,338 non-generated lines hit (75.24%). The floor is 74%, allowing 1.24 percentage points for ordinary changes while catching a material drop.
-Exclude generated API code, localization, Drift, Riverpod and Freezed output.
+Exclude generated API code, localization, Drift, Riverpod and Freezed output. The verified Windows runs reached 77.56% (1,873 of 2,415). Both hosted Linux runs reached 77.43% (1,870 of 2,415).
 
 #### Limits
 
@@ -1282,7 +1282,7 @@ so it exercises the application without contacting a shared API.
 
 ### Running the tests
 
-From the mobile repository root, use the pinned Flutter SDK and run:
+From the mobile repository root, use the pinned Flutter SDK.
 
 ```sh
 flutter pub get --enforce-lockfile
@@ -1303,14 +1303,14 @@ uses block text and runs in the fast job in both time zones.
 Run `flutter test --tags live` after configuring `RONDI_LIVE_URL` and
 `RONDI_LIVE_PASSWORD` for a disposable, seeded Development backend only.
 In the backend checkout, set `POSTGRES_PASSWORD`, `JWT_KEY` and
-`E2E_PASSWORD` privately to disposable values. On a fresh database, run the migration and bootstrap seed in a one-off container first:
+`E2E_PASSWORD` privately to disposable values. On a fresh database, run the migration and bootstrap seed in a one-off container first.
 
 ```sh
 docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml run --build --rm api
 ```
 
 Wait for the API to listen, then stop the one-off container with Ctrl+C.
-Start the mobile fixture API on loopback with the demo accounts enabled:
+Start the mobile fixture API on loopback with the demo accounts enabled.
 
 ```sh
 docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml -f ../RondiTrack-Mobile/tool/compose.assignment-12.1.yaml up -d --build
@@ -1318,7 +1318,7 @@ docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml -
 
 Set `RONDI_LIVE_URL` to `http://127.0.0.1:8080/api/v1` and
 `RONDI_LIVE_PASSWORD` to the disposable `E2E_PASSWORD` value. Run the fresh-seed checks first
-because the replay test creates an extra stokvel:
+because the replay test creates an extra stokvel.
 
 ```sh
 flutter test --tags live test/real_api_live_test.dart
@@ -1338,9 +1338,16 @@ removing them and releases the fixture cycles.
 The history regression uses 300 synthetic rows, scrolls to the first
 row and refreshes the existing page at 200% text scale. The contribution
 rows now use a lazy sliver that is reused while controls and progress
-indicators update. Row height follows content and text scale. The
-debug rebuild hook counted one previously mounted row rebuilding before the change and zero afterward. This measurement ran under Flutter debug widget testing on Windows x64. An on-device
-Flutter DevTools comparison is tracked in the evidence index.
+indicators update. Row height follows content and text scale. The comparison used the same 300 synthetic rows and 200% text scale in
+the Windows x64 Flutter debug test renderer at 800 by 600 logical pixels.
+The VM traces use Flutter's widget-build profiling flag and DevTools'
+timeline data. They include new mounts. The regression counts only rows
+that were already mounted before the refresh.
+
+| Refresh measurement | Before | After |
+| --- | ---: | ---: |
+| `ListTile` builds in the VM timeline | 9 | 3 |
+| Previously mounted rows rebuilt | 1 | 0 |
 
 ### Decisions
 

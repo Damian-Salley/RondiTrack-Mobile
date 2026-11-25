@@ -14,9 +14,12 @@
 
 - All three isolated live API tests passed when the fresh-seed checks ran before payment replay. [Live API output](live-api.txt)
 
+- DevTools widget-build instrumentation recorded 9 ListTile builds before the change and 3 afterward on the Windows x64 Flutter debug renderer at 200% text scale. [Before VM timeline](devtools-before.json) · [After VM timeline](devtools-after.json)
+- Hosted Linux UTC and Africa/Johannesburg each passed 206 tests and enforced 77.43% coverage. The backend contract passed. [Hosted matrix](https://github.com/Damian-Salley/RondiTrack-Mobile/actions/runs/45580262226)
+
 ## Pending verification
 
-- Three successful Android integration runs and emulator image. API 34 booted locally. Two attempts failed during Gradle build before the journey started. [Build diagnostics](android-build-failures.txt)
-- DevTools before-and-after capture on a running app.
+- The Android journey passed three consecutive times on the hosted Android API 34 emulator. Two local builds failed before installation. A later isolated-cache build succeeded but the local emulator disconnected. The screenshot from the first hosted run could not be retrieved after app uninstall. [Three hosted passes](android-hosted.txt) · [Local build diagnostics](android-build-failures.txt)
+
 - A real Sentry event from a private DSN using synthetic data.
-- Hosted GitHub Actions results.
+- Confirm the validated Android screenshot artifact from the latest CI run.
