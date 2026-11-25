@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:ronditrack_mobile/core/data/api_client.dart';
 import 'package:ronditrack_mobile/core/data/offline_database.dart';
 import 'package:ronditrack_mobile/core/offline_refresh.dart';
+import 'package:ronditrack_mobile/core/telemetry/analytics.dart';
 import 'package:ronditrack_mobile/features/contributions/data/contribution_history.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_api.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_outbox.dart';
@@ -31,6 +32,7 @@ final paymentOutboxSyncProvider = Provider<PaymentOutboxSync>((ref) {
     ref.watch(paymentOutboxStoreProvider),
     (payment) => sendCyclePayment(client, payment),
     refresh.add,
+    analytics: ref.watch(analyticsProvider),
   );
   ref.onDispose(sync.dispose);
   return sync;

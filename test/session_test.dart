@@ -2,14 +2,71 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:ronditrack_mobile/core/api_failure.dart';
+import 'package:ronditrack_mobile/core/data/api_client.dart';
+import 'package:ronditrack_mobile/core/telemetry/error_reporter.dart';
 import 'package:ronditrack_mobile/features/session/data/session_api.dart';
 import 'package:ronditrack_mobile/features/session/data/session_dependencies.dart';
 import 'package:ronditrack_mobile/features/session/presentation/auth_provider.dart';
 
 import 'support/session_fixture.dart';
 
+class _MockSession extends Mock implements Auth;
+
+class _RecordingReporter implements ErrorReporter {
+  final failures = <Object>[];
+
+  @override
+  Future<void> report(Object failure) async => failures.add(failure);
+}
+
 void main() {
+  test(
+    '403 never refreshes and only 5xx reaches the reporting interface',
+    () async {
+      final session = _MockSession();
+      when(session.generation).thenReturn(1);
+      when(session.accessToken).thenReturn('fixture-access');
+      when(session.needsRefresh).thenReturn(false);
+      final reporter = _RecordingReporter();
+      final retry = Dio();
+      final client = Dio(BaseOptions(baseUrl: 'https://fixture.invalid'))
+        ..httpClientAdapter = FixtureAdapter((options) async {
+          expect(options.headers['Authorization'], 'Bearer fixture-access');
+          return ResponseBody.fromString(
+            '{"correlationId":"4bf92f3577b34da6a3ce929d0e0e4736"}',
+            options.path == '/forbidden' ? 403 : 500,
+            headers: {
+              Headers.contentTypeHeader: [Headers.jsonContentType],
+            },
+          );
+        })
+        ..interceptors.add(
+          SessionInterceptor(session, retry, reporter: reporter, log: (_) {}),
+        );
+      addTearDown(client.close);
+      addTearDown(retry.close);
+      await expectLater(
+        client.get<void>('/forbidden'),
+        throwsA(isA<DioException>()),
+      );
+      expect(reporter.failures, isEmpty);
+      await expectLater(
+        client.get<void>('/server-failure'),
+        throwsA(isA<DioException>()),
+      );
+      expect(
+        reporter.failures.single,
+        isA<ServerFailure>().having(
+          (failure) => failure.correlationId,
+          'correlation ID',
+          '4bf92f3577b34da6a3ce929d0e0e4736',
+        ),
+      );
+      verifyNever(session.refresh);
+    },
+  );
   test('cookie extraction uses the configured name and requires a value', () {
     expect(
       extractRefreshCookie([

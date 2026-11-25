@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:ronditrack_mobile/core/api_failure.dart';
 import 'package:ronditrack_mobile/core/money.dart';
+import 'package:ronditrack_mobile/core/telemetry/analytics.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_outbox_store.dart';
 import 'package:ronditrack_mobile/features/contributions/domain/payment_intent.dart';
 
@@ -13,10 +14,12 @@ class PaymentOutboxSync {
     this._refresh, {
     DateTime Function()? now,
     String Function()? newKey,
+    this._analytics = const LocalAnalytics(),
   }) : _now = now ?? DateTime.now,
        _newKey = newKey ?? _uuid;
 
   static const maximumAge = Duration(hours: 12);
+  final Analytics _analytics;
   final PaymentOutboxStore _store;
   final Future<void> Function(PaymentIntent) _send;
   final void Function(int) _refresh;
@@ -81,7 +84,13 @@ class PaymentOutboxSync {
       try {
         await _send(payment);
         await _finish(payment, generation, PaymentDisposition.paid);
-        if (_current(generation)) _refresh(payment.target.stokvelId);
+        if (_current(generation)) {
+          _analytics.contributionRecorded(
+            stokvelId: payment.target.stokvelId,
+            memberId: payment.target.userId,
+          );
+          _refresh(payment.target.stokvelId);
+        }
       } on RateLimitedFailure catch (error) {
         final wait = Duration(seconds: max(1, error.waitSeconds ?? 60));
         final retryAt = _now().toUtc().add(wait);

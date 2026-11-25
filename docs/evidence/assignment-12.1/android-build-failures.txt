@@ -1,0 +1,11 @@
+android-retry.txt
+* What went wrong:
+Execution failed for task ':app:mergeDevDebugGlobalSynthetics'.
+Running Gradle task 'assembleDevDebug'...                         939,5s
+  Failed to load "integration_test/contribution_test.dart": Gradle task assembleDevDebug failed with exit code 1
+android-run-1.txt
+flutter : e: Failed connecting to the daemon in 4 retries, error: java.rmi.ConnectException: Connection refused to
+* What went wrong:
+Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)
+Running Gradle task 'assembleDevDebug'...                        1118,9s
+  Failed to load "integration_test/contribution_test.dart": Gradle task assembleDevDebug failed with exit code 1

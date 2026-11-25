@@ -1,0 +1,13 @@
+00:00 +0: loading test/provider_test.dart
+00:00 +0: Home failure waits for an explicit retry
+00:00 +1: detail preserves independent failures for separate stokvels
+Disposed stokvel id=2
+Disposed stokvel id=1
+00:00 +2: view conversion retains manual refresh data but hides a new persona
+00:00 +3: two IDs remain separate; two listeners share one fetch
+Disposed stokvel id=2
+Disposed stokvel id=1
+00:00 +4: detail is disposed only after its final listener closes
+Disposed stokvel id=1
+Disposed stokvel id=1
+00:00 +5: All tests passed!

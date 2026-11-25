@@ -1,0 +1,36 @@
+00:00 +0: loading test/assignment113_offline_test.dart
+00:00 +0: outbox reuses the key when the first response is lost
+00:00 +0 -1: outbox reuses the key when the first response is lost [E]
+  Expected: ['c03670bb-9159-49b1-b0aa-18bbaed3afbe', 'c03670bb-9159-49b1-b0aa-18bbaed3afbe']
+    Actual: ['ecb34a92-9780-41f4-b5bf-5192a1874130', '58530378-30fc-43a6-acd2-dfc337fbeb62']
+     Which: at location [0] is 'ecb34a92-9780-41f4-b5bf-5192a1874130' instead of 'c03670bb-9159-49b1-b0aa-18bbaed3afbe'
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\assignment113_offline_test.dart 209:5          main.<fn>
+
+00:00 +0 -1: one payment intent and its key survive an app restart
+00:00 +0 -2: one payment intent and its key survive an app restart [E]
+  Expected: <1>
+    Actual: <2>
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\assignment113_offline_test.dart 246:5          main.<fn>
+
+00:00 +0 -2: 429 preserves key and wait, a refusal removes it, and expiry never sends
+00:00 +0 -3: 429 preserves key and wait, a refusal removes it, and expiry never sends [E]
+  Expected: ['359bbd76-c3e2-4cc0-abe2-8bdfad3ccec7']
+    Actual: ['66643902-c251-482d-938f-e7c7bcfce47c']
+     Which: at location [0] is '66643902-c251-482d-938f-e7c7bcfce47c' instead of '359bbd76-c3e2-4cc0-abe2-8bdfad3ccec7'
+
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\assignment113_offline_test.dart 299:7          main.<fn>
+
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  test/assignment113_offline_test.dart: 429 preserves key and wait, a refusal removes it, and expiry never sends
+  test/assignment113_offline_test.dart: one payment intent and its key survive an app restart
+  test/assignment113_offline_test.dart: outbox reuses the key when the first response is lost

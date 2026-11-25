@@ -7,6 +7,7 @@ import 'package:ronditrack_mobile/core/south_african_day.dart';
 import 'package:ronditrack_mobile/features/contributions/contribution_providers.dart';
 import 'package:ronditrack_mobile/features/contributions/domain/contribution_page.dart';
 import 'package:ronditrack_mobile/features/contributions/presentation/contribution_paging.dart';
+import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
 import 'package:ronditrack_mobile/l10n/localization.dart';
 
@@ -22,6 +23,37 @@ class ContributionListScreen extends ConsumerStatefulWidget {
 
 class _ContributionListState extends ConsumerState<ContributionListScreen> {
   late final ContributionPaging _paging;
+  List<Contribution>? _displayedRows;
+  late Widget _rowsSliver;
+
+  Widget _buildRows(List<Contribution> rows) {
+    // Paging keeps the same rows during a refresh. Reuse their sliver while
+    // the loading indicator and controls rebuild.
+    if (!identical(rows, _displayedRows)) {
+      _displayedRows = rows;
+      _rowsSliver = SliverList.builder(
+        itemCount: rows.length,
+        itemBuilder: (context, index) {
+          final row = rows[index];
+          final strings = context.strings;
+          return ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(row.memberName),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(strings.contributionStatus(row.status)),
+                Text(formatCents(row.amount)),
+                if (row.paidAtUtc case final date?)
+                  Text(_paymentDate(context, date)),
+              ],
+            ),
+          );
+        },
+      );
+    }
+    return _rowsSliver;
+  }
 
   @override
   void initState() {
@@ -95,72 +127,77 @@ class _ContributionListState extends ConsumerState<ContributionListScreen> {
                 }
                 return false;
               },
-              child: ListView(
+              child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16),
-                children: [
-                  _filters(context, options.value),
-                  if (options.hasError)
-                    TextButton(
-                      onPressed: () => ref.invalidate(
-                        contributionFilterOptionsProvider(widget.stokvelId),
-                      ),
-                      child: Text(strings.filtersUnavailable),
-                    ),
-                  if (filtered)
-                    OutlinedButton(
-                      onPressed: () =>
-                          _paging.changeFilters(emptyContributionFilters),
-                      child: Text(strings.clearFilters),
-                    ),
-                  if (_paging.loading)
-                    LinearProgressIndicator(
-                      semanticsLabel: strings.firstPageLoading,
-                    ),
-                  if (_paging.loading && rows.isEmpty)
-                    Text(strings.firstPageLoading),
-                  if (failure == PageFailure.first) ...[
-                    Text(strings.firstPageFailed),
-                    TextButton(
-                      onPressed: _paging.refresh,
-                      child: Text(strings.tryAgain),
-                    ),
-                  ],
-                  if (rows.isEmpty && !_paging.loading && failure == null)
-                    Text(
-                      filtered
-                          ? strings.noFilteredContributions
-                          : strings.noContributions,
-                    ),
-                  for (final row in rows)
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(row.memberName),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(strings.contributionStatus(row.status)),
-                          Text(formatCents(row.amount)),
-                          if (row.paidAtUtc case final date?)
-                            Text(_paymentDate(context, date)),
+                slivers: [
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    sliver: SliverList.list(
+                      children: [
+                        _filters(context, options.value),
+                        if (options.hasError)
+                          TextButton(
+                            onPressed: () => ref.invalidate(
+                              contributionFilterOptionsProvider(
+                                widget.stokvelId,
+                              ),
+                            ),
+                            child: Text(strings.filtersUnavailable),
+                          ),
+                        if (filtered)
+                          OutlinedButton(
+                            onPressed: () =>
+                                _paging.changeFilters(emptyContributionFilters),
+                            child: Text(strings.clearFilters),
+                          ),
+                        if (_paging.loading)
+                          LinearProgressIndicator(
+                            semanticsLabel: strings.firstPageLoading,
+                          ),
+                        if (_paging.loading && rows.isEmpty)
+                          Text(strings.firstPageLoading),
+                        if (failure == PageFailure.first) ...[
+                          Text(strings.firstPageFailed),
+                          TextButton(
+                            onPressed: _paging.refresh,
+                            child: Text(strings.tryAgain),
+                          ),
                         ],
-                      ),
+                        if (rows.isEmpty && !_paging.loading && failure == null)
+                          Text(
+                            filtered
+                                ? strings.noFilteredContributions
+                                : strings.noContributions,
+                          ),
+                      ],
                     ),
-                  if (failure == PageFailure.later) ...[
-                    Text(strings.nextPageFailed),
-                    TextButton(
-                      onPressed: _paging.next,
-                      child: Text(strings.tryAgain),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: _buildRows(rows),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    sliver: SliverList.list(
+                      children: [
+                        if (failure == PageFailure.later) ...[
+                          Text(strings.nextPageFailed),
+                          TextButton(
+                            onPressed: _paging.next,
+                            child: Text(strings.tryAgain),
+                          ),
+                        ] else if (_paging.ended && rows.isNotEmpty)
+                          Text(strings.endOfContributions)
+                        else if (!_paging.loading &&
+                            failure == null &&
+                            rows.isNotEmpty)
+                          TextButton(
+                            onPressed: _paging.next,
+                            child: Text(strings.loadMore),
+                          ),
+                      ],
                     ),
-                  ] else if (_paging.ended && rows.isNotEmpty)
-                    Text(strings.endOfContributions)
-                  else if (!_paging.loading &&
-                      failure == null &&
-                      rows.isNotEmpty)
-                    TextButton(
-                      onPressed: _paging.next,
-                      child: Text(strings.loadMore),
-                    ),
+                  ),
                 ],
               ),
             ),

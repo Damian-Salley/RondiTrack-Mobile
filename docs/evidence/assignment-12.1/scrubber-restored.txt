@@ -1,0 +1,3 @@
+00:00 +0: loading test/privacy_test.dart
+00:00 +0: realistic event exposes only safe information and the API trace
+00:00 +1: All tests passed!
