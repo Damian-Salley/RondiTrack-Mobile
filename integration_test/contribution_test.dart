@@ -17,6 +17,7 @@ import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/fake_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/status.dart';
+import 'package:ronditrack_mobile/features/stokvels/presentation/detail_screen.dart';
 import 'package:ronditrack_mobile/features/stokvels/stokvel_providers.dart';
 
 class _CycleRepository extends FakeStokvelRepository {
@@ -99,15 +100,38 @@ void main() {
     await tester.ensureVisible(signIn);
     await tester.tap(signIn);
     final stokvel = find.text('Community Savings');
-    await _waitFor(tester, stokvel);
-    await tester.tap(stokvel.first);
+    await _waitFor(tester, stokvel.hitTestable());
+    await tester.tap(stokvel.hitTestable().first);
+    final detail = find.byType(DetailScreen);
+    final detailList = find.descendant(
+      of: detail,
+      matching: find.byType(Scrollable),
+    );
+    // A short phone may not mount the action until the list is scrolled.
+    await _waitFor(
+      tester,
+      find.descendant(of: detail, matching: find.text('Your role: Treasurer')),
+    );
     final pay = find.widgetWithText(OutlinedButton, 'Pay');
-    await _waitFor(tester, pay);
-    await tester.ensureVisible(pay);
+    await tester.scrollUntilVisible(pay, 180, scrollable: detailList);
+    await _waitFor(tester, pay.hitTestable());
     await tester.tap(pay);
-    final submit = find.widgetWithText(FilledButton, 'Pay');
-    await _waitFor(tester, submit);
-    await tester.enterText(find.byType(TextFormField), '123,45');
+    final form = find.byType(PayForm);
+    final amount = find.descendant(
+      of: form,
+      matching: find.byType(TextFormField),
+    );
+    await _waitFor(tester, amount);
+    await tester.enterText(amount, '123,45');
+    FocusManager.instance.primaryFocus?.unfocus();
+    final submit = find.descendant(
+      of: form,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is FilledButton && widget.onPressed != null,
+        description: 'the enabled payment submit button',
+      ),
+    );
+    await _waitFor(tester, submit.hitTestable());
     await tester.tap(submit);
     await _waitFor(tester, find.text('Payment recorded.'));
     await tester.tap(
@@ -117,8 +141,8 @@ void main() {
       ),
     );
     final payer = find.text('Synthetic payer');
-    await _waitFor(tester, payer);
-    await tester.ensureVisible(payer);
+    await _waitFor(tester, detailList);
+    await tester.scrollUntilVisible(payer, -140, scrollable: detailList);
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('R\u00A0123,45'), findsOneWidget);
     expect(repository.saved?.amount.value, 12345);
