@@ -321,6 +321,24 @@ void main() {
     expect(await store.read(), isEmpty);
   });
 
+  test('429 without Retry-After schedules the one-minute fallback', () async {
+    final db = OfflineDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    final store = PaymentOutboxStore(db);
+    final sync = PaymentOutboxSync(
+      store,
+      (_) async => throw const RateLimitedFailure(null),
+      (_) => fail('An unpaid contribution cannot refresh totals.'),
+      now: () => _initialTime,
+      newKey: () => 'stored-key',
+    );
+    addTearDown(sync.dispose);
+    await sync.enqueue(_paymentTarget, const Cents(1000));
+    final payment = (await store.read()).single;
+    expect(payment.key, 'stored-key');
+    expect(payment.retryAt, _initialTime.add(const Duration(minutes: 1)));
+  });
+
   test(
     '429 preserves key and wait, a refusal removes it, and expiry never sends',
     () async {
@@ -352,7 +370,9 @@ void main() {
       );
       final refused = sync.notices.first;
       await sync.flush();
-      expect((await refused).disposition, PaymentDisposition.refused);
+      final notice = await refused;
+      expect(notice.disposition, PaymentDisposition.refused);
+      expect(notice.failure?.message, 'Already paid');
       expect(attempts, [queued.key, queued.key]);
       expect(await store.read(), isEmpty);
 

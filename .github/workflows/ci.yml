@@ -91,13 +91,13 @@ jobs:
           script: |
             flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
             flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
-            flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json --no-uninstall
-            adb exec-out run-as za.co.damiansalley.ronditrack_mobile.dev cat cache/assignment-12.1-contribution.png > assignment-12.1-contribution.png
-            python3 -c "from pathlib import Path; image = Path('assignment-12.1-contribution.png').read_bytes(); assert image.startswith(bytes([137, 80, 78, 71, 13, 10, 26, 10])) and len(image) > 1024"
+            flutter test integration_test --flavor dev --dart-define-from-file=config/dev.json
+            flutter drive --debug -d emulator-5554 --flavor dev --dart-define-from-file=config/dev.json --dart-define=CAPTURE_ANDROID_SCREENSHOT=true --driver=integration_test/screenshot_driver.dart --target=integration_test/contribution_test.dart
       - uses: actions/upload-artifact@v4
         with:
           name: assignment-12.1-android
           path: assignment-12.1-contribution.png
+          if-no-files-found: error
 
   backend-contract:
     runs-on: ubuntu-latest

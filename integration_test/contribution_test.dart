@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -148,10 +146,10 @@ void main() {
     expect(repository.saved?.amount.value, 12345);
     expect(await container.read(paymentOutboxStoreProvider).read(), isEmpty);
 
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
-    final image = await binding.takeScreenshot('assignment-12.1-contribution');
-    await File('${Directory.systemTemp.path}/assignment-12.1-contribution.png')
-        .writeAsBytes(image);
+    if (const bool.fromEnvironment('CAPTURE_ANDROID_SCREENSHOT')) {
+      await binding.convertFlutterSurfaceToImage();
+      await tester.pump();
+      await binding.takeScreenshot('assignment-12.1-contribution');
+    }
   });
 }
