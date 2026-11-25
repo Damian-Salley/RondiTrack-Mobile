@@ -1,6 +1,6 @@
 # Assignment 12.1 evidence
 
-- [Windows light golden](../../../test/goldens/windows/stokvel_card_light.png) and [Windows dark golden](../../../test/goldens/windows/stokvel_card_dark.png). The images were inspected in both themes. [CI light](../../../test/goldens/ci/stokvel_card_light.png) and [CI dark](../../../test/goldens/ci/stokvel_card_dark.png) use block text.
+- [Windows light golden](../../../test/goldens/windows/stokvel_card_light.png) and [Windows dark golden](../../../test/goldens/windows/stokvel_card_dark.png). The images were inspected in both themes. [CI light](../../../test/goldens/ci/stokvel_card_light.png) and [CI dark](../../../test/goldens/ci/stokvel_card_dark.png) use block text. Hosted Linux diffs on the first baseline were thin paint differences at fractional column and label offsets. The test grid now uses whole-pixel columns and integer Ahem letter spacing. The adjusted images were reviewed locally before committing.
 - All three key tests fail when the outbox replaces the stored key on send. [Broken](outbox-broken.txt) · [Restored](outbox-restored.txt)
 - Converting a Home repository error to an empty list fails the notifier transition test. [Broken](notifier-broken.txt) · [Restored](notifier-restored.txt)
 - Reducing the card padding from 20 to 12 changes both themes and golden variants. [Broken](golden-broken.txt) · [Restored](golden-restored.txt)

@@ -3,8 +3,8 @@
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 Golden "goldens/windows/stokvel_card_dark.png": Pixel test failed, image sizes do not match.
-Master Image: 960 X 552
-Test Image: 960 X 520
+Master Image: 1248 X 552
+Test Image: 1248 X 520
 Failure feedback can be found at
 /test/failures
 
@@ -34,16 +34,16 @@ When the exception was thrown, this was the stack:
 
 The exception was caught asynchronously.
 ════════════════════════════════════════════════════════════════════════════════════════════════════
-00:07 +0 -1: Stokvel card dark (variant: Windows) [E]
+00:04 +0 -1: Stokvel card dark (variant: Windows) [E]
   Test failed. See exception logs above.
   The test description was: dark (variant: Windows)
 
-00:07 +0 -1: Stokvel card dark (variant: CI)
+00:04 +0 -1: Stokvel card dark (variant: CI)
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 Golden "goldens/ci/stokvel_card_dark.png": Pixel test failed, image sizes do not match.
-Master Image: 1095 X 664
-Test Image: 1095 X 612
+Master Image: 1248 X 664
+Test Image: 1248 X 612
 Failure feedback can be found at
 /test/failures
 
@@ -73,16 +73,16 @@ When the exception was thrown, this was the stack:
 
 The exception was caught asynchronously.
 ════════════════════════════════════════════════════════════════════════════════════════════════════
-00:08 +0 -2: Stokvel card dark (variant: CI) [E]
+00:04 +0 -2: Stokvel card dark (variant: CI) [E]
   Test failed. See exception logs above.
   The test description was: dark (variant: CI)
 
-00:08 +0 -2: Stokvel card light (variant: Windows)
+00:04 +0 -2: Stokvel card light (variant: Windows)
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 Golden "goldens/windows/stokvel_card_light.png": Pixel test failed, image sizes do not match.
-Master Image: 960 X 552
-Test Image: 960 X 520
+Master Image: 1248 X 552
+Test Image: 1248 X 520
 Failure feedback can be found at
 /test/failures
 
@@ -112,16 +112,16 @@ When the exception was thrown, this was the stack:
 
 The exception was caught asynchronously.
 ════════════════════════════════════════════════════════════════════════════════════════════════════
-00:08 +0 -3: Stokvel card light (variant: Windows) [E]
+00:04 +0 -3: Stokvel card light (variant: Windows) [E]
   Test failed. See exception logs above.
   The test description was: light (variant: Windows)
 
-00:08 +0 -3: Stokvel card light (variant: CI)
+00:04 +0 -3: Stokvel card light (variant: CI)
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following assertion was thrown while running async test code:
 Golden "goldens/ci/stokvel_card_light.png": Pixel test failed, image sizes do not match.
-Master Image: 1095 X 664
-Test Image: 1095 X 612
+Master Image: 1248 X 664
+Test Image: 1248 X 612
 Failure feedback can be found at
 /test/failures
 
@@ -151,11 +151,11 @@ When the exception was thrown, this was the stack:
 
 The exception was caught asynchronously.
 ════════════════════════════════════════════════════════════════════════════════════════════════════
-00:08 +0 -4: Stokvel card light (variant: CI) [E]
+00:05 +0 -4: Stokvel card light (variant: CI) [E]
   Test failed. See exception logs above.
   The test description was: light (variant: CI)
 
-00:08 +0 -4: Some tests failed.
+00:05 +0 -4: Some tests failed.
 
 Failing tests:
   test/stokvel_card_golden_test.dart: Stokvel card dark (variant: CI)

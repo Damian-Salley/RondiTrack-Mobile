@@ -1,6 +1,6 @@
 00:00 +0: loading test/stokvel_card_golden_test.dart
 00:00 +0: Stokvel card dark (variant: Windows)
-00:02 +1: Stokvel card dark (variant: CI)
-00:02 +2: Stokvel card light (variant: Windows)
-00:02 +3: Stokvel card light (variant: CI)
-00:02 +4: All tests passed!
+00:07 +1: Stokvel card dark (variant: CI)
+00:07 +2: Stokvel card light (variant: Windows)
+00:07 +3: Stokvel card light (variant: CI)
+00:08 +4: All tests passed!

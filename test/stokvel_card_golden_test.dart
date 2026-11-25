@@ -19,6 +19,8 @@ void main() {
         fileName: 'stokvel_card_${brightness.name}',
         builder: () => GoldenTestGroup(
           columns: 3,
+          // Use integer column offsets on every host.
+          columnWidthBuilder: (_) => const FixedColumnWidth(416),
           children: [
             for (final role in [StokvelRole.treasurer, StokvelRole.member])
               for (final (label, arrears, status) in [
@@ -35,9 +37,19 @@ void main() {
                           .textTheme
                           .bodyMedium
                           ?.fontFamily;
+                      final text = theme.textTheme.apply(fontFamily: font);
                       return Theme(
                         data: theme.copyWith(
-                          textTheme: theme.textTheme.apply(fontFamily: font),
+                          textTheme: font == 'Ahem'
+                              ? text.copyWith(
+                                  bodyMedium: text.bodyMedium?.copyWith(
+                                    letterSpacing: 0,
+                                  ),
+                                  titleLarge: text.titleLarge?.copyWith(
+                                    letterSpacing: 0,
+                                  ),
+                                )
+                              : text,
                         ),
                         child: Localizations(
                           locale: const Locale('en'),
