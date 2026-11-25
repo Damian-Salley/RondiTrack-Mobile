@@ -1,0 +1,14 @@
+00:00 +0: loading test/real_api_live_test.dart
+00:00 +0: fresh seed Home, membership access, close role and wrong address
+00:03 +1: live rotation, reuse revocation and logout revocation
+Shell: GET /api/v1/me/home 401 11ms correlationId=dd261270d4d937665cbdc4f2cf5e8a5d
+Shell: GET /api/v1/me/home 401 12ms correlationId=0bec92c2433a40f2c542a85660a2630e
+Shell: GET /api/v1/me/home 401 12ms correlationId=2549dddaa4cd6a1c43f0e544024a7615
+Shell: GET /api/v1/me/home 200 81ms
+Shell: GET /api/v1/me/home 200 81ms
+Shell: GET /api/v1/me/home 200 82ms
+Shell: One refresh, three successful retries, reuse revoked the replacement, and logout revoked its cookie.
+00:04 +2: All tests passed!
+00:00 +0: loading test/assignment113_live_test.dart
+00:00 +0: live API replays one payment and rejects a stale stokvel edit
+00:00 +1: All tests passed!

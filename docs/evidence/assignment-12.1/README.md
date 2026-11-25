@@ -12,6 +12,8 @@
 - Assignment 11.3 baseline had 187 passing fast tests and three skipped live tests. Coverage was 1,759 of 2,338 reported lines (75.24%). Both local configured time-zone runs passed 208 fast tests and covered 1,873 of 2,415 lines (77.56%). [UTC tests](tests-UTC.txt) · [UTC coverage](coverage-UTC.txt) · [Johannesburg tests](tests-Africa-Johannesburg.txt) · [Johannesburg coverage](coverage-Africa-Johannesburg.txt)
 - The dedicated database script inserted and deleted exactly 300 contribution fixtures. [Fixture commands](fixtures.txt)
 
+- All three isolated live API tests passed when the fresh-seed checks ran before payment replay. [Live API output](live-api.txt)
+
 ## Pending verification
 
 - Three successful Android integration runs and emulator image. API 34 booted locally. Two attempts failed during Gradle build before the journey started. [Build diagnostics](android-build-failures.txt)

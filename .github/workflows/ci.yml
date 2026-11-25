@@ -60,6 +60,13 @@ jobs:
       # Run automated tests without requiring a live backend.
       - run: flutter test --coverage --exclude-tags live
       - run: dart run tool/check_coverage.dart
+      - name: Upload golden failure images
+        if: failure() && matrix.timezone == 'UTC'
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: test/failures/
+          if-no-files-found: ignore
 
   android-integration:
     needs: check

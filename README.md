@@ -1317,7 +1317,13 @@ docker compose -p ronditrack-assignment121 -f compose.yaml -f compose.e2e.yaml -
 ```
 
 Set `RONDI_LIVE_URL` to `http://127.0.0.1:8080/api/v1` and
-`RONDI_LIVE_PASSWORD` to the disposable `E2E_PASSWORD` value.
+`RONDI_LIVE_PASSWORD` to the disposable `E2E_PASSWORD` value. Run the fresh-seed checks first
+because the replay test creates an extra stokvel:
+
+```sh
+flutter test --tags live test/real_api_live_test.dart
+flutter test --tags live test/assignment113_live_test.dart
+```
 
 ### Performance
 

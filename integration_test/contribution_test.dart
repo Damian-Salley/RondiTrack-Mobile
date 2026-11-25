@@ -12,6 +12,7 @@ import 'package:ronditrack_mobile/core/offline_refresh.dart';
 import 'package:ronditrack_mobile/features/contributions/contribution_providers.dart';
 import 'package:ronditrack_mobile/features/contributions/data/payment_outbox.dart';
 import 'package:ronditrack_mobile/features/contributions/domain/payment_intent.dart';
+import 'package:ronditrack_mobile/features/contributions/presentation/pay_form.dart';
 import 'package:ronditrack_mobile/features/session/domain/persona.dart';
 import 'package:ronditrack_mobile/features/stokvels/data/fake_stokvel_repository.dart';
 import 'package:ronditrack_mobile/features/stokvels/domain/models.dart';
@@ -89,10 +90,14 @@ void main() {
         child: const RondiTrackApp(),
       ),
     );
-    final email = find.byType(TextFormField).first;
+    final email = find.widgetWithText(TextFormField, 'Email');
+    final password = find.widgetWithText(TextFormField, 'Password');
     await _waitFor(tester, email);
     await tester.enterText(email, Persona.demo.email);
-    await tester.tap(find.text('Sign in').last);
+    await tester.enterText(password, 'fixture-password');
+    final signIn = find.widgetWithText(FilledButton, 'Sign in');
+    await tester.ensureVisible(signIn);
+    await tester.tap(signIn);
     final stokvel = find.text('Community Savings');
     await _waitFor(tester, stokvel);
     await tester.tap(stokvel.first);
@@ -105,8 +110,16 @@ void main() {
     await tester.enterText(find.byType(TextFormField), '123,45');
     await tester.tap(submit);
     await _waitFor(tester, find.text('Payment recorded.'));
-    await tester.pageBack();
-    await _waitFor(tester, find.text('Synthetic payer'));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(PayForm),
+        matching: find.byTooltip('Back'),
+      ),
+    );
+    final payer = find.text('Synthetic payer');
+    await _waitFor(tester, payer);
+    await tester.ensureVisible(payer);
+    await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('R\u00A0123,45'), findsOneWidget);
     expect(repository.saved?.amount.value, 12345);
     expect(await container.read(paymentOutboxStoreProvider).read(), isEmpty);
